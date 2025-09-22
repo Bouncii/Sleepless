@@ -1,6 +1,8 @@
 # Example file showing a circle moving on screen
 import pygame
 
+#################################### game initialization ####################################
+
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -8,31 +10,32 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-TILE_SIZE = 128
-GRID_WIDTH = 7
+TILE_SIZE = 128   
+GRID_WIDTH = 7    
 GRID_HEIGHT = 3
 
-level = [
-    [0,0,0,1,1,0,0],
-    [0,1,0,0,0,0,0],
-    [0,1,1,1,0,0,0],
-]
+level_str = [["sol" for j in range (7)] for i in range (3)]
+
+#################################### Player ####################################
+
+
+
 
 class Player:
-  def __init__ (self,grid_position:tuple):
+  def __init__ (self,grid_x:int,grid_y:int):
 
-      self.grid_x = grid_position[0]
-      self.grid_y = grid_position[1]
+    self.grid_x = grid_x
+    self.grid_y = grid_y
 
-      self.pixel_x = self.grid_x*TILE_SIZE
-      self.pixel_y = self.grid_y*TILE_SIZE
+    self.pixel_x = self.grid_x*TILE_SIZE
+    self.pixel_y = self.grid_y*TILE_SIZE
 
-      self.target_x = self.pixel_x
-      self.target_y = self.pixel_y
+    self.target_x = self.pixel_x
+    self.target_y = self.pixel_y
 
-      self.speed = 300 
-      self.height = 70
-      self.width = 50
+    self.speed = 300 
+    self.height = 70
+    self.width = 50
  
   
   def move(self):
@@ -79,19 +82,74 @@ class Player:
       pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
 
 
-def grid_builder(grid_height:int,grid_width:int,tile_size:int):
+#################################### Map ####################################
+
+def build_sol(pos_tile_pixel:tuple, tile_dimension:tuple)->pygame.Rect:
+    return {"rect":pygame.Rect(pos_tile_pixel[0], pos_tile_pixel[1]+(0.8*tile_dimension[1]),tile_dimension[0],tile_dimension*0.2),"color":(255,0,50)}
+
+def structures_builder(tile_type:str,pos_tile_pixel:tuple,tile_dimension:tuple) -> list:
+    res= []
+    if tile_type == "sol":
+        res.append(build_sol(pos_tile_pixel,tile_dimension))
+    return res
+    
+
+
+class Tile:
+    def __init__ (self, grid_x:int, grid_y:int, width:int, height:int, tile_type:str):
+        self.grid_x = grid_x
+        self.grid_y = grid_y
+
+        self.pixel_x = self.grid_x*TILE_SIZE
+        self.pixel_y = self.grid_y*TILE_SIZE
+
+        self.width = width
+        self.height = height
+
+        self.tile_type = tile_type # type de la tile (exemple : "sol", "échelle", "bouton", "vide")
+
+        self.structures = structures_builder(self.tile_type,(self.pixel_x,self.pixel_y),(self.width,self.height)) #Tab contenant l'ensemble des structures (sous forme d'objet rect pygames) présentent dans la tile
+
+
+    def draw(self):
+        pygame.draw.rect(screen,(100,100,100),(self.x, self.y, self.width, self.height))
+        for structure in self.structures:
+            pygame.draw.rect(screen,structure["color"],structure["rect"])
+
+
+
+# def grid_builder(grid_height:int,grid_width:int,tile_size:int):
+#     for row in range(grid_height):
+#         for col in range(grid_width):
+#             tile_type = level[row][col]
+#             x = col * tile_size
+#             y = row * tile_size
+
+#             if tile_type == 0:
+#                 pygame.draw.rect(screen, (100,0,255), (x, y, TILE_SIZE, TILE_SIZE))
+#             elif tile_type == 1:
+#                 pygame.draw.rect(screen, (100,100,100), (x, y, TILE_SIZE, TILE_SIZE))
+
+
+
+
+def level_builder(grid_height:int,grid_width:int,tile_size:int,level_str:str):
+    res=[]
     for row in range(grid_height):
-      for col in range(grid_width):
-          tile_type = level[row][col]
-          x = col * tile_size
-          y = row * tile_size
+        tab_row = []
+        for col in range(grid_width):
+            type = level_str[row][col]
+            tile = Tile(row,col,tile_size,tile_size,type)
+            tab_row.append(tile)
+        res.append(tab_row)
+    return res
 
-          if tile_type == 0:
-              pygame.draw.rect(screen, (100,0,255), (x, y, TILE_SIZE, TILE_SIZE))
-          elif tile_type == 1:
-              pygame.draw.rect(screen, (100,100,100), (x, y, TILE_SIZE, TILE_SIZE))
 
-player = Player((0,0))
+#################################### game ####################################
+         
+level_builder(GRID_HEIGHT,GRID_WIDTH,TILE_SIZE,level_str)
+
+player = Player(0,0)
 
 while running:
     # poll for events
@@ -101,7 +159,7 @@ while running:
             running = False
     screen.fill((0,0,0))
 
-    grid_builder(GRID_HEIGHT,GRID_WIDTH,TILE_SIZE)
+    
 
     player.move()
     player.update(dt)
@@ -118,3 +176,7 @@ while running:
     dt = clock.tick(60) / 1000
 
 pygame.quit()
+
+#######################################################
+# TODO : Draw implementation des classes dans le jeu
+#######################################################
