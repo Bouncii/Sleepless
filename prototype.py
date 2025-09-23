@@ -44,16 +44,26 @@ class Player:
     entrées: none
     sorties: none
     '''
+    dist_move_x = TILE_SIZE - self.pixel_x
+    dist_move_y = TILE_SIZE - self.pixel_y
     if self.pixel_x == self.target_x and self.pixel_y == self.target_y:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_z]:
-            self.try_move(0,-1)
+            print(-dist_move_y,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(0,-dist_move_y)
         elif keys[pygame.K_s]:
-            self.try_move(0,1)
+            print(dist_move_y,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(0,dist_move_y)
         elif keys[pygame.K_q]:
-            self.try_move(-1,0)
+            print(-dist_move_x,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(-dist_move_x,0)
         elif keys[pygame.K_d]:
-            self.try_move(1,0)
+            print(dist_move_x,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(dist_move_x,0)
   
   def try_move(self,dx:int,dy:int):
       '''
@@ -65,13 +75,14 @@ class Player:
         dy : int  
       sorties: none
       '''
-      new_x = self.grid_x + dx
-      new_y = self.grid_y + dy
+      new_x = self.pixel_x + dx
+      new_y = self.pixel_y + dy
+      print(new_x,new_y)
       if 0 <= new_x and new_x < GRID_WIDTH and 0 <= new_y and new_y < GRID_HEIGHT:
-          self.grid_x = new_x
-          self.grid_y = new_y
-          self.target_x = self.grid_x * TILE_SIZE
-          self.target_y = self.grid_y * TILE_SIZE
+          self.pixel_x = new_x
+          self.pixel_y = new_y
+          self.target_x = self.pixel_x
+          self.target_y = self.pixel_y
 
   def update(self, dt):
     '''
