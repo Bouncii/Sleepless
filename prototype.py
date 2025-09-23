@@ -85,7 +85,7 @@ class Player:
 #################################### Map ####################################
 
 def build_sol(pos_tile_pixel:tuple, tile_dimension:tuple)->pygame.Rect:
-    return {"rect":pygame.Rect(pos_tile_pixel[0], pos_tile_pixel[1]+(0.8*tile_dimension[1]),tile_dimension[0],tile_dimension*0.2),"color":(255,0,50)}
+    return {"rect":pygame.Rect(pos_tile_pixel[0], pos_tile_pixel[1]+(0.8*tile_dimension[1]),tile_dimension[0],tile_dimension[1]*0.2),"color":(255,0,50)}
 
 def structures_builder(tile_type:str,pos_tile_pixel:tuple,tile_dimension:tuple) -> list:
     res= []
