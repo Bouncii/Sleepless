@@ -48,11 +48,11 @@ class Player:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_z]:
             self.try_move(0,-1)
-        if keys[pygame.K_s]:
+        elif keys[pygame.K_s]:
             self.try_move(0,1)
-        if keys[pygame.K_q]:
+        elif keys[pygame.K_q]:
             self.try_move(-1,0)
-        if keys[pygame.K_d]:
+        elif keys[pygame.K_d]:
             self.try_move(1,0)
   
   def try_move(self,dx:int,dy:int):
