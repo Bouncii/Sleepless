@@ -24,18 +24,20 @@ level_str = [["sol" for j in range (7)] for i in range (3)]
 class Player:
   def __init__ (self, grid_x:int, grid_y:int):
 
+    self.speed = 300 
+    self.height = 70
+    self.width = 50
+
     self.grid_x = grid_x
     self.grid_y = grid_y
 
-    self.pixel_x = self.grid_x*TILE_SIZE
-    self.pixel_y = self.grid_y*TILE_SIZE
+    self.pixel_x = self.grid_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
+    self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
     self.target_x = self.pixel_x
     self.target_y = self.pixel_y
 
-    self.speed = 300 
-    self.height = 70
-    self.width = 50
+
  
 
   def move(self):
@@ -70,8 +72,8 @@ class Player:
       if 0 <= new_x and new_x < GRID_WIDTH and 0 <= new_y and new_y < GRID_HEIGHT:
           self.grid_x = new_x
           self.grid_y = new_y
-          self.target_x = self.grid_x * TILE_SIZE
-          self.target_y = self.grid_y * TILE_SIZE
+          self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
+          self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
   def update(self, dt):
     '''
@@ -242,6 +244,3 @@ while running:
 
 pygame.quit()
 
-#######################################################
-# TODO : Draw implementation des classes dans le jeu
-#######################################################
