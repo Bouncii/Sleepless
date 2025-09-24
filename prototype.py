@@ -44,26 +44,26 @@ class Player:
     entrées: none
     sorties: none
     '''
+    dist_move_x = TILE_SIZE - self.pixel_x
+    dist_move_y = TILE_SIZE - self.pixel_y
     if self.pixel_x == self.target_x and self.pixel_y == self.target_y:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_z]:
-            if self.pixel_y%TILE_SIZE == 0:
-                move = 128
-            else:
-                move = self.pixel_y%TILE_SIZE
-            self.try_move(0,-move)
+            print(-dist_move_y,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(0,-dist_move_y)
         elif keys[pygame.K_s]:
-            move = TILE_SIZE - (self.pixel_y%TILE_SIZE)
-            self.try_move(0,move)
+            print(dist_move_y,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(0,dist_move_y)
         elif keys[pygame.K_q]:
-            if self.pixel_x%TILE_SIZE == 0:
-                move = 128
-            else:
-                move = self.pixel_x%TILE_SIZE
-            self.try_move(-move,0)
+            print(-dist_move_x,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(-dist_move_x,0)
         elif keys[pygame.K_d]:
-            move = TILE_SIZE - (self.pixel_x%TILE_SIZE)
-            self.try_move(move,0)
+            print(dist_move_x,"Distance move")
+            print(self.target_x,self.target_y,"Target")
+            self.try_move(dist_move_x,0)
   
   def try_move(self,dx:int,dy:int):
       '''
@@ -77,11 +77,12 @@ class Player:
       '''
       new_x = self.pixel_x + dx
       new_y = self.pixel_y + dy
-      if 0 <= new_x and new_x < GRID_WIDTH*TILE_SIZE and 0 <= new_y and new_y < GRID_HEIGHT*TILE_SIZE:
-          self.target_x = new_x
-          self.target_y = new_y
-          self.grid_x = new_x // TILE_SIZE
-          self.grid_y = new_y // TILE_SIZE
+      print(new_x,new_y)
+      if 0 <= new_x and new_x < GRID_WIDTH and 0 <= new_y and new_y < GRID_HEIGHT:
+          self.pixel_x = new_x
+          self.pixel_y = new_y
+          self.target_x = self.pixel_x
+          self.target_y = self.pixel_y
 
   def update(self, dt):
     '''
