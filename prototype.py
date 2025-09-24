@@ -120,7 +120,7 @@ def build_sol(pos_tile_pixel:tuple, tile_dimension:tuple)->pygame.Rect:
     sorties: 
         un dictionnaire contenant un rect pygame (la fome geometrique) et la couleur en rvb
     '''
-    return {"rect":pygame.Rect(pos_tile_pixel[0], pos_tile_pixel[1]+(0.8*tile_dimension[1]),tile_dimension[0],tile_dimension[1]*0.2),"color":(255,0,50)}
+    return {"rect":pygame.Rect(pos_tile_pixel[0], pos_tile_pixel[1]+(0.8*tile_dimension[1]),tile_dimension[0],tile_dimension[1]*0.2),"color":(100,100,0)}
 
 def structures_builder(tile_type:str,pos_tile_pixel:tuple,tile_dimension:tuple) -> list:
     '''
@@ -163,28 +163,18 @@ class Tile:
         entrées: none
         sorties: none
         '''
-        pygame.draw.rect(screen,self.background,(self.x, self.y, self.width, self.height))
+        pygame.draw.rect(screen,self.background,(self.pixel_x, self.pixel_y, self.width, self.height))
         for structure in self.structures:
             pygame.draw.rect(screen,structure["color"],structure["rect"])
 
 
 
-# def grid_builder(grid_height:int,grid_width:int,tile_size:int):
-#     for row in range(grid_height):
-#         for col in range(grid_width):
-#             tile_type = level[row][col]
-#             x = col * tile_size
-#             y = row * tile_size
-
-#             if tile_type == 0:
-#                 pygame.draw.rect(screen, (100,0,255), (x, y, TILE_SIZE, TILE_SIZE))
-#             elif tile_type == 1:
-#                 pygame.draw.rect(screen, (100,100,100), (x, y, TILE_SIZE, TILE_SIZE))
 
 
 
 
-def level_builder(grid_height:int,grid_width:int,tile_size:int,level_str:str) -> list:
+
+def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) -> list:
     '''
     Fonction qui construit le niveau sous forme de tableau 2 dimension d'objet Tile 
     entrées: 
@@ -200,7 +190,7 @@ def level_builder(grid_height:int,grid_width:int,tile_size:int,level_str:str) ->
         tab_row = []
         for col in range(grid_width):
             type = level_str[row][col]
-            tile = Tile(row,col,tile_size,tile_size,type)
+            tile = Tile(col,row,tile_size,tile_size,type)
             tab_row.append(tile)
         res.append(tab_row)
     return res
@@ -208,9 +198,21 @@ def level_builder(grid_height:int,grid_width:int,tile_size:int,level_str:str) ->
 
 #################################### game ####################################
          
-level_builder(GRID_HEIGHT,GRID_WIDTH,TILE_SIZE,level_str)
+level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
 
 player = Player(75,75)
+
+# def grid_builder(grid_height:int,grid_width:int,tile_size:int):
+#     for row in range(grid_height):
+#         for col in range(grid_width):
+#             tile_type = level[row][col]
+#             x = col * tile_size
+#             y = row * tile_size
+
+#             if tile_type == 0:
+#                 pygame.draw.rect(screen, (100,0,255), (x, y, TILE_SIZE, TILE_SIZE))
+#             elif tile_type == 1:
+#                 pygame.draw.rect(screen, (100,100,100), (x, y, TILE_SIZE, TILE_SIZE))
 
 while running:
     # poll for events
@@ -220,7 +222,9 @@ while running:
             running = False
     screen.fill((0,0,0))
 
-    
+    for row in range(GRID_HEIGHT):
+        for col in range(GRID_WIDTH):
+            level[row][col].draw()
 
     player.move()
     player.update(dt)
