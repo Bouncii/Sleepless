@@ -22,13 +22,13 @@ level_str = [["sol" for j in range (7)] for i in range (3)]
 
 
 class Player:
-  def __init__ (self,pixel_x:int,pixel_y:int):
+  def __init__ (self, grid_x:int, grid_y:int):
 
-    self.pixel_x = pixel_x
-    self.pixel_y = pixel_y
+    self.grid_x = grid_x
+    self.grid_y = grid_y
 
-    self.grid_x = self.pixel_x // TILE_SIZE   # Modulo taille en px de la case
-    self.grid_y = self.pixel_y // TILE_SIZE   # Idem 
+    self.pixel_x = self.grid_x*TILE_SIZE
+    self.pixel_y = self.grid_y*TILE_SIZE
 
     self.target_x = self.pixel_x
     self.target_y = self.pixel_y
@@ -200,7 +200,7 @@ def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) ->
          
 level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
 
-player = Player(75,75)
+player = Player(0,0)
 
 # def grid_builder(grid_height:int,grid_width:int,tile_size:int):
 #     for row in range(grid_height):
