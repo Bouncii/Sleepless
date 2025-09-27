@@ -14,7 +14,9 @@ TILE_SIZE = 128
 GRID_WIDTH = 7    
 GRID_HEIGHT = 3
 
-level_str = [["sol" for j in range (7)] for i in range (3)]
+level_str = [["sol","sol","sol","sol","sol","sol","vide"],
+             ["sol","sol","vide","sol","sol","sol","sol"],
+             ["sol","sol","sol","sol","sol","sol","sol"]]
 
 #################################### Player ####################################
 
@@ -24,7 +26,7 @@ level_str = [["sol" for j in range (7)] for i in range (3)]
 class Player:
   def __init__ (self, grid_x:int, grid_y:int):
 
-    self.speed = 300 
+
     self.height = 70
     self.width = 50
 
@@ -35,7 +37,12 @@ class Player:
     self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
     self.target_x = self.pixel_x
-    self.target_y = self.pixel_y
+
+    self.speed_x = 300 
+    self.speed_y = 0
+
+    self.gravity = 300
+    self.on_ground = False
 
 
  
@@ -46,13 +53,9 @@ class Player:
     entrées: none
     sorties: none
     '''
-    if self.pixel_x == self.target_x and self.pixel_y == self.target_y:
+    if self.pixel_x == self.target_x:
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_z]:
-            self.try_move(0,-1)
-        elif keys[pygame.K_s]:
-            self.try_move(0,1)
-        elif keys[pygame.K_q]:
+        if keys[pygame.K_q]:
             self.try_move(-1,0)
         elif keys[pygame.K_d]:
             self.try_move(1,0)
@@ -68,38 +71,61 @@ class Player:
       sorties: none
       '''
       new_x = self.grid_x + dx
-      new_y = self.grid_y + dy
-      if 0 <= new_x and new_x < GRID_WIDTH and 0 <= new_y and new_y < GRID_HEIGHT:
+      if 0 <= new_x and new_x < GRID_WIDTH:
           self.grid_x = new_x
-          self.grid_y = new_y
           self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
-          self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
-  def update(self, dt):
+  def update(self, dt, level):
     '''
     Fonction qui actualise le déplacement/animation
-    vérifie si x et y target ne sont pas atteints, si pas atteints alors on incrémente la co avec speed
+    deplacement horizontal :
+    vérifie si x target ne est pas atteinte, si pas atteinte alors on incrémente la co avec speed
+    deplacement vertical : 
+    incremente les coordonnées par la vitesse (dont on incremente aussi la valeur) quand on ne touche pas le sol
     entrées: 
     dt : float
+    level : list of list
     sorties: none
     '''
+
+    # Deplacement veticale
+    if not self.on_ground:
+        self.speed_y += self.gravity * dt
+    else:
+        self.speed_y = 0
+
+    self.pixel_y += self.speed_y * dt
+
+    player_rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
+
+    # Détection structure
+    self.on_ground = False
+    for row in level:
+        for tile in row:
+            for structure in tile.structures:
+                if player_rect.colliderect(structure["rect"]):
+                    if self.speed_y >= 0:
+                        self.pixel_y = structure["rect"].top - self.height
+                        self.on_ground = True
+
+
+    # Deplacement horizontal
     if self.pixel_x < self.target_x:
-        self.pixel_x += self.speed * dt
+        self.pixel_x += self.speed_x * dt
         if self.pixel_x > self.target_x:
             self.pixel_x = self.target_x
     if self.pixel_x > self.target_x:
-        self.pixel_x -= self.speed * dt
+        self.pixel_x -= self.speed_x * dt
         if self.pixel_x < self.target_x:
             self.pixel_x = self.target_x
 
-    if self.pixel_y < self.target_y:
-        self.pixel_y += self.speed * dt
-        if self.pixel_y > self.target_y:
-            self.pixel_y = self.target_y
-    if self.pixel_y > self.target_y:
-        self.pixel_y -= self.speed * dt
-        if self.pixel_y < self.target_y:
-            self.pixel_y = self.target_y
+    previous_coord = (self.grid_x,self.grid_y)
+    self.grid_x = int(self.pixel_x // TILE_SIZE)
+    self.grid_y = int(self.pixel_y // TILE_SIZE)
+
+    #Affichage tile à chaque changement
+    if previous_coord != (self.grid_x,self.grid_y):
+        print(self.grid_x,self.grid_y)
 
   def show(self,tile_size:int):
       '''
@@ -137,6 +163,9 @@ def structures_builder(tile_type:str,pos_tile_pixel:tuple,tile_dimension:tuple) 
     res= []
     if tile_type == "sol":
         res.append(build_sol(pos_tile_pixel,tile_dimension))
+    elif tile_type == "vide":
+        res = []
+    
     return res
     
 
@@ -171,11 +200,6 @@ class Tile:
 
 
 
-
-
-
-
-
 def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) -> list:
     '''
     Fonction qui construit le niveau sous forme de tableau 2 dimension d'objet Tile 
@@ -204,17 +228,6 @@ level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
 
 player = Player(0,0)
 
-# def grid_builder(grid_height:int,grid_width:int,tile_size:int):
-#     for row in range(grid_height):
-#         for col in range(grid_width):
-#             tile_type = level[row][col]
-#             x = col * tile_size
-#             y = row * tile_size
-
-#             if tile_type == 0:
-#                 pygame.draw.rect(screen, (100,0,255), (x, y, TILE_SIZE, TILE_SIZE))
-#             elif tile_type == 1:
-#                 pygame.draw.rect(screen, (100,100,100), (x, y, TILE_SIZE, TILE_SIZE))
 
 while running:
     # poll for events
@@ -229,7 +242,7 @@ while running:
             level[row][col].draw()
 
     player.move()
-    player.update(dt)
+    player.update(dt,level)
     player.show(TILE_SIZE)
 
     
