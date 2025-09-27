@@ -14,9 +14,9 @@ TILE_SIZE = 128
 GRID_WIDTH = 7    
 GRID_HEIGHT = 3
 
-level_str = [["sol","sol","sol","sol","sol","sol","vide"],
+level_str = [["start","sol","sol","sol","sol","sol","vide"],
              ["sol","sol","vide","sol","sol","sol","sol"],
-             ["sol","sol","sol","sol","sol","sol","sol"]]
+             ["sol","sol","sol","sol","sol","sol","end"]]
 
 #################################### Player ####################################
 
@@ -46,7 +46,6 @@ class Player:
 
 
  
-
   def move(self):
     '''
     Fonction qui détecte une pression des touches et agit en conséquence
@@ -137,36 +136,7 @@ class Player:
       pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
 
 
-#################################### Map ####################################
-
-def build_sol(pos_tile_pixel:tuple, tile_dimension:tuple)->pygame.Rect:
-    '''
-    Fonction qui construit une structure de type sol
-    entrées: 
-        pos_tile_pixel : tuple des coordonnées de la tile en pixel
-        tile_dimension : tuple  des dimension de la tile
-    sorties: 
-        un dictionnaire contenant un rect pygame (la fome geometrique) et la couleur en rvb
-    '''
-    return {"rect":pygame.Rect(pos_tile_pixel[0], pos_tile_pixel[1]+(0.8*tile_dimension[1]),tile_dimension[0],tile_dimension[1]*0.2),"color":(100,100,0)}
-
-def structures_builder(tile_type:str,pos_tile_pixel:tuple,tile_dimension:tuple) -> list:
-    '''
-    Fonction qui construit un tableau avec toute les structures de la tile en fonction de son type
-    entrées: 
-        tile_type : str  
-        pos_tile_pixel : tuple  
-        tile_dimension : tuple  
-    sorties: 
-        la liste contenant les structures
-    '''
-    res= []
-    if tile_type == "sol":
-        res.append(build_sol(pos_tile_pixel,tile_dimension))
-    elif tile_type == "vide":
-        res = []
-    
-    return res
+#################################### Tile ####################################
     
 
 
@@ -181,13 +151,24 @@ class Tile:
         self.width = width
         self.height = height
 
-        self.background = (100,100,150)
-
         self.tile_type = tile_type # type de la tile (exemple : "sol", "échelle", "bouton", "vide")
 
-        self.structures = structures_builder(self.tile_type,(self.pixel_x,self.pixel_y),(self.width,self.height)) #Tab contenant l'ensemble des structures (sous forme d'objet rect pygames) présentent dans la tile
+        self.background = self.find_color()
+
+        self.structures = self.structures_builder() #Tab contenant l'ensemble des structures (sous forme d'objet rect pygames) présentent dans la tile
 
 
+    def find_color(self):
+        '''
+        Fonction qui choisit la couleur en fonction du type de la tile
+        sorties: la couleur en rgb
+        '''
+        if self.tile_type == "sol" or self.tile_type == "vide":
+            return (100,100,150)
+        elif self.tile_type == "start":
+            return (000,250,50)
+        elif self.tile_type == "end":
+            return (000,50,250)
     def draw(self):
         '''
         Fonction qui dessine la tile puis les structures qu'elle conttient
@@ -198,7 +179,32 @@ class Tile:
         for structure in self.structures:
             pygame.draw.rect(screen,structure["color"],structure["rect"])
 
+    def build_sol(self)->pygame.Rect:
+        '''
+        Fonction qui construit une structure de type sol
+        entrées: 
+            self
+        sorties: 
+            un dictionnaire contenant un rect pygame (la fome geometrique) et la couleur en rvb
+        '''
+        return {"rect":pygame.Rect(self.pixel_x, self.pixel_y+(0.8*self.height),self.width,self.height*0.2),"color":(100,100,0)}
 
+    def structures_builder(self) -> list:
+        '''
+        Fonction qui construit un tableau avec toute les structures de la tile en fonction de son type
+        entrées: 
+            self
+        sorties: 
+            la liste contenant les structures
+        '''
+        res= []
+        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end":
+            res.append(self.build_sol())
+        
+        
+        return res
+
+##########################################################################################
 
 def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) -> list:
     '''
