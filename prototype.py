@@ -99,8 +99,9 @@ class Player:
 
     # Détection structure
     self.on_ground = False
-    for row in level:
-        for tile in row:
+    for i_row in range(max(0, self.grid_y-1), min(GRID_HEIGHT, self.grid_y+2)):
+        for i_col in range(max(0, self.grid_x-1), min(GRID_WIDTH, self.grid_x+2)):
+            tile = level[i_row][i_col]
             for structure in tile.structures:
                 if player_rect.colliderect(structure["rect"]):
                     if self.speed_y >= 0:
