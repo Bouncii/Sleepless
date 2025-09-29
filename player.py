@@ -53,6 +53,7 @@ class Player:
         if 0 <= new_x and new_x < grid_width:
             self.grid_x = new_x
             self.target_x = new_x * tile_size + (tile_size - self.width) // 2
+            self.update_moves()
 
     def update(self, dt:float, level:list, tile_size:int, grid_width:int):
         '''

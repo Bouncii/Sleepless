@@ -68,6 +68,7 @@ while running:
 
     if player.pixel_x == player.target_x and player.on_ground == True:
         player.detection_key(GRID_WIDTH,TILE_SIZE)
+        print(player.moves)
 
     player.update(dt,level,TILE_SIZE,GRID_WIDTH)
     player.show(screen)
