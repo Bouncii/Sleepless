@@ -164,7 +164,7 @@ class Player:
         '''
         Fonction qui ajoute chaque nouvelles coordonnées que prends joueur à un tableau sous forme de tuple (x,y)
         '''
-        self.moves.append((self.pixel_x,self.pixel_y))
+        self.moves.append((self.grid_x,self.grid_y))
 
 
 
@@ -261,6 +261,17 @@ def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) ->
         res.append(tab_row)
     return res
 
+#################################### past self ####################################
+
+class Past_self:
+    def __init__ (self,deplacements:list,width,height):
+        self.deplacements = deplacements
+
+        self.pixel_x = self.grid_x*TILE_SIZE
+        self.pixel_y = self.grid_y*TILE_SIZE
+
+        self.width = width
+        self.height = height
 
 #################################### game ####################################
          
