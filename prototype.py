@@ -3,20 +3,23 @@ import pygame
 
 #################################### game initialization ####################################
 
+level_str = [["start","sol","sol","sol","sol","sol","vide"],
+             ["sol","sol","vide","sol","sol","sol","sol"],
+             ["sol","sol","sol","sol","sol","sol","end"]]
+
+TILE_SIZE = 128 
+GRID_WIDTH = len(level_str[0])   
+GRID_HEIGHT = len(level_str)
+
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
 clock = pygame.time.Clock()
 running = True
 dt = 0
 
-TILE_SIZE = 128   
-GRID_WIDTH = 7    
-GRID_HEIGHT = 3
 
-level_str = [["start","sol","sol","sol","sol","sol","vide"],
-             ["sol","sol","vide","sol","sol","sol","sol"],
-             ["sol","sol","sol","sol","sol","sol","end"]]
+
 
 #################################### Player ####################################
 
