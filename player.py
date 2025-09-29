@@ -32,12 +32,11 @@ class Player:
         grid_width : int
         sorties: none
         '''
-        if self.pixel_x == self.target_x:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_q]:
-                self.try_move(-1,grid_width,tile_size)
-            elif keys[pygame.K_d]:
-                self.try_move(1,grid_width,tile_size)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_q]:
+            self.try_move(-1,grid_width,tile_size)
+        elif keys[pygame.K_d]:
+            self.try_move(1,grid_width,tile_size)
   
     def try_move(self,dx:int,grid_width,tile_size):
         '''
@@ -72,7 +71,6 @@ class Player:
 
 
         # Deplacement horizontal
-        self.detection_key(grid_width,tile_size)
         self.deplacement_horizontal(dt)
 
         
