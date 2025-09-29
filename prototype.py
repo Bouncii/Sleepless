@@ -1,5 +1,7 @@
 # Example file showing a circle moving on screen
 import pygame
+from player import *
+from tile import *
 
 #################################### game initialization ####################################
 
@@ -20,224 +22,6 @@ dt = 0
 
 
 
-
-#################################### Player ####################################
-
-
-
-
-class Player:
-    def __init__ (self, grid_x:int, grid_y:int):
-
-        self.height = 70
-        self.width = 50
-
-        self.grid_x = grid_x
-        self.grid_y = grid_y
-
-        self.pixel_x = self.grid_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
-        self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
-
-        self.target_x = self.pixel_x
-
-        self.speed_x = 300 
-        self.speed_y = 0
-
-        self.gravity = 600
-        self.on_ground = False
-
-        self.moves = []
-
-
- 
-    def detection_key(self):
-        '''
-        Fonction qui détecte une pression des touches et agit en conséquence
-        entrées: none
-        sorties: none
-        '''
-        if self.pixel_x == self.target_x:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_q]:
-                self.try_move(-1)
-            elif keys[pygame.K_d]:
-                self.try_move(1)
-  
-    def try_move(self,dx:int):
-        '''
-        Fonction qui vérifie si le déplacement est possible
-        si faisable : update target x et y pour déplacement et animation
-        si pas faisable : ne fait rien
-        entrées: 
-        dx : int  
-        dy : int  
-        sorties: none
-        '''
-        new_x = self.grid_x + dx
-        if 0 <= new_x and new_x < GRID_WIDTH:
-            self.grid_x = new_x
-            self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
-
-    def update(self, dt, level):
-        '''
-        fonction qui actualise différents élements relatifs au joueur
-        entrées: 
-        dt : float
-        level : list of list
-        sorties: none
-        '''
-
-
-        # Chute veticale
-        self.gestion_gravite(dt,level)
-
-
-        # Deplacement horizontal
-        self.detection_key()
-        self.deplacement_horizontal()
-
-        
-        self.grid_x = int(self.pixel_x // TILE_SIZE) # nécessaire pour y à cause de la gravité, x est update par securité
-        self.grid_y = int(self.pixel_y // TILE_SIZE)
-
-        #Affichage tile à chaque changement -----DEBEUGUAGE-----
-        previous_coord = (self.grid_x,self.grid_y)
-        if previous_coord != (self.grid_x,self.grid_y):
-            print(self.grid_x,self.grid_y)
-
-
-
-    def deplacement_horizontal(self):
-        '''
-        Fonction qui actualise le déplacement/animation horizontal :
-        vérifie si x target ne est pas atteinte, si pas atteinte alors on additionne/soustrait la co avec speed
-        '''
-        if self.pixel_x < self.target_x:
-            self.pixel_x += self.speed_x * dt
-            if self.pixel_x > self.target_x:
-                self.pixel_x = self.target_x
-        if self.pixel_x > self.target_x:
-            self.pixel_x -= self.speed_x * dt
-            if self.pixel_x < self.target_x:
-                self.pixel_x = self.target_x
-
-
-
-    def gestion_gravite(self,dt,level):
-        '''
-        Fonction qui gère le déplacement/animation lié à la gravité : 
-        incremente les coordonnées par la vitesse verticale (dont on additionne aussi la valeur avec gravité) quand on ne touche pas le sol
-        entrées: 
-        dt : float
-        level : list of list
-        sorties: none
-        '''
-        if not self.on_ground:
-            self.speed_y += self.gravity * dt
-        else:
-            self.speed_y = 0
-
-        self.pixel_y += self.speed_y * dt
-
-        player_rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
-
-        # Détection structure
-        self.on_ground = False
-        for i_col in range(max(0, self.grid_x-1), min(GRID_WIDTH, self.grid_x+2)): # on check que les tiles à droite et à gauche pour verifier le sol
-            tile = level[self.grid_y][i_col]
-            for structure in tile.structures:
-                if player_rect.colliderect(structure["rect"]):
-                    if self.speed_y >= 0:
-                        self.pixel_y = structure["rect"].top - self.height
-                        self.on_ground = True
-
-    def show(self,tile_size:int):
-        '''
-        Fonction qui dessine le joueur en fonction de ses attributs
-        entrées: 
-        tile_size :int
-        sorties: none
-        '''
-        pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
-
-    def update_moves (self):
-        '''
-        Fonction qui ajoute chaque nouvelles coordonnées que prends joueur à un tableau sous forme de tuple (x,y)
-        '''
-        self.moves.append((self.grid_x,self.grid_y))
-
-
-
-
-
-#################################### Tile ####################################
-    
-
-
-class Tile:
-    def __init__ (self, grid_x:int, grid_y:int, width:int, height:int, tile_type:str):
-        self.grid_x = grid_x
-        self.grid_y = grid_y
-
-        self.pixel_x = self.grid_x*TILE_SIZE
-        self.pixel_y = self.grid_y*TILE_SIZE
-
-        self.width = width
-        self.height = height
-
-        self.tile_type = tile_type # type de la tile (exemple : "sol", "échelle", "bouton", "vide")
-
-        self.background = self.find_color()
-
-        self.structures = self.structures_builder() #Tab contenant l'ensemble des structures (sous forme d'objet rect pygames) présentent dans la tile
-
-
-    def find_color(self):
-        '''
-        Fonction qui choisit la couleur en fonction du type de la tile
-        sorties: la couleur en rgb
-        '''
-        if self.tile_type == "sol" or self.tile_type == "vide":
-            return (100,100,150)
-        elif self.tile_type == "start":
-            return (000,250,50)
-        elif self.tile_type == "end":
-            return (000,50,250)
-    def draw(self):
-        '''
-        Fonction qui dessine la tile puis les structures qu'elle conttient
-        entrées: none
-        sorties: none
-        '''
-        pygame.draw.rect(screen,self.background,(self.pixel_x, self.pixel_y, self.width, self.height))
-        for structure in self.structures:
-            pygame.draw.rect(screen,structure["color"],structure["rect"])
-
-    def build_sol(self)->pygame.Rect:
-        '''
-        Fonction qui construit une structure de type sol
-        entrées: 
-            self
-        sorties: 
-            un dictionnaire contenant un rect pygame (la fome geometrique) et la couleur en rvb
-        '''
-        return {"rect":pygame.Rect(self.pixel_x, self.pixel_y+(0.8*self.height),self.width,self.height*0.2),"color":(100,100,0)}
-
-    def structures_builder(self) -> list:
-        '''
-        Fonction qui construit un tableau avec toute les structures de la tile en fonction de son type
-        entrées: 
-            self
-        sorties: 
-            la liste contenant les structures
-        '''
-        res= []
-        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end":
-            res.append(self.build_sol())
-        
-        
-        return res
-
 ##########################################################################################
 
 def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) -> list:
@@ -256,28 +40,18 @@ def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) ->
         tab_row = []
         for col in range(grid_width):
             type = level_str[row][col]
-            tile = Tile(col,row,tile_size,tile_size,type)
+            tile = Tile(col,row,tile_size,tile_size,type,TILE_SIZE)
             tab_row.append(tile)
         res.append(tab_row)
     return res
 
-#################################### past self ####################################
 
-class Past_self:
-    def __init__ (self,deplacements:list,width,height):
-        self.deplacements = deplacements
-
-        self.pixel_x = self.grid_x*TILE_SIZE
-        self.pixel_y = self.grid_y*TILE_SIZE
-
-        self.width = width
-        self.height = height
 
 #################################### game ####################################
          
 level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
 
-player = Player(0,0)
+player = Player(0,0,TILE_SIZE)
 
 
 while running:
@@ -290,11 +64,11 @@ while running:
 
     for row in range(GRID_HEIGHT):
         for col in range(GRID_WIDTH):
-            level[row][col].draw()
+            level[row][col].draw(screen)
 
 
-    player.update(dt,level)
-    player.show(TILE_SIZE)
+    player.update(dt,level,TILE_SIZE,GRID_WIDTH)
+    player.show(screen)
 
     
 
