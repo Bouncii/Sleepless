@@ -41,7 +41,7 @@ class Player:
     self.speed_x = 300 
     self.speed_y = 0
 
-    self.gravity = 300
+    self.gravity = 600
     self.on_ground = False
 
 
