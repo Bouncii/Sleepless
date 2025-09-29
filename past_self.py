@@ -1,4 +1,5 @@
 import pygame
+from player import *
 class Past_self:
     def __init__ (self, grid_x:int, grid_y:int,tile_size:int):
 
@@ -20,11 +21,13 @@ class Past_self:
         self.on_ground = False
 
         self.moves = []
+        self.tour = 0
+
+        self.timer_spawn = 3
         
 
 
- 
-    def detection_key(self,grid_width,tile_size):
+    def detection_key(self,tile_size):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
         entrées: 
@@ -33,28 +36,30 @@ class Past_self:
         sorties: none
         '''
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_q]:
-            self.try_move(-1,grid_width,tile_size)
-        elif keys[pygame.K_d]:
-            self.try_move(1,grid_width,tile_size)
+        if keys[pygame.K_q] or keys[pygame.K_d]:
+            if self.timer_spawn == 0:
+                self.move(tile_size)
+            else:
+                self.timer_spawn -=1
+            
+
   
-    def try_move(self,dx:int,grid_width,tile_size):
+    def move(self,tile_size):
         '''
-        Fonction qui vérifie si le déplacement est possible
-        si faisable : update target x et y pour déplacement et animation
-        si pas faisable : ne fait rien
+        Fonction qui assigne la cible du deplacement du old self en fonction de la liste des moves du joueur
         entrées: 
         dx : int  
         tile_size : int
         grid_width : int
         sorties: none
         '''
-        new_x = self.grid_x + dx
-        if 0 <= new_x and new_x < grid_width:
-            self.grid_x = new_x
-            self.target_x = new_x * tile_size + (tile_size - self.width) // 2
+        print(self.moves)
+        new_x = self.moves[self.tour][0]
+        self.tour += 1
+        self.grid_x = new_x
+        self.target_x = new_x * tile_size + (tile_size - self.width) // 2
 
-    def update(self, dt:float, level:list, tile_size:int, grid_width:int):
+    def update(self, dt:float, level:list, tile_size:int):
         '''
         fonction qui actualise différents élements relatifs au joueur
         entrées: 
@@ -135,7 +140,7 @@ class Past_self:
         entrées: screen
         sorties: none
         '''
-        pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
+        pygame.draw.rect(screen, "orange", (self.pixel_x, self.pixel_y, self.width, self.height ))
 
     def update_moves (self):
         '''

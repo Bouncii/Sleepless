@@ -1,6 +1,7 @@
 # Example file showing a circle moving on screen
 import pygame
 from player import *
+from past_self import *
 from tile import *
 
 #################################### game initialization ####################################
@@ -53,6 +54,8 @@ level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
 
 player = Player(0,0,TILE_SIZE)
 
+past_self = Past_self(0,0,TILE_SIZE)
+time_spawn_old_self = 3;
 
 while running:
     # poll for events
@@ -68,12 +71,18 @@ while running:
 
     if player.pixel_x == player.target_x and player.on_ground == True:
         player.detection_key(GRID_WIDTH,TILE_SIZE)
-        print(player.moves)
+        past_self.detection_key(TILE_SIZE)
+
+
+
+    past_self.moves = player.moves
 
     player.update(dt,level,TILE_SIZE,GRID_WIDTH)
     player.show(screen)
 
-    
+    if past_self.timer_spawn == 0:
+        past_self.update(dt,level,TILE_SIZE)
+        past_self.show(screen)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
@@ -85,3 +94,6 @@ while running:
 
 pygame.quit()
 
+########
+#TODO bug quand past self descend et que player bouge horizontalement => past self glitch sur le sol et ne tombe pas
+########
