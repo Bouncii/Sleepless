@@ -56,11 +56,11 @@ class Player:
         if self.pixel_x == self.target_x:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_q]:
-                self.try_move(-1,0)
+                self.try_move(-1)
             elif keys[pygame.K_d]:
-                self.try_move(1,0)
+                self.try_move(1)
   
-    def try_move(self,dx:int,dy:int):
+    def try_move(self,dx:int):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target x et y pour déplacement et animation
