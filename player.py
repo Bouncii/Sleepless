@@ -24,7 +24,7 @@ class Player:
 
 
  
-    def detection_key(self,grid_width,tile_size):
+    def detection_key(self,grid_width,tile_size,past_self):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
         entrées: 
@@ -34,11 +34,11 @@ class Player:
         '''
         keys = pygame.key.get_pressed()
         if keys[pygame.K_q]:
-            self.try_move(-1,grid_width,tile_size)
+            self.try_move(-1,grid_width,tile_size,past_self)
         elif keys[pygame.K_d]:
-            self.try_move(1,grid_width,tile_size)
+            self.try_move(1,grid_width,tile_size,past_self)
   
-    def try_move(self,dx:int,grid_width,tile_size):
+    def try_move(self,dx:int,grid_width,tile_size,past_self):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target x et y pour déplacement et animation
@@ -53,7 +53,12 @@ class Player:
         if 0 <= new_x and new_x < grid_width:
             self.grid_x = new_x
             self.target_x = new_x * tile_size + (tile_size - self.width) // 2
+
+
             self.update_moves()
+            past_self.moves = self.moves
+            past_self.detection_key(tile_size)
+
 
     def update(self, dt:float, level:list, tile_size:int, grid_width:int):
         '''

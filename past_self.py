@@ -23,7 +23,7 @@ class Past_self:
         self.moves = []
         self.tour = 0
 
-        self.timer_spawn = 3
+        self.timer_spawn = 4
         
 
 
@@ -35,12 +35,10 @@ class Past_self:
         grid_width : int
         sorties: none
         '''
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_q] or keys[pygame.K_d]:
-            if self.timer_spawn == 0:
-                self.move(tile_size)
-            else:
-                self.timer_spawn -=1
+        if self.timer_spawn == 0:
+            self.move(tile_size)
+        else:
+            self.timer_spawn -=1
             
 
   

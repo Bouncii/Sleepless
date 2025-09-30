@@ -8,3 +8,6 @@
 
 - toi du passé ancien niveaupour le gosse qui dénloque des actions selon l'objet
 - differents objets 
+
+
+- demi seconde de pose entre deplacement

@@ -6,12 +6,12 @@ from tile import *
 
 #################################### game initialization ####################################
 
-level_str = [["start","sol","sol","sol","sol","sol","vide"],
-             ["sol","sol","vide","sol","sol","sol","sol"],
-             ["sol","sol","sol","sol","sol","sol","end"]]
+level_str = [["start","sol","sol","sol","sol","sol","vide","sol"],
+             ["sol","sol","vide","sol","sol","sol","sol","sol"],
+             ["sol","sol","sol","sol","sol","sol","sol","end"]]
 
 TILE_SIZE = 128 
-GRID_WIDTH = len(level_str[0])   
+GRID_WIDTH = len(level_str[0]) 
 GRID_HEIGHT = len(level_str)
 
 # pygame setup
@@ -70,12 +70,11 @@ while running:
             level[row][col].draw(screen)
 
     if player.pixel_x == player.target_x and player.on_ground == True:
-        player.detection_key(GRID_WIDTH,TILE_SIZE)
-        past_self.detection_key(TILE_SIZE)
+        player.detection_key(GRID_WIDTH,TILE_SIZE,past_self)
 
 
 
-    past_self.moves = player.moves
+    
 
     player.update(dt,level,TILE_SIZE,GRID_WIDTH)
     player.show(screen)
@@ -96,4 +95,5 @@ pygame.quit()
 
 ########
 #TODO bug quand past self descend et que player bouge horizontalement => past self glitch sur le sol et ne tombe pas
+# ne pas ajouter à la liste des mooves
 ########
