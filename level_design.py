@@ -8,6 +8,7 @@ def cree_tableau_de_la_map(file:str):
         '_' ou '-' -> sol
         'S'  ou 's' -> start
         'E' ou 'e' -> end
+        '\n' ne cree rien, il est ignoré
         Tout autre caractère -> vide
     """
     map = []
@@ -32,5 +33,3 @@ def cree_tableau_de_la_map(file:str):
         if taille_etage != len(tab):
             return [["start"]]
     return map
-
-print(cree_tableau_de_la_map("level.txt"))

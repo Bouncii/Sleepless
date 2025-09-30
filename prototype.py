@@ -3,12 +3,13 @@ import pygame
 from player import *
 from past_self import *
 from tile import *
+from level_design import *
 
 #################################### game initialization ####################################
 
-level_str = [["start","sol","sol","sol","sol","sol","vide","sol"],
-             ["sol","sol","vide","sol","sol","sol","sol","sol"],
-             ["sol","sol","sol","sol","sol","sol","sol","end"]]
+FILE_MAP = "level.txt"
+
+level_str = cree_tableau_de_la_map(FILE_MAP)
 
 TILE_SIZE = 128 
 GRID_WIDTH = len(level_str[0]) 
