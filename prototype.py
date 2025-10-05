@@ -70,8 +70,8 @@ while running:
         for col in range(GRID_WIDTH):
             level[row][col].draw(screen)
 
-    if player.pixel_x == player.target_x and player.on_ground == True:
-        player.detection_key(GRID_WIDTH,TILE_SIZE,past_self)
+    if player.pixel_x == player.target_x and player.moving == False:
+        player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self,level)
 
 
 

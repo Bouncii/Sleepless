@@ -8,6 +8,7 @@ def cree_tableau_de_la_map(file:str):
         '_' ou '-' -> sol
         'S'  ou 's' -> start
         'E' ou 'e' -> end
+        '#' -> ladder
         '\n' ne cree rien, il est ignoré
         Tout autre caractère -> vide
     """
@@ -22,6 +23,8 @@ def cree_tableau_de_la_map(file:str):
                     niveau += ["start"]
                 elif crt == 'E' or crt == 'e':
                     niveau += ["end"]
+                elif crt == '#':
+                    niveau += ["ladder"]
                 elif crt == '\n':
                     pass
                 else:

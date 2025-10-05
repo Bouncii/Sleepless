@@ -22,7 +22,7 @@ class Tile:
         Fonction qui choisit la couleur en fonction du type de la tile
         sorties: la couleur en rgb
         '''
-        if self.tile_type == "sol" or self.tile_type == "vide":
+        if self.tile_type == "sol" or self.tile_type == "vide"or self.tile_type == "ladder":
             return (100,100,150)
         elif self.tile_type == "start":
             return (000,250,50)
@@ -57,7 +57,7 @@ class Tile:
             la liste contenant les structures
         '''
         res= []
-        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end":
+        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end" or self.tile_type=="ladder":
             res.append(self.build_sol())
         
         

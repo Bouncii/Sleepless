@@ -12,19 +12,23 @@ class Player:
         self.pixel_y = self.grid_y * tile_size + int(tile_size*0.8) - self.height
 
         self.target_x = self.pixel_x
+        self.target_y = self.pixel_y
 
-        self.speed_x = 300 
-        self.speed_y = 0
+        self.speed_x = 300  
+        self.speed_y = 300  
 
+        self.speed_gravity_y = 0
         self.gravity = 600
         self.on_ground = False
 
         self.moves = []
+
+        self.moving = False
         
 
 
  
-    def detection_key(self,grid_width,tile_size,past_self):
+    def detection_key(self,grid_width,grid_height,tile_size,past_self,level):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
         entrées: 
@@ -34,11 +38,14 @@ class Player:
         '''
         keys = pygame.key.get_pressed()
         if keys[pygame.K_q]:
-            self.try_move(-1,grid_width,tile_size,past_self)
+            self.try_move_horizontal(-1,grid_width,tile_size,past_self)
         elif keys[pygame.K_d]:
-            self.try_move(1,grid_width,tile_size,past_self)
+            self.try_move_horizontal(1,grid_width,tile_size,past_self)
+        elif keys[pygame.K_z]:
+            if level[self.grid_y][self.grid_x].tile_type == "ladder":
+                self.try_move_vertical(-1,grid_height,tile_size,past_self)
   
-    def try_move(self,dx:int,grid_width,tile_size,past_self):
+    def try_move_horizontal(self,dx:int,grid_width,tile_size,past_self):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target x et y pour déplacement et animation
@@ -58,6 +65,26 @@ class Player:
             self.update_moves()
             past_self.moves = self.moves
             past_self.detection_key(tile_size)
+            print(self.grid_x,self.grid_y)
+
+    def try_move_vertical(self,dy:int,grid_height,tile_size,past_self):
+        '''
+        Fonction qui vérifie si le déplacement est possible
+        si faisable : update target y pour déplacement et animation
+        si pas faisable : ne fait rien
+        entrées: 
+        dy : int  
+        tile_size : int
+        grid_width : int
+        sorties: none
+        '''
+        new_y = self.grid_y + dy
+        if 0 <= new_y and new_y < grid_height:
+            self.grid_y = new_y
+            self.target_y = new_y * tile_size + int(tile_size*0.8) - self.height
+
+            print(self.grid_x,self.grid_y)
+
 
 
     def update(self, dt:float, level:list, tile_size:int, grid_width:int):
@@ -71,22 +98,28 @@ class Player:
         sorties: none
         '''
 
-
         # Chute veticale
-        self.gestion_gravite(dt,level)
+        if level[self.grid_y][self.grid_x].tile_type != "ladder" and (self.grid_y + 1 >= len(level) or level[self.grid_y + 1][self.grid_x].tile_type != "ladder"):
+            self.gestion_gravite(dt,level)
 
 
         # Deplacement horizontal
         self.deplacement_horizontal(dt)
+        
+        if level[self.grid_y][self.grid_x].tile_type == "ladder" or (self.grid_y + 1 < len(level) and level[self.grid_y + 1][self.grid_x].tile_type == "ladder"):
+            self.deplacement_vertical(dt)
 
         
-        self.grid_x = int(self.pixel_x // tile_size) # nécessaire pour y à cause de la gravité, x est update par securité
+        self.grid_x = int(self.pixel_x // tile_size) # nécessaire pour y à cause de la gravité, x et update par securité
         self.grid_y = int(self.pixel_y // tile_size)
 
         #Affichage tile à chaque changement -----DEBEUGUAGE-----
         previous_coord = (self.grid_x,self.grid_y)
         if previous_coord != (self.grid_x,self.grid_y):
             print(self.grid_x,self.grid_y)
+
+
+
 
 
 
@@ -97,14 +130,36 @@ class Player:
         entrée : dt
         '''
         if self.pixel_x < self.target_x:
+            self.moving = True
             self.pixel_x += self.speed_x * dt
             if self.pixel_x > self.target_x:
                 self.pixel_x = self.target_x
-        if self.pixel_x > self.target_x:
+        elif self.pixel_x > self.target_x:
+            self.moving = True
             self.pixel_x -= self.speed_x * dt
             if self.pixel_x < self.target_x:
                 self.pixel_x = self.target_x
+        else:
+                self.moving = False
 
+    def deplacement_vertical(self,dt:float):
+            '''
+            Fonction qui actualise le déplacement/animation vertical :
+            vérifie si y target ne est pas atteinte, si pas atteinte alors on additionne/soustrait la co avec speed
+            entrée : dt
+            '''
+            if self.pixel_y < self.target_y:
+                self.pixel_y += self.speed_y * dt
+                if self.pixel_y > self.target_y:
+                    self.pixel_y = self.target_y
+
+            elif self.pixel_y > self.target_y:
+                self.pixel_y -= self.speed_y * dt
+                if self.pixel_y < self.target_y:
+                    self.pixel_y = self.target_y
+
+            else:
+                self.moving = False
 
 
     def gestion_gravite(self,dt,level):
@@ -117,11 +172,13 @@ class Player:
         sorties: none
         '''
         if not self.on_ground:
-            self.speed_y += self.gravity * dt
+            self.speed_gravity_y += self.gravity * dt
+            self.moving = True
         else:
-            self.speed_y = 0
+            self.speed_gravity_y = 0
+            self.moving = False
 
-        self.pixel_y += self.speed_y * dt
+        self.pixel_y += self.speed_gravity_y * dt
 
         player_rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
@@ -131,9 +188,11 @@ class Player:
             tile = level[self.grid_y][i_col]
             for structure in tile.structures:
                 if player_rect.colliderect(structure["rect"]):
-                    if self.speed_y >= 0:
+                    if self.speed_gravity_y >= 0:
                         self.pixel_y = structure["rect"].top - self.height
                         self.on_ground = True
+
+        self.target_y = self.pixel_y
 
     def show(self,screen):
         '''
