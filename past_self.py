@@ -13,10 +13,12 @@ class Past_self:
         self.pixel_y = self.grid_y * tile_size + int(tile_size*0.8) - self.height
 
         self.target_x = self.pixel_x
+        self.target_y = self.pixel_y
 
-        self.speed_x = 300 
-        self.speed_y = 0
+        self.speed_x = 300  
+        self.speed_y = 300  
 
+        self.speed_gravity_y = 0
         self.gravity = 600
         self.on_ground = False
 
@@ -27,63 +29,97 @@ class Past_self:
         
 
 
-    def detection_key(self,tile_size):
+    def detection_key(self,tile_size:int):
         '''
-        Fonction qui détecte une pression des touches et agit en conséquence
+        Fonction qui détecte une pression des touches et agit en conséquence (on bouge si le délai de spawn est écoulé ou alors on décrémente celui-ci)
         entrées: 
-        tile_size : int
-        grid_width : int
+            tile_size : int
+            grid_width : int
         sorties: none
         '''
+
+
         if self.timer_spawn == 0:
             self.move(tile_size)
         else:
-            self.timer_spawn -=1
+            self.timer_spawn -= 1
+
             
 
-  
-    def move(self,tile_size):
+    def move_horizontal(self,new_x:int,tile_size):
         '''
-        Fonction qui assigne la cible du deplacement du old self en fonction de la liste des moves du joueur
+        Fonction qui déplace horizontalement past self a partir de new_x
         entrées: 
-        dx : int  
-        tile_size : int
-        grid_width : int
+            new_x : int
+            tile_size : int
         sorties: none
         '''
-        print(self.moves)
-        new_x = self.moves[self.tour][0]
-        self.tour += 1
+
         self.grid_x = new_x
         self.target_x = new_x * tile_size + (tile_size - self.width) // 2
 
-    def update(self, dt:float, level:list, tile_size:int):
+
+    def move_vertical(self,new_y:int,tile_size):
         '''
-        fonction qui actualise différents élements relatifs au joueur
+        Fonction qui déplace verticalement past self a partir de new_y
         entrées: 
-        dt : float
-        level : list of list
-        tile_size : int
-        grid_width : int
+            new_y : int
+            tile_size : int
+        sorties: none
+        '''
+
+        self.grid_y = new_y
+        self.target_y = new_y * tile_size + int(tile_size*0.8) - self.height
+
+
+
+    def move(self,tile_size:int):
+        '''
+        Fonction qui assigne la cible du deplacement du past self en fonction de la liste des moves et incrémente self.tour(indice dans moves)
+        entrées: 
+            tile_size : int
         sorties: none
         '''
 
 
+        next_move = self.moves[self.tour]
+        
+        if self.grid_x != next_move[0]:
+            self.move_horizontal(next_move[0], tile_size)
+        elif self.grid_y != next_move[1]:
+            self.move_vertical(next_move[1], tile_size)
+        self.tour += 1
+
+            
+
+            
+
+    def update(self, dt:float, level:list, tile_size:int):
+        '''
+        fonction qui actualise différents élements relatifs au past_self (à chaque frame)
+        entrées: 
+            dt : float
+            level : list of list
+            tile_size : int
+        sorties: none
+        '''
+
         # Chute veticale
-        self.gestion_gravite(dt,level)
+        if level[self.grid_y][self.grid_x].tile_type != "ladder" and (self.grid_y + 1 >= len(level) or level[self.grid_y + 1][self.grid_x].tile_type != "ladder"):
+            self.gestion_gravite(dt,level)
 
 
         # Deplacement horizontal
         self.deplacement_horizontal(dt)
+        
+        if level[self.grid_y][self.grid_x].tile_type == "ladder" or (self.grid_y + 1 < len(level) and level[self.grid_y + 1][self.grid_x].tile_type == "ladder"):
+            self.deplacement_vertical(dt)
 
         
-        self.grid_x = int(self.pixel_x // tile_size) # nécessaire pour y à cause de la gravité, x est update par securité
-        self.grid_y = int(self.pixel_y // tile_size)
+        
 
-        #Affichage tile à chaque changement -----DEBEUGUAGE-----
-        previous_coord = (self.grid_x,self.grid_y)
-        if previous_coord != (self.grid_x,self.grid_y):
-            print(self.grid_x,self.grid_y)
+        self.grid_x = int(self.pixel_x // tile_size) # nécessaire pour y à cause de la gravité, x et update par securité
+        self.grid_y = int(self.pixel_y // tile_size)
 
 
 
@@ -91,16 +127,39 @@ class Past_self:
         '''
         Fonction qui actualise le déplacement/animation horizontal :
         vérifie si x target ne est pas atteinte, si pas atteinte alors on additionne/soustrait la co avec speed
-        entrée : dt
+        entrée : 
+            dt : float
         '''
         if self.pixel_x < self.target_x:
+
             self.pixel_x += self.speed_x * dt
             if self.pixel_x > self.target_x:
                 self.pixel_x = self.target_x
-        if self.pixel_x > self.target_x:
+        elif self.pixel_x > self.target_x:
+
             self.pixel_x -= self.speed_x * dt
             if self.pixel_x < self.target_x:
                 self.pixel_x = self.target_x
+
+
+
+    def deplacement_vertical(self,dt:float):
+            '''
+            Fonction qui actualise le déplacement/animation vertical :
+            vérifie si y target ne est pas atteinte, si pas atteinte alors on additionne/soustrait la co avec speed
+            entrée : 
+                dt : float
+            '''
+            if self.pixel_y < self.target_y:
+                self.pixel_y += self.speed_y * dt
+                if self.pixel_y > self.target_y:
+                    self.pixel_y = self.target_y
+
+            elif self.pixel_y > self.target_y:
+                self.pixel_y -= self.speed_y * dt
+                if self.pixel_y < self.target_y:
+                    self.pixel_y = self.target_y
+
 
 
 
@@ -109,16 +168,16 @@ class Past_self:
         Fonction qui gère le déplacement/animation lié à la gravité : 
         incremente les coordonnées par la vitesse verticale (dont on additionne aussi la valeur avec gravité) quand on ne touche pas le sol
         entrées: 
-        dt : float
-        level : list of list
+            dt : float
+            level : list of list
         sorties: none
         '''
         if not self.on_ground:
-            self.speed_y += self.gravity * dt
+            self.speed_gravity_y += self.gravity * dt
         else:
-            self.speed_y = 0
+            self.speed_gravity_y = 0
 
-        self.pixel_y += self.speed_y * dt
+        self.pixel_y += self.speed_gravity_y * dt
 
         player_rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
@@ -128,20 +187,17 @@ class Past_self:
             tile = level[self.grid_y][i_col]
             for structure in tile.structures:
                 if player_rect.colliderect(structure["rect"]):
-                    if self.speed_y >= 0:
+                    if self.speed_gravity_y >= 0:
                         self.pixel_y = structure["rect"].top - self.height
                         self.on_ground = True
 
+        self.target_y = self.pixel_y
+
     def show(self,screen):
         '''
-        Fonction qui dessine le joueur en fonction de ses attributs
-        entrées: screen
+        Fonction qui dessine le past self en fonction de ses attributs
+        entrées: 
+            screen: pygames
         sorties: none
         '''
         pygame.draw.rect(screen, "orange", (self.pixel_x, self.pixel_y, self.width, self.height ))
-
-    def update_moves (self):
-        '''
-        Fonction qui ajoute chaque nouvelles coordonnées que prends joueur à un tableau sous forme de tuple (x,y)
-        '''
-        self.moves.append((self.grid_x,self.grid_y))

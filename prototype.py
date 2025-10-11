@@ -70,14 +70,14 @@ while running:
         for col in range(GRID_WIDTH):
             level[row][col].draw(screen)
 
-    if player.pixel_x == player.target_x and player.moving == False:
-        player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self,level)
+    
+    player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self,level)
 
 
 
     
 
-    player.update(dt,level,TILE_SIZE,GRID_WIDTH)
+    player.update(dt,level,TILE_SIZE)
     player.show(screen)
 
     if past_self.timer_spawn == 0:

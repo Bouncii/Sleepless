@@ -32,28 +32,34 @@ class Player:
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
         entrées: 
-        tile_size : int
-        grid_width : int
+            grid_width : int
+            grid_height : int
+            tile_size : int
+            past_self : Past_self
+            level : list
         sorties: none
         '''
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_q]:
-            self.try_move_horizontal(-1,grid_width,tile_size,past_self)
-        elif keys[pygame.K_d]:
-            self.try_move_horizontal(1,grid_width,tile_size,past_self)
-        elif keys[pygame.K_z]:
-            if level[self.grid_y][self.grid_x].tile_type == "ladder":
-                self.try_move_vertical(-1,grid_height,tile_size,past_self)
+        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and self.moving == False:
+            self.moving=True
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_q]:
+                self.try_move_horizontal(-1,grid_width,grid_height,tile_size,past_self)
+            elif keys[pygame.K_d]:
+                self.try_move_horizontal(1,grid_width,grid_height,tile_size,past_self)
+            elif keys[pygame.K_z]:
+                if level[self.grid_y][self.grid_x].tile_type == "ladder":
+                    self.try_move_vertical(-1,grid_height,tile_size,past_self)
   
     def try_move_horizontal(self,dx:int,grid_width,tile_size,past_self):
         '''
         Fonction qui vérifie si le déplacement est possible
-        si faisable : update target x et y pour déplacement et animation
+        si faisable : update target x pour déplacement et animation
         si pas faisable : ne fait rien
         entrées: 
-        dx : int  
-        tile_size : int
-        grid_width : int
+            dx : int  
+            grid_width : int
+            tile_size : int
+            past_self : Past_self
         sorties: none
         '''
         new_x = self.grid_x + dx
@@ -65,7 +71,6 @@ class Player:
             self.update_moves()
             past_self.moves = self.moves
             past_self.detection_key(tile_size)
-            print(self.grid_x,self.grid_y)
 
     def try_move_vertical(self,dy:int,grid_height,tile_size,past_self):
         '''
@@ -73,9 +78,10 @@ class Player:
         si faisable : update target y pour déplacement et animation
         si pas faisable : ne fait rien
         entrées: 
-        dy : int  
-        tile_size : int
-        grid_width : int
+            dy : int  
+            grid_height : int
+            tile_size : int
+            past_self : Past_self
         sorties: none
         '''
         new_y = self.grid_y + dy
@@ -83,20 +89,23 @@ class Player:
             self.grid_y = new_y
             self.target_y = new_y * tile_size + int(tile_size*0.8) - self.height
 
-            print(self.grid_x,self.grid_y)
+
+            self.update_moves()
+            past_self.moves = self.moves
+            past_self.detection_key(tile_size)
 
 
 
-    def update(self, dt:float, level:list, tile_size:int, grid_width:int):
+    def update(self, dt:float, level:list, tile_size:int):
         '''
-        fonction qui actualise différents élements relatifs au joueur
+        fonction qui actualise différents élements relatifs au joueur (à chaque frame)
         entrées: 
-        dt : float
-        level : list of list
-        tile_size : int
-        grid_width : int
+            dt : float
+            level : list of list
+            tile_size : int
         sorties: none
         '''
+
 
         # Chute veticale
         if level[self.grid_y][self.grid_x].tile_type != "ladder" and (self.grid_y + 1 >= len(level) or level[self.grid_y + 1][self.grid_x].tile_type != "ladder"):
@@ -113,13 +122,6 @@ class Player:
         self.grid_x = int(self.pixel_x // tile_size) # nécessaire pour y à cause de la gravité, x et update par securité
         self.grid_y = int(self.pixel_y // tile_size)
 
-        #Affichage tile à chaque changement -----DEBEUGUAGE-----
-        previous_coord = (self.grid_x,self.grid_y)
-        if previous_coord != (self.grid_x,self.grid_y):
-            print(self.grid_x,self.grid_y)
-
-
-
 
 
 
@@ -127,15 +129,14 @@ class Player:
         '''
         Fonction qui actualise le déplacement/animation horizontal :
         vérifie si x target ne est pas atteinte, si pas atteinte alors on additionne/soustrait la co avec speed
-        entrée : dt
+        entrée : 
+            dt : float
         '''
         if self.pixel_x < self.target_x:
-            self.moving = True
             self.pixel_x += self.speed_x * dt
             if self.pixel_x > self.target_x:
                 self.pixel_x = self.target_x
         elif self.pixel_x > self.target_x:
-            self.moving = True
             self.pixel_x -= self.speed_x * dt
             if self.pixel_x < self.target_x:
                 self.pixel_x = self.target_x
@@ -146,7 +147,8 @@ class Player:
             '''
             Fonction qui actualise le déplacement/animation vertical :
             vérifie si y target ne est pas atteinte, si pas atteinte alors on additionne/soustrait la co avec speed
-            entrée : dt
+            entrée : 
+                dt : float
             '''
             if self.pixel_y < self.target_y:
                 self.pixel_y += self.speed_y * dt
@@ -167,16 +169,14 @@ class Player:
         Fonction qui gère le déplacement/animation lié à la gravité : 
         incremente les coordonnées par la vitesse verticale (dont on additionne aussi la valeur avec gravité) quand on ne touche pas le sol
         entrées: 
-        dt : float
-        level : list of list
+            dt : float
+            level : list of list
         sorties: none
         '''
         if not self.on_ground:
             self.speed_gravity_y += self.gravity * dt
-            self.moving = True
         else:
             self.speed_gravity_y = 0
-            self.moving = False
 
         self.pixel_y += self.speed_gravity_y * dt
 
@@ -197,7 +197,8 @@ class Player:
     def show(self,screen):
         '''
         Fonction qui dessine le joueur en fonction de ses attributs
-        entrées: screen
+        entrée: 
+            screen : pygames
         sorties: none
         '''
         pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
