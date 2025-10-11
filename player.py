@@ -43,9 +43,9 @@ class Player:
             self.moving=True
             keys = pygame.key.get_pressed()
             if keys[pygame.K_q]:
-                self.try_move_horizontal(-1,grid_width,grid_height,tile_size,past_self)
+                self.try_move_horizontal(-1,grid_width,tile_size,past_self)
             elif keys[pygame.K_d]:
-                self.try_move_horizontal(1,grid_width,grid_height,tile_size,past_self)
+                self.try_move_horizontal(1,grid_width,tile_size,past_self)
             elif keys[pygame.K_z]:
                 if level[self.grid_y][self.grid_x].tile_type == "ladder":
                     self.try_move_vertical(-1,grid_height,tile_size,past_self)
