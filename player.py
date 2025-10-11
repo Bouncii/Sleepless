@@ -19,7 +19,7 @@ class Player:
 
         self.speed_gravity_y = 0
         self.gravity = 600
-        self.on_ground = False
+        self.on_ground = True
 
         self.moves = []
 
@@ -39,7 +39,7 @@ class Player:
             level : list
         sorties: none
         '''
-        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and self.moving == False:
+        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and self.moving == False and self.on_ground == True and past_self.on_ground == True:
             self.moving=True
             keys = pygame.key.get_pressed()
             if keys[pygame.K_q]:

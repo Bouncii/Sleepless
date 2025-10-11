@@ -20,7 +20,7 @@ class Past_self:
 
         self.speed_gravity_y = 0
         self.gravity = 600
-        self.on_ground = False
+        self.on_ground = True
 
         self.moves = []
         self.tour = 0
