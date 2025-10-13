@@ -78,6 +78,7 @@ while running:
     
 
     player.update(dt,level,TILE_SIZE)
+    print(player.moving_vertical,past_self.moving_vertical)
     player.show(screen)
 
     if past_self.timer_spawn == 0:
@@ -95,6 +96,5 @@ while running:
 pygame.quit()
 
 ########
-#TODO bug quand past self descend et que player bouge horizontalement => past self glitch sur le sol et ne tombe pas
-# ne pas ajouter à la liste des mooves
+#TODO 
 ########

@@ -22,6 +22,8 @@ class Past_self:
         self.gravity = 600
         self.on_ground = True
 
+        self.moving_vertical = False
+
         self.moves = []
         self.tour = 0
 
@@ -174,8 +176,13 @@ class Past_self:
         '''
         if not self.on_ground:
             self.speed_gravity_y += self.gravity * dt
+            if self.debug > 4 :
+                self.moving_vertical = True
+            self.debug +=1
         else:
             self.speed_gravity_y = 0
+            self.debug = 0
+            self.moving_vertical = False
 
         self.pixel_y += self.speed_gravity_y * dt
 

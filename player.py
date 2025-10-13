@@ -23,7 +23,10 @@ class Player:
 
         self.moves = []
 
-        self.moving = False
+        self.moving_horizontal = False
+        self.moving_vertical = False
+
+        self.frame_dans_air = 0
         
 
 
@@ -39,8 +42,8 @@ class Player:
             level : list
         sorties: none
         '''
-        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and self.moving == False and self.on_ground == True and past_self.on_ground == True:
-            self.moving=True
+        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and not self.moving_horizontal and not self.moving_vertical and not past_self.moving_vertical:
+            self.moving_horizontal=True
             keys = pygame.key.get_pressed()
             if keys[pygame.K_q]:
                 self.try_move_horizontal(-1,grid_width,tile_size,past_self)
@@ -141,7 +144,7 @@ class Player:
             if self.pixel_x < self.target_x:
                 self.pixel_x = self.target_x
         else:
-                self.moving = False
+                self.moving_horizontal = False
 
     def deplacement_vertical(self,dt:float):
             '''
@@ -161,7 +164,7 @@ class Player:
                     self.pixel_y = self.target_y
 
             else:
-                self.moving = False
+                self.moving_horizontal = False
 
 
     def gestion_gravite(self,dt,level):
@@ -173,10 +176,16 @@ class Player:
             level : list of list
         sorties: none
         '''
+            
         if not self.on_ground:
             self.speed_gravity_y += self.gravity * dt
+            if self.frame_dans_air > 4 : #Au bout de 4 frame de on_ground à l'etat faux on considère que le player tombe, sinon il est toujour sur le sol
+                self.moving_vertical = True
+            self.frame_dans_air +=1
         else:
             self.speed_gravity_y = 0
+            self.frame_dans_air = 0
+            self.moving_vertical = False
 
         self.pixel_y += self.speed_gravity_y * dt
 
@@ -184,7 +193,7 @@ class Player:
 
         # Détection structure
         self.on_ground = False
-        for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+2)): # on check que les tiles à droite et à gauche pour verifier le sol
+        for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+1)): # on check que les tiles à droite et à gauche pour verifier le sol
             tile = level[self.grid_y][i_col]
             for structure in tile.structures:
                 if player_rect.colliderect(structure["rect"]):
@@ -193,6 +202,7 @@ class Player:
                         self.on_ground = True
 
         self.target_y = self.pixel_y
+        
 
     def show(self,screen):
         '''
