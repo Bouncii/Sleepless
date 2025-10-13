@@ -1,4 +1,6 @@
 from player import *
+from structures import *
+import pygame
 class Tile:
     def __init__ (self, grid_x:int, grid_y:int, width:int, height:int, tile_type:str, tile_size):
         self.grid_x = grid_x
@@ -36,17 +38,8 @@ class Tile:
         '''
         pygame.draw.rect(screen,self.background,(self.pixel_x, self.pixel_y, self.width, self.height))
         for structure in self.structures:
-            pygame.draw.rect(screen,structure["color"],structure["rect"])
+            pygame.draw.rect(screen,structure.color,structure.rect)
 
-    def build_sol(self)->pygame.Rect:
-        '''
-        Fonction qui construit une structure de type sol
-        entrées: 
-            self
-        sorties: 
-            un dictionnaire contenant un rect pygame (la fome geometrique) et la couleur en rvb
-        '''
-        return {"rect":pygame.Rect(self.pixel_x, self.pixel_y+(0.8*self.height),self.width,self.height*0.2),"color":(100,100,0)}
 
     def structures_builder(self) -> list:
         '''
@@ -58,7 +51,7 @@ class Tile:
         '''
         res= []
         if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end" or self.tile_type=="ladder":
-            res.append(self.build_sol())
+            res.append(Ground(self.pixel_x,self.pixel_y,self.width,self.height))
         
         
         return res
