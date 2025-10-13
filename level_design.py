@@ -25,6 +25,8 @@ def cree_tableau_de_la_map(file:str):
                     niveau += ["end"]
                 elif crt == '#':
                     niveau += ["ladder"]
+                elif crt == '}':
+                    niveau += ["left_door"]
                 elif crt == '\n':
                     pass
                 else:

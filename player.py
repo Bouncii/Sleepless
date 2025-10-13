@@ -196,10 +196,11 @@ class Player:
         for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+1)): # on check que les tiles à droite et à gauche pour verifier le sol
             tile = level[self.grid_y][i_col]
             for structure in tile.structures:
-                if player_rect.colliderect(structure.rect):
-                    if self.speed_gravity_y >= 0:
-                        self.pixel_y = structure.rect.top - self.height
-                        self.on_ground = True
+                if structure.type == "ground":
+                    if player_rect.colliderect(structure.rect):
+                        if self.speed_gravity_y >= 0:
+                            self.pixel_y = structure.rect.top - self.height
+                            self.on_ground = True
 
         self.target_y = self.pixel_y
         
