@@ -30,6 +30,8 @@ class Tile:
             return (000,250,50)
         elif self.tile_type == "end":
             return (000,50,250)
+        elif self.tile_type == "button":
+            return (100,0,100)
     def draw(self,screen):
         '''
         Fonction qui dessine la tile puis les structures qu'elle conttient
@@ -50,7 +52,7 @@ class Tile:
             la liste contenant les structures
         '''
         res= []
-        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end" or self.tile_type=="ladder" or self.tile_type == "left_door":
+        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end" or self.tile_type=="ladder" or self.tile_type == "left_door" or self.tile_type == "button":
             res.append(Ground(self.pixel_x,self.pixel_y,self.width,self.height))
         if self.tile_type == "left_door":
             res.append(Door(self.pixel_x,self.pixel_y,self.width,self.height))

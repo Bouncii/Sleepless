@@ -52,7 +52,7 @@ def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) ->
 #################################### game ####################################
          
 level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
-
+print(level)
 player = Player(0,0,TILE_SIZE)
 
 past_self = Past_self(0,0,TILE_SIZE)
@@ -78,7 +78,7 @@ while running:
     
 
     player.update(dt,level,TILE_SIZE)
-    print(player.moving_vertical,past_self.moving_vertical)
+
     player.show(screen)
 
     if past_self.timer_spawn == 0:

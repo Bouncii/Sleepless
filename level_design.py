@@ -23,6 +23,8 @@ def cree_tableau_de_la_map(file:str):
                     niveau += ["start"]
                 elif crt == 'E' or crt == 'e':
                     niveau += ["end"]
+                elif crt == 'B':
+                    niveau += ["button"]
                 elif crt == '#':
                     niveau += ["ladder"]
                 elif crt == '}':
