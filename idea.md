@@ -30,6 +30,11 @@
   Interagir ↔ Ne rien faire.
 
 
+TODO :
+ - implémenter porte / bouton (attribut id qui est le numéro après le B ou le D pour assigner des couple)
+ - implémenter autre fichier pour chaque niveau avec les paramètres
+ - début/fin du niveau, GUI , ect
+
 
 
 
