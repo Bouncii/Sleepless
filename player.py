@@ -111,7 +111,7 @@ class Player:
 
 
         # Chute veticale
-        if level[self.grid_y][self.grid_x].tile_type != "ladder" and (self.grid_y + 1 >= len(level) or level[self.grid_y + 1][self.grid_x].tile_type != "ladder"):
+        if  (level[min(len(level),self.grid_y-1)][self.grid_x].tile_type == "vide" or level[self.grid_y][self.grid_x].tile_type == "vide"):
             self.gestion_gravite(dt,level)
 
 

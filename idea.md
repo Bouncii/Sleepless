@@ -43,7 +43,7 @@ TODO :
 
 
 
-
+- case qui se ferme et s'ouvre tout les deux tours par exemple
 
 
 
