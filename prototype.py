@@ -5,6 +5,7 @@ from player import *
 from past_self import *
 from tile import *
 from level_design import *
+from gui import *
 
 #################################### game initialization ####################################
 
@@ -16,27 +17,29 @@ TILE_SIZE = 128
 GRID_WIDTH = len(level_str[0]) 
 GRID_HEIGHT = len(level_str)
 
-# pygame setup
+#################################### Pygame Setup ####################################
+
 pygame.init()
 screen = pygame.display.set_mode((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
 clock = pygame.time.Clock()
 running = True
 dt = 0
 
-# pygame_gui setup
+#################################### Pygame_GUI Setup ####################################
+
 background = pygame.Surface((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
-manager = pygame_gui.UIManager((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE), 'theme.json')
-play_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((GRID_WIDTH*TILE_SIZE//2 - 100//2, GRID_HEIGHT*TILE_SIZE//1.5 - 50//2), (100, 50)),
-                                             text='Play',
-                                             manager=manager)
-text_label = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect((0, GRID_HEIGHT*TILE_SIZE//3 - 100), (GRID_WIDTH*TILE_SIZE, 50)),
-    text='SleepLess',
-    manager=manager,
-    object_id=pygame_gui.core.ObjectID(class_id="#menu_titre")
-)
-time_delta = clock.tick(60)/1000.0  #pareil que dt
-play = False
+# Pareil que dt sauf que dt est modif je crois pour l'anime de chute
+time_delta = clock.tick(60) / 1000
+
+#################################### Etape du jeu ####################################
+
+menu = Menu(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT)
+reset_game = "reset_game"
+game = "game"
+win = Fin(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT)
+
+# Décide de ce que l'on affiche menu/game etc ...
+current_screen = menu
 
 ##########################################################################################
 
@@ -64,13 +67,6 @@ def level_builder(grid_width:int,grid_height:int,tile_size:int,level_str:str) ->
 
 
 #################################### game ####################################
-         
-level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
-print(level)
-player = Player(0,0,TILE_SIZE)
-
-past_self = Past_self(0,0,TILE_SIZE)
-time_spawn_old_self = 3;
 
 while running:
     # poll for events
@@ -79,46 +75,57 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == play_button:
-                play = True
+            if event.ui_element == menu.play_button:
+                current_screen = reset_game
+            if event.ui_element == win.replay_button:
+                # Reset le message de fin :)
+                win = Fin(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT)
+                current_screen = reset_game
+        menu.manager.process_events(event)
+        win.manager.process_events(event)
 
-        manager.process_events(event)
-    if play == False:
-        manager.update(time_delta)
-
+    if current_screen == menu:
+        menu.update(time_delta)
         screen.blit(background, (0, 0))
-        manager.draw_ui(screen)
-        pygame.display.update()
-        
-    else:
-        screen.fill((0,0,0))
+        menu.draw(screen)
+    
+    elif current_screen == reset_game:
+        level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
+        player = Player(0,0,TILE_SIZE)
+        past_self = Past_self(0,0,TILE_SIZE)
+        time_spawn_old_self = 3
+        current_screen = game
 
+        
+    elif current_screen == game:
+        screen.fill((0,0,0))
         for row in range(GRID_HEIGHT):
             for col in range(GRID_WIDTH):
                 level[row][col].draw(screen)
 
-        
         player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self,level)
-
-
-
-        
-
         player.update(dt,level,TILE_SIZE)
-
         player.show(screen)
 
         if past_self.timer_spawn == 0:
             past_self.update(dt,level,TILE_SIZE)
             past_self.show(screen)
 
-    # flip() the display to put your work on screen
-        pygame.display.flip()
+        if player.on_finish(level):
+            current_screen = win
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
+        # flip() the display to put your work on screen
+        # limits FPS to 60
+        # dt is delta time in seconds since last frame, used for framerate-
+        # independent physics.
         dt = clock.tick(60) / 1000
+
+    elif current_screen == win:
+        win.update(time_delta)
+        screen.blit(background, (0, 0))
+        win.draw(screen)
+    
+    pygame.display.flip()
 
 pygame.quit()
 

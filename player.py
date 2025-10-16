@@ -219,3 +219,14 @@ class Player:
         Fonction qui ajoute chaque nouvelles coordonnées que prends joueur à un tableau sous forme de tuple (x,y)
         '''
         self.moves.append((self.grid_x,self.grid_y))
+
+    def on_finish(self,level):
+        '''
+        Fonction qui verifie si le joueur est sur la case de l'arivée
+        entrée: 
+            level : list of list
+        sorties: bool
+        '''
+        if level[self.grid_y][self.grid_x].tile_type == "end":
+            return True
+        return False
