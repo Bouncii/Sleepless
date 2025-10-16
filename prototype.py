@@ -88,7 +88,6 @@ while running:
                 win.message = random.choice(win.level_messages)
                 # On passe au niveau + 1 et on retourne à 0 si on depasse le nombre de niveaux
                 niveau = (niveau + 1) % NB_LEVEL
-                print(niveau)
                 # On passe à l'étape reset la map pour le prochaine niveau
                 current_screen = reset_game
         menu.manager.process_events(event)
