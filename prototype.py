@@ -1,5 +1,6 @@
 # Example file showing a circle moving on screen
 import pygame
+import pygame_gui
 from player import *
 from past_self import *
 from tile import *
@@ -22,7 +23,20 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 
-
+# pygame_gui setup
+background = pygame.Surface((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
+manager = pygame_gui.UIManager((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE), 'theme.json')
+play_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((GRID_WIDTH*TILE_SIZE//2 - 100//2, GRID_HEIGHT*TILE_SIZE//1.5 - 50//2), (100, 50)),
+                                             text='Play',
+                                             manager=manager)
+text_label = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect((0, GRID_HEIGHT*TILE_SIZE//3 - 100), (GRID_WIDTH*TILE_SIZE, 50)),
+    text='SleepLess',
+    manager=manager,
+    object_id=pygame_gui.core.ObjectID(class_id="#menu_titre")
+)
+time_delta = clock.tick(60)/1000.0  #pareil que dt
+play = False
 
 ##########################################################################################
 
@@ -64,34 +78,47 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    screen.fill((0,0,0))
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element == play_button:
+                play = True
 
-    for row in range(GRID_HEIGHT):
-        for col in range(GRID_WIDTH):
-            level[row][col].draw(screen)
+        manager.process_events(event)
+    if play == False:
+        manager.update(time_delta)
 
-    
-    player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self,level)
+        screen.blit(background, (0, 0))
+        manager.draw_ui(screen)
+        pygame.display.update()
+        
+    else:
+        screen.fill((0,0,0))
+
+        for row in range(GRID_HEIGHT):
+            for col in range(GRID_WIDTH):
+                level[row][col].draw(screen)
+
+        
+        player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self,level)
 
 
 
-    
+        
 
-    player.update(dt,level,TILE_SIZE)
+        player.update(dt,level,TILE_SIZE)
 
-    player.show(screen)
+        player.show(screen)
 
-    if past_self.timer_spawn == 0:
-        past_self.update(dt,level,TILE_SIZE)
-        past_self.show(screen)
+        if past_self.timer_spawn == 0:
+            past_self.update(dt,level,TILE_SIZE)
+            past_self.show(screen)
 
     # flip() the display to put your work on screen
-    pygame.display.flip()
+        pygame.display.flip()
 
     # limits FPS to 60
     # dt is delta time in seconds since last frame, used for framerate-
     # independent physics.
-    dt = clock.tick(60) / 1000
+        dt = clock.tick(60) / 1000
 
 pygame.quit()
 

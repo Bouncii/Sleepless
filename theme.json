@@ -1,0 +1,49 @@
+{
+    "defaults":
+    {
+        "colours":
+        {
+            "normal_bg": "#1F1D1D",
+            "hovered_bg": "#706B6B",
+            "disabled_bg": "rgb(200, 150, 60)",
+            "selected_bg": "rgba(20, 50, 89, 225)",
+            "dark_bg": "hsl(30, 0.6, 0.7)",
+            "normal_text": "white",
+            "hovered_text": "#FFFFFF",
+            "selected_text": "purple",
+            "disabled_text": "RGB(40, 70, 90)",
+            "link_text": "HSV(50deg, 30%, 40%)",
+            "link_hover": "cmy(50%, 30%, 0.7)",
+            "link_selected": "teal",
+            "text_shadow": "skyblue",
+            "normal_border": "white"
+        },
+         "misc":
+        {
+             "shape": "rectangle",
+             "border_width": {"left": 1, "right": 1, "top": 1, "bottom": 1},
+             "shadow_width": 2,
+             "shape_corner_radius": 2,
+             "border_overlap": 1,
+             "enable_title_bar": "1",
+             "text_horiz_alignment": "left",
+             "text_vert_alignment": "center",
+             "text_horiz_alignment_padding": 4,
+             "text_vert_alignment_padding": 4,
+             "text_shadow_size": 1,
+             "text_shadow_offset": [1, 1],
+             "tool_tip_delay": 1.0,
+             "title_bar_height": 28
+        }
+    },
+    "#menu_titre": {
+    "colours": {
+        "dark_bg": "#000000",
+        "normal_text": "#FF0000",
+        "disabled_text": "#888888",
+        "text_shadow": "#222222"
+    },
+    "text_horiz_alignment": "center",
+    "text_vert_alignment": "center"
+    }
+}

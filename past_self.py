@@ -27,7 +27,7 @@ class Past_self:
         self.moves = []
         self.tour = 0
 
-        self.timer_spawn = 8
+        self.timer_spawn = 4
         
 
 
