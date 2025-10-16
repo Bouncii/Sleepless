@@ -88,6 +88,7 @@ while running:
                 win.message = random.choice(win.level_messages)
                 # On passe au niveau + 1 et on retourne à 0 si on depasse le nombre de niveaux
                 niveau = (niveau + 1) % NB_LEVEL
+                print(niveau)
                 # On passe à l'étape reset la map pour le prochaine niveau
                 current_screen = reset_game
         menu.manager.process_events(event)
@@ -100,14 +101,16 @@ while running:
         menu.draw(screen)
     
     elif current_screen == reset_game:
-        # On Cree la nouvelle map
+        # On Cree le tableau de tableau de la nouvelle map
         file_map = f"level/level{niveau}.txt"
         level_str = cree_tableau_de_la_map(file_map)
-        level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
 
         # Ce qui implique un possible changment de Hauteur/largeur
         GRID_WIDTH = len(level_str[0]) 
         GRID_HEIGHT = len(level_str)
+
+        # On cree la map ici
+        level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
 
         # On change les propriété de hauteur/Largeur à pygame
         screen = pygame.display.set_mode((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE), pygame.RESIZABLE)
