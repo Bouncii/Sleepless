@@ -80,37 +80,50 @@ while running:
                 current_screen = reset_game
             if event.ui_element == win.replay_button:
                 # Reset le message de fin :)
-                win.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=random.choice(win.level_messages))
+                win.message = random.choice(win.level_messages)
+                # On passe à l'étape reset la map pour le prochaine niveau
                 current_screen = reset_game
             if event.ui_element == win.next_button:
                 # Reset le message de fin :)
-                win.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=random.choice(win.level_messages))
+                win.message = random.choice(win.level_messages)
+                # On passe au niveau + 1 et on retourne à 0 si on depasse le nombre de niveaux
                 niveau = (niveau + 1) % NB_LEVEL
+                # On passe à l'étape reset la map pour le prochaine niveau
                 current_screen = reset_game
         menu.manager.process_events(event)
         win.manager.process_events(event)
 
     if current_screen == menu:
+        # Affiche le menu du début
         menu.update(time_delta)
         screen.blit(background, (0, 0))
         menu.draw(screen)
     
     elif current_screen == reset_game:
+        # On Cree la nouvelle map
         file_map = f"level/level{niveau}.txt"
         level_str = cree_tableau_de_la_map(file_map)
+        level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
+
+        # Ce qui implique un possible changment de Hauteur/largeur
         GRID_WIDTH = len(level_str[0]) 
         GRID_HEIGHT = len(level_str)
 
-        background = pygame.Surface((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
+        # On change les propriété de hauteur/Largeur à pygame
         screen = pygame.display.set_mode((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE), pygame.RESIZABLE)
-        level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
+        background = pygame.Surface((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
         
+        # On rebuild les menus pour être responsive aux changement de hauteur/Largeur
         menu.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT)
         win.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=random.choice(win.level_messages))
 
+        # On respawn le joueur/ghost au spawn
         player = Player(0,0,TILE_SIZE)
         past_self = Past_self(0,0,TILE_SIZE)
+        # Je ne sais pas si c'est utile je l'ai laissé :
         time_spawn_old_self = 3
+
+        # On a finis de reset la game on peut jouer maintenant
         current_screen = game
 
         
@@ -138,6 +151,7 @@ while running:
         dt = clock.tick(60) / 1000
 
     elif current_screen == win:
+        # Affiche le menu de victoire
         win.update(time_delta)
         screen.blit(background, (0, 0))
         win.draw(screen)
