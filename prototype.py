@@ -8,10 +8,11 @@ from level_design import *
 from gui import *
 
 #################################### game initialization ####################################
+niveau = 0
+NB_LEVEL = 2
 
-FILE_MAP = "level.txt"
-
-level_str = cree_tableau_de_la_map(FILE_MAP)
+file_map = f"level/level{niveau}.txt"
+level_str = cree_tableau_de_la_map(file_map)
 
 TILE_SIZE = 128 
 GRID_WIDTH = len(level_str[0]) 
@@ -79,7 +80,12 @@ while running:
                 current_screen = reset_game
             if event.ui_element == win.replay_button:
                 # Reset le message de fin :)
-                win = Fin(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT)
+                win.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=random.choice(win.level_messages))
+                current_screen = reset_game
+            if event.ui_element == win.next_button:
+                # Reset le message de fin :)
+                win.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=random.choice(win.level_messages))
+                niveau = (niveau + 1) % NB_LEVEL
                 current_screen = reset_game
         menu.manager.process_events(event)
         win.manager.process_events(event)
@@ -90,7 +96,18 @@ while running:
         menu.draw(screen)
     
     elif current_screen == reset_game:
+        file_map = f"level/level{niveau}.txt"
+        level_str = cree_tableau_de_la_map(file_map)
+        GRID_WIDTH = len(level_str[0]) 
+        GRID_HEIGHT = len(level_str)
+
+        background = pygame.Surface((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
+        screen = pygame.display.set_mode((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE), pygame.RESIZABLE)
         level = level_builder(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,level_str)
+        
+        menu.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT)
+        win.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=random.choice(win.level_messages))
+
         player = Player(0,0,TILE_SIZE)
         past_self = Past_self(0,0,TILE_SIZE)
         time_spawn_old_self = 3
@@ -126,7 +143,6 @@ while running:
         win.draw(screen)
     
     pygame.display.flip()
-
 pygame.quit()
 
 ########
