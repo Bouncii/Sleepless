@@ -16,27 +16,56 @@ def cree_tableau_de_la_map(file:str):
     with open(file, "r") as lvl_map:
         for etage in lvl_map:
             niveau = []
-            for crt in etage:
-                if crt == '_' or crt == '-':
+            i = 0
+            while i < len(etage):
+                crt = etage[i]
+
+                if crt == '_':
                     niveau += ["sol"]
-                elif crt == 'S' or crt == 's':
+                    i += 1
+                    
+                elif crt == 'S':
                     niveau += ["start"]
-                elif crt == 'E' or crt == 'e':
+                    i += 1
+                    
+                elif crt == 'E':
                     niveau += ["end"]
-                elif crt == 'B':
-                    niveau += ["button"]
+                    i += 1
+                    
                 elif crt == '#':
                     niveau += ["ladder"]
-                elif crt == '}':
-                    niveau += ["left_door"]
+                    i += 1
+                    
+                elif crt == 'B':
+                    if i + 1 < len(etage) and etage[i + 1].isdigit(): #regarde si il y a un numero après la lettre
+                        button_id = etage[i + 1]
+                        niveau += ["button_"+ str(button_id)]
+                        i += 2
+                    else:
+                        niveau += ["button_0"]  # id par défaut
+                        i += 1
+                    
+                elif crt == 'D':
+                    if i + 1 < len(etage) and etage[i + 1].isdigit(): #regarde si il y a un numero après la lettre
+                        door_id = etage[i + 1]
+                        niveau += ["door_"+ str(door_id)]
+                        i += 2
+                    else:
+                        niveau += ["door_0"]  # id par défaut
+                        i += 1
+                    
                 elif crt == '\n':
-                    pass
+                    i += 1 
+                    
                 else:
                     niveau += ["vide"]
+                    i += 1
+            
             map += [niveau]
     
     taille_etage = len(map[0])
     for tab in map:
         if taille_etage != len(tab):
+            print("Erreur: Toutes les lignes du niveau n'ont pas la même longueur!")
             return [["start"]]
     return map

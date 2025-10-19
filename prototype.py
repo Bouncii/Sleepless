@@ -103,6 +103,7 @@ while running:
         # On Cree le tableau de tableau de la nouvelle map
         file_map = f"level/level{niveau}.txt"
         level_str = cree_tableau_de_la_map(file_map)
+        print(level_str)
 
         # Ce qui implique un possible changment de Hauteur/largeur
         GRID_WIDTH = len(level_str[0]) 
@@ -122,8 +123,6 @@ while running:
         # On respawn le joueur/ghost au spawn
         player = Player(0,0,TILE_SIZE,level)
         past_self = Past_self(0,0,TILE_SIZE)
-        # Je ne sais pas si c'est utile je l'ai laissé :
-        time_spawn_old_self = 3
 
         # On a finis de reset la game on peut jouer maintenant
         current_screen = game
