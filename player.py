@@ -1,4 +1,5 @@
 import pygame
+
 class Player:
     def __init__ (self, grid_x:int, grid_y:int,tile_size:int,level:list):
 
@@ -34,32 +35,35 @@ class Player:
         self.tile_above = level[self.grid_y-1][self.grid_x] if self.grid_y-1 >= 0 else None
         self.tile_left = level[self.grid_y][self.grid_x-1] if self.grid_x-1 >= 0 else None
         self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
+
+        self.last_move_time = 0
+        self.move_delay = 500
         
 
 
  
-    def detection_key(self,grid_width,grid_height,tile_size,past_self):
+    def detection_key(self, grid_width, grid_height, tile_size, past_self):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
-        entrées: 
-            grid_width : int
-            grid_height : int
-            tile_size : int
-            past_self : Past_self
-        sorties: none
         '''
-        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and not self.moving_horizontal and not self.moving_horizontal and not self.moving_gravite and not past_self.moving_gravite:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_q]:
-                self.moving_horizontal=True
-                self.try_move_horizontal(-1,grid_width,tile_size,past_self)
-            elif keys[pygame.K_d]:
-                self.moving_horizontal=True
-                self.try_move_horizontal(1,grid_width,tile_size,past_self)
-            elif keys[pygame.K_z]:
-                if self.current_tile.tile_type == "ladder":
-                    self.moving_vertical=True
-                    self.try_move_vertical(-1,grid_height,tile_size,past_self)
+        if not self.moving_horizontal and not self.moving_vertical and not self.moving_gravite and not past_self.moving_gravite:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.last_move_time >= self.move_delay:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_q]:
+                    self.moving_horizontal = True
+                    self.try_move_horizontal(-1, grid_width, tile_size, past_self)
+                    self.last_move_time = current_time
+                elif keys[pygame.K_d]:
+                    self.moving_horizontal = True
+                    self.try_move_horizontal(1, grid_width, tile_size, past_self)
+                    self.last_move_time = current_time
+                elif keys[pygame.K_z]:
+                    if self.current_tile.tile_type == "ladder":
+                        self.moving_vertical = True
+                        self.try_move_vertical(-1, grid_height, tile_size, past_self)
+                        self.last_move_time = current_time
+
   
     def try_move_horizontal(self,dx:int,grid_width,tile_size,past_self):
         '''
