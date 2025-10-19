@@ -1,6 +1,6 @@
 import pygame
 class Player:
-    def __init__ (self, grid_x:int, grid_y:int,tile_size:int):
+    def __init__ (self, grid_x:int, grid_y:int,tile_size:int,level:list):
 
         self.height = 70
         self.width = 50
@@ -25,13 +25,20 @@ class Player:
 
         self.moving_horizontal = False
         self.moving_vertical = False
+        self.moving_gravite = False
 
         self.frame_dans_air = 0
+
+        self.current_tile = level[self.grid_y][self.grid_x]
+        self.tile_below = level[self.grid_y+1][self.grid_x] if self.grid_y+1 < len(level) else None
+        self.tile_above = level[self.grid_y-1][self.grid_x] if self.grid_y-1 >= 0 else None
+        self.tile_left = level[self.grid_y][self.grid_x-1] if self.grid_x-1 >= 0 else None
+        self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
         
 
 
  
-    def detection_key(self,grid_width,grid_height,tile_size,past_self,level):
+    def detection_key(self,grid_width,grid_height,tile_size,past_self):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
         entrées: 
@@ -39,18 +46,19 @@ class Player:
             grid_height : int
             tile_size : int
             past_self : Past_self
-            level : list
         sorties: none
         '''
-        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and not self.moving_horizontal and not self.moving_vertical and not past_self.moving_vertical:
-            self.moving_horizontal=True
+        if self.pixel_x == self.target_x and self.pixel_y == self.target_y and not self.moving_horizontal and not self.moving_horizontal and not self.moving_gravite and not past_self.moving_gravite:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_q]:
+                self.moving_horizontal=True
                 self.try_move_horizontal(-1,grid_width,tile_size,past_self)
             elif keys[pygame.K_d]:
+                self.moving_horizontal=True
                 self.try_move_horizontal(1,grid_width,tile_size,past_self)
             elif keys[pygame.K_z]:
-                if level[self.grid_y][self.grid_x].tile_type == "ladder":
+                if self.current_tile.tile_type == "ladder":
+                    self.moving_vertical=True
                     self.try_move_vertical(-1,grid_height,tile_size,past_self)
   
     def try_move_horizontal(self,dx:int,grid_width,tile_size,past_self):
@@ -108,22 +116,29 @@ class Player:
             tile_size : int
         sorties: none
         '''
+        self.current_tile = level[self.grid_y][self.grid_x]
+        self.tile_below = level[self.grid_y+1][self.grid_x] if self.grid_y+1 < len(level) else None
+        self.tile_above = level[self.grid_y-1][self.grid_x] if self.grid_y-1 >= 0 else None
+        self.tile_left = level[self.grid_y][self.grid_x-1] if self.grid_x-1 >= 0 else None
+        self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
 
 
         # Chute veticale
-        if  (level[min(len(level),self.grid_y-1)][self.grid_x].tile_type == "vide" or level[self.grid_y][self.grid_x].tile_type == "vide"):
+        if not self.moving_vertical:
             self.gestion_gravite(dt,level)
 
 
         # Deplacement horizontal
         self.deplacement_horizontal(dt)
         
-        if level[self.grid_y][self.grid_x].tile_type == "ladder" or (self.grid_y + 1 < len(level) and level[self.grid_y + 1][self.grid_x].tile_type == "ladder"):
+        if self.moving_vertical:
             self.deplacement_vertical(dt)
 
         
         self.grid_x = int(self.pixel_x // tile_size) # nécessaire pour y à cause de la gravité, x et update par securité
         self.grid_y = int(self.pixel_y // tile_size)
+
+        
 
 
 
@@ -164,7 +179,7 @@ class Player:
                     self.pixel_y = self.target_y
 
             else:
-                self.moving_horizontal = False
+                self.moving_vertical = False
 
 
     def gestion_gravite(self,dt,level):
@@ -176,18 +191,17 @@ class Player:
             level : list of list
         sorties: none
         '''
-            
         if not self.on_ground:
             self.speed_gravity_y += self.gravity * dt
             if self.frame_dans_air > 4 : #Au bout de 4 frame de on_ground à l'etat faux on considère que le player tombe, sinon il est toujour sur le sol
-                self.moving_vertical = True
+                self.moving_gravite = True
             self.frame_dans_air +=1
         else:
             self.speed_gravity_y = 0
             self.frame_dans_air = 0
-            self.moving_vertical = False
+            self.moving_gravite = False
 
-        self.pixel_y += self.speed_gravity_y * dt
+        self.pixel_y += self.speed_gravity_y * dt   
 
         player_rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
@@ -203,7 +217,6 @@ class Player:
                             self.on_ground = True
 
         self.target_y = self.pixel_y
-        
 
     def show(self,screen):
         '''
@@ -220,13 +233,12 @@ class Player:
         '''
         self.moves.append((self.grid_x,self.grid_y))
 
-    def on_finish(self,level):
+    def on_finish(self):
         '''
         Fonction qui verifie si le joueur est sur la case de l'arivée
         entrée: 
-            level : list of list
         sorties: bool
         '''
-        if level[self.grid_y][self.grid_x].tile_type == "end":
+        if self.current_tile.tile_type == "end":
             return True
         return False

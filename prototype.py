@@ -120,7 +120,7 @@ while running:
         win.rebuild_ui(GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=random.choice(win.level_messages))
 
         # On respawn le joueur/ghost au spawn
-        player = Player(0,0,TILE_SIZE)
+        player = Player(0,0,TILE_SIZE,level)
         past_self = Past_self(0,0,TILE_SIZE)
         # Je ne sais pas si c'est utile je l'ai laissé :
         time_spawn_old_self = 3
@@ -135,7 +135,7 @@ while running:
             for col in range(GRID_WIDTH):
                 level[row][col].draw(screen)
 
-        player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self,level)
+        player.detection_key(GRID_WIDTH,GRID_HEIGHT,TILE_SIZE,past_self)
         player.update(dt,level,TILE_SIZE)
         player.show(screen)
 
@@ -143,14 +143,8 @@ while running:
             past_self.update(dt,level,TILE_SIZE)
             past_self.show(screen)
 
-        if player.on_finish(level):
+        if player.on_finish():
             current_screen = win
-
-        # flip() the display to put your work on screen
-        # limits FPS to 60
-        # dt is delta time in seconds since last frame, used for framerate-
-        # independent physics.
-        dt = clock.tick(60) / 1000
 
     elif current_screen == win:
         # Affiche le menu de victoire
@@ -159,6 +153,12 @@ while running:
         win.draw(screen)
     
     pygame.display.flip()
+    # flip() the display to put your work on screen
+    # limits FPS to 60
+    # dt is delta time in seconds since last frame, used for framerate-
+    # independent physics.
+    dt = clock.tick(60) / 1000
+
 pygame.quit()
 
 ########

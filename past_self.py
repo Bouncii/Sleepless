@@ -22,7 +22,9 @@ class Past_self:
         self.gravity = 600
         self.on_ground = True
 
+        self.moving_horizontal = False
         self.moving_vertical = False
+        self.moving_gravite = False
 
         self.moves = []
         self.tour = 0
@@ -88,8 +90,10 @@ class Past_self:
         
         if self.grid_x != next_move[0]:
             self.move_horizontal(next_move[0], tile_size)
+            self.moving_horizontal = True
         elif self.grid_y != next_move[1]:
             self.move_vertical(next_move[1], tile_size)
+            self.moving_vertical = True
         self.tour += 1
 
             
@@ -107,14 +111,14 @@ class Past_self:
         '''
 
         # Chute veticale
-        if (level[min(len(level),self.grid_y-1)][self.grid_x].tile_type == "vide" or level[self.grid_y][self.grid_x].tile_type == "vide"):
+        if not self.moving_vertical:
             self.gestion_gravite(dt,level)
 
 
         # Deplacement horizontal
         self.deplacement_horizontal(dt)
         
-        if level[self.grid_y][self.grid_x].tile_type == "ladder" or (self.grid_y + 1 < len(level) and level[self.grid_y + 1][self.grid_x].tile_type == "ladder"):
+        if self.moving_vertical:
             self.deplacement_vertical(dt)
 
         
@@ -133,15 +137,15 @@ class Past_self:
             dt : float
         '''
         if self.pixel_x < self.target_x:
-
             self.pixel_x += self.speed_x * dt
             if self.pixel_x > self.target_x:
                 self.pixel_x = self.target_x
         elif self.pixel_x > self.target_x:
-
             self.pixel_x -= self.speed_x * dt
             if self.pixel_x < self.target_x:
                 self.pixel_x = self.target_x
+        else:
+                self.moving_horizontal = False
 
 
 
@@ -161,6 +165,8 @@ class Past_self:
                 self.pixel_y -= self.speed_y * dt
                 if self.pixel_y < self.target_y:
                     self.pixel_y = self.target_y
+            else:
+                self.moving_vertical = False
 
 
 
@@ -177,12 +183,12 @@ class Past_self:
         if not self.on_ground:
             self.speed_gravity_y += self.gravity * dt
             if self.debug > 4 :
-                self.moving_vertical = True
+                self.moving_gravite = True
             self.debug +=1
         else:
             self.speed_gravity_y = 0
             self.debug = 0
-            self.moving_vertical = False
+            self.moving_gravite = False
 
         self.pixel_y += self.speed_gravity_y * dt
 
