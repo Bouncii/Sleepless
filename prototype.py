@@ -1,17 +1,16 @@
 # Example file showing a circle moving on screen
 import pygame
 import pygame_gui
-from player import *
-from past_self import *
-from tile import *
-from level_design import *
-from gui import *
+from src.entities import Player, Past_self
+from src.build import *
+from src.ui import *
+import random
 
 #################################### game initialization ####################################
 niveau = 0
 NB_LEVEL = 2
 
-file_map = f"level/level{niveau}.txt"
+file_map = f"assets/levels/level{niveau}.txt"
 level_str = cree_tableau_de_la_map(file_map)
 
 TILE_SIZE = 128 
@@ -101,7 +100,7 @@ while running:
     
     elif current_screen == reset_game:
         # On Cree le tableau de tableau de la nouvelle map
-        file_map = f"level/level{niveau}.txt"
+        file_map = f"assets/levels/level{niveau}.txt"
         level_str = cree_tableau_de_la_map(file_map)
         print(level_str)
 

@@ -1,5 +1,5 @@
 import pygame
-from player import *
+from .player import Player
 class Past_self:
     def __init__ (self, grid_x:int, grid_y:int,tile_size:int):
 

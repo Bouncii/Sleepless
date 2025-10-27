@@ -1,5 +1,5 @@
-from player import *
-from structures import *
+from src.entities import Player
+from src.build.structures import *
 import pygame
 class Tile:
     def __init__ (self, grid_x:int, grid_y:int, width:int, height:int, tile_type:str, tile_size):
