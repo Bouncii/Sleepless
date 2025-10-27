@@ -26,3 +26,14 @@ class Game:
         """
         level_path = config.get_level_path(level_num)
         pass
+    
+    def run(self):
+      '''
+      Boucle principale du jeu
+      '''
+      while self.running:
+          self.dt = self.clock.tick(FPS) / 1000  # Temps écoulé depuis la dernière frame en secondes
+          for event in pygame.event.get():
+              if event.type == pygame.QUIT:
+                  self.running = False
+
