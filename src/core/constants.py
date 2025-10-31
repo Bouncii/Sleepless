@@ -30,9 +30,8 @@ class _GameConstants:
     class States:
         MENU = "menu"
         PLAYING = "playing"
-        PAUSED = "paused"
-        VICTORY = "victory"
-        GAME_OVER = "game_over"
+        WIN = "win"
+        RESET_GAME = "reset_game"
     
     
     class Paths:

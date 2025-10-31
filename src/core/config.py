@@ -7,9 +7,7 @@ class Config:
     """
     
     def __init__(self):
-        self.current_level = 0
-        self.nb_levels = 2
-        self.screen_size = (1024, 768)
+        self.screen_size = (1920, 1080)
         self.debug_mode = False
         self.sound_volume = 1.0
     def get_level_path(self, level_num):
