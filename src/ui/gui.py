@@ -3,11 +3,9 @@ import pygame_gui
 import random
 
 class Menu:
-    def __init__(self, GRID_WIDTH, TILE_SIZE, GRID_HEIGHT):
-        self.GRID_WIDTH = GRID_WIDTH
-        self.GRID_HEIGHT = GRID_HEIGHT
-        self.TILE_SIZE = TILE_SIZE
-        self.manager = pygame_gui.UIManager((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE), 'theme.json')
+    def __init__(self):
+        self.window_width, self.window_height = pygame.display.get_surface().get_size()
+        self.manager = pygame_gui.UIManager((self.window_width, self.window_height), 'theme.json')
         self.elements = []
         self.build_ui()
 
@@ -17,13 +15,10 @@ class Menu:
             e.kill()
         self.elements = []
 
-        # Reinitialise la taille de la fenêtre
-        width_window = self.GRID_WIDTH * self.TILE_SIZE
-        height_window = self.GRID_HEIGHT * self.TILE_SIZE
 
         # Ajoute un titre
         self.title = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((0, height_window//3 - 50), (width_window, 50)),
+            relative_rect=pygame.Rect((0, self.window_height//3 - 100), (self.window_width, 100)),
             text='SleepLess',
             manager=self.manager
         )
@@ -31,18 +26,15 @@ class Menu:
 
         # Ajoute un boutton pour jouer
         self.play_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((width_window//2 - 50, height_window//2), (100, 50)),
+            relative_rect=pygame.Rect((self.window_width//2 - 50, self.window_height//2), (100, 50)),
             text='Play',
             manager=self.manager
         )
         self.elements.append(self.play_button)
 
     # Fonction pour rebuild l'UI qui rappelle build_ui
-    def rebuild_ui(self, GRID_WIDTH, TILE_SIZE, GRID_HEIGHT):
-        self.GRID_WIDTH = GRID_WIDTH
-        self.GRID_HEIGHT = GRID_HEIGHT
-        self.TILE_SIZE = TILE_SIZE
-        self.manager.set_window_resolution((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
+    def rebuild_ui(self):
+        self.manager.set_window_resolution((self.window_width, self.window_height))
         self.build_ui()
 
     # Update la classe
@@ -54,11 +46,9 @@ class Menu:
         self.manager.draw_ui(screen)
 
 class Fin:
-    def __init__(self, GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=None):
-        self.GRID_WIDTH = GRID_WIDTH
-        self.GRID_HEIGHT = GRID_HEIGHT
-        self.TILE_SIZE = TILE_SIZE
-        self.manager = pygame_gui.UIManager((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE), 'theme.json')
+    def __init__(self, message=None):
+        self.window_width, self.window_height = pygame.display.get_surface().get_size()
+        self.manager = pygame_gui.UIManager((self.window_width, self.window_height), 'theme.json')
         self.elements = []
         self.level_messages = [
             "Congratulations! You've cleared this level!",
@@ -76,13 +66,10 @@ class Fin:
             e.kill()
         self.elements = []
 
-        # Reinitialise la taille de la fenêtre
-        width_window = self.GRID_WIDTH * self.TILE_SIZE
-        height_window = self.GRID_HEIGHT * self.TILE_SIZE
 
         # Ajoute un titre
         self.title_label = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((0, height_window//3 - 50), (width_window, 50)),
+            relative_rect=pygame.Rect((0, self.window_height//3 - 50), (self.window_width, 50)),
             text=self.message,
             manager=self.manager
         )
@@ -90,7 +77,7 @@ class Fin:
 
          # Ajoute un boutton pour rejouer
         self.replay_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((width_window//2.5 - 100, height_window//1.5 - 25), (200, 50)),
+            relative_rect=pygame.Rect((self.window_width//2.5 - 100, self.window_height//1.5 - 25), (200, 50)),
             text='Replay this level ?',
             manager=self.manager
         )
@@ -98,20 +85,17 @@ class Fin:
 
         # Ajoute un boutton pour changer de niveau
         self.next_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((width_window//1.5 - 100, height_window//1.5 - 25), (200, 50)),
+            relative_rect=pygame.Rect((self.window_width//1.5 - 100, self.window_height//1.5 - 25), (200, 50)),
             text='Next Level',
             manager=self.manager
         )
         self.elements.append(self.next_button)
 
     # Fonction pour rebuild l'UI qui rappelle build_ui
-    def rebuild_ui(self, GRID_WIDTH, TILE_SIZE, GRID_HEIGHT, message=None):
-        self.GRID_WIDTH = GRID_WIDTH
-        self.GRID_HEIGHT = GRID_HEIGHT
-        self.TILE_SIZE = TILE_SIZE
+    def rebuild_ui(self,message=None):
         if message:
             self.message = message
-        self.manager.set_window_resolution((GRID_WIDTH*TILE_SIZE, GRID_HEIGHT*TILE_SIZE))
+        self.manager.set_window_resolution((self.window_width, self.window_height))
         self.build_ui()
 
     # Update la classe

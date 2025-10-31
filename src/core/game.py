@@ -17,11 +17,15 @@ class Game:
         pygame.init()
 
 
-        self.screen = pygame.display.set_mode(config.screen_size)
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.window_width, self.window_height = pygame.display.get_surface().get_size()
+
         self.clock = pygame.time.Clock()
         self.dt = 0
+
         self.running = True
         self.state = GameState.MENU
+        
 
         self.current_level_num = 0
         self.nb_levels = 2
@@ -32,10 +36,10 @@ class Game:
 
     def _init_screens(self):
         """Initialise les différents écrans du jeu"""
-        self.menu = Menu(self.GRID_WIDTH, self.TILE_SIZE, self.GRID_HEIGHT)
-        self.win_screen = Fin(self.GRID_WIDTH, self.TILE_SIZE, self.GRID_HEIGHT)
+        self.menu = Menu()
+        self.win_screen = Fin()
         self.current_screen = self.menu
-        self.background = pygame.Surface((self.GRID_WIDTH*TILE_SIZE, self.GRID_HEIGHT*TILE_SIZE))
+        self.background = pygame.Surface((self.window_width, self.window_height))
 
 
     def level_builder(self, grid_width: int, grid_height: int, level_str: str) -> list:
@@ -56,7 +60,8 @@ class Game:
     def handle_events(self):
         """Gère tous les événements du jeu"""
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            keys = pygame.key.get_pressed()
+            if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                 self.running = False
                 
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
@@ -77,7 +82,6 @@ class Game:
             self.state = GameState.RESET_GAME
             
         elif event.ui_element == self.win_screen.next_button:
-            print("blabla")
             self.win_screen.message = random.choice(self.win_screen.level_messages)
             self.current_level_num = (self.current_level_num + 1) % self.nb_levels
             self.state = GameState.RESET_GAME
@@ -99,16 +103,15 @@ class Game:
         self.level = self.level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str)
         
         # Redimensionnement de l'écran
-        self.screen = pygame.display.set_mode((self.GRID_WIDTH * self.TILE_SIZE, self.GRID_HEIGHT * self.TILE_SIZE), pygame.RESIZABLE)
-        self.background = pygame.Surface((self.GRID_WIDTH * self.TILE_SIZE, self.GRID_HEIGHT * self.TILE_SIZE))
+        self.background = pygame.Surface((self.window_width, self.window_height))
         
         # Mise à jour des UI
-        self.menu.rebuild_ui(self.GRID_WIDTH, self.TILE_SIZE, self.GRID_HEIGHT)
-        self.win_screen.rebuild_ui(self.GRID_WIDTH, self.TILE_SIZE, self.GRID_HEIGHT, message=random.choice(self.win_screen.level_messages))
+        self.menu.rebuild_ui()
+        self.win_screen.rebuild_ui(message=random.choice(self.win_screen.level_messages))
         
         # Création des entités
-        self.player = Player(0, 0, self.TILE_SIZE, self.level)
-        self.past_self = Past_self(0, 0, self.TILE_SIZE)
+        self.player = Player(0, 0, TILE_SIZE, self.level)
+        self.past_self = Past_self(0, 0, TILE_SIZE)
         
         self.state = GameState.PLAYING
 
@@ -127,12 +130,12 @@ class Game:
             
         elif self.state == GameState.PLAYING:
             # Mise à jour du joueur
-            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.TILE_SIZE, self.past_self)
-            self.player.update(self.dt, self.level, self.TILE_SIZE)
+            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, TILE_SIZE, self.past_self)
+            self.player.update(self.dt, self.level, TILE_SIZE)
             
             # Mise à jour du past_self
             if self.past_self.timer_spawn == 0:
-                self.past_self.update(self.dt, self.level, self.TILE_SIZE)
+                self.past_self.update(self.dt, self.level, TILE_SIZE)
                 
             # Vérification de la victoire
             if self.player.on_finish():
@@ -174,11 +177,6 @@ class Game:
         Boucle principale du jeu
         '''
         ####################################  ceci est sencé virer plus tard
-        file_map = config.get_level_path(self.current_level_num)
-        level_str = cree_tableau_de_la_map(file_map)
-        self.TILE_SIZE = 128 
-        self.GRID_WIDTH = len(level_str[0])  # enlever le fait que la fenetre prenne la taille du niveau
-        self.GRID_HEIGHT = len(level_str)
         self._init_screens()
         ####################################
         while self.running:
