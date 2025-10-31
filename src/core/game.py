@@ -110,8 +110,8 @@ class Game:
         self.win_screen.rebuild_ui(message=random.choice(self.win_screen.level_messages))
         
         # Création des entités
-        self.player = Player(0, 0, TILE_SIZE, self.level)
-        self.past_self = Past_self(0, 0, TILE_SIZE)
+        self.player = Player(0, 0, self.level)
+        self.past_self = Past_self(0, 0)
         
         self.state = GameState.PLAYING
 
@@ -130,12 +130,12 @@ class Game:
             
         elif self.state == GameState.PLAYING:
             # Mise à jour du joueur
-            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, TILE_SIZE, self.past_self)
-            self.player.update(self.dt, self.level, TILE_SIZE)
+            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self)
+            self.player.update(self.dt, self.level)
             
             # Mise à jour du past_self
             if self.past_self.timer_spawn == 0:
-                self.past_self.update(self.dt, self.level, TILE_SIZE)
+                self.past_self.update(self.dt, self.level)
                 
             # Vérification de la victoire
             if self.player.on_finish():

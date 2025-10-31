@@ -5,7 +5,7 @@ class _GameConstants:
     """
     Constantes à utiliser qui ne changerons pas
     """
-    TILE_SIZE = 128
+    TILE_SIZE = 200
     FPS = 60
     
 

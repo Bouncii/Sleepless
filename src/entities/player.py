@@ -1,16 +1,17 @@
 import pygame
+from src.core.constants import *
 
 class Player:
-    def __init__ (self, grid_x:int, grid_y:int,tile_size:int,level:list):
+    def __init__ (self, grid_x:int,grid_y:int,level:list):
 
-        self.height = 70
-        self.width = 50
+        self.height = 0.5*TILE_SIZE
+        self.width = 0.3*TILE_SIZE
 
         self.grid_x = grid_x
         self.grid_y = grid_y
 
-        self.pixel_x = self.grid_x * tile_size + (tile_size - self.width) // 2
-        self.pixel_y = self.grid_y * tile_size + int(tile_size*0.8) - self.height
+        self.pixel_x = self.grid_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
+        self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
         self.target_x = self.pixel_x
         self.target_y = self.pixel_y
@@ -42,7 +43,7 @@ class Player:
 
 
  
-    def detection_key(self, grid_width, grid_height, tile_size, past_self):
+    def detection_key(self, grid_width, grid_height, past_self):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
         '''
@@ -52,20 +53,20 @@ class Player:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_q]:
                     self.moving_horizontal = True
-                    self.try_move_horizontal(-1, grid_width, tile_size, past_self)
+                    self.try_move_horizontal(-1, grid_width, past_self)
                     self.last_move_time = current_time
                 elif keys[pygame.K_d]:
                     self.moving_horizontal = True
-                    self.try_move_horizontal(1, grid_width, tile_size, past_self)
+                    self.try_move_horizontal(1, grid_width, past_self)
                     self.last_move_time = current_time
                 elif keys[pygame.K_z]:
                     if self.current_tile.tile_type == "ladder":
                         self.moving_vertical = True
-                        self.try_move_vertical(-1, grid_height, tile_size, past_self)
+                        self.try_move_vertical(-1, grid_height, past_self)
                         self.last_move_time = current_time
 
   
-    def try_move_horizontal(self,dx:int,grid_width,tile_size,past_self):
+    def try_move_horizontal(self,dx:int,grid_width,past_self):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target x pour déplacement et animation
@@ -73,21 +74,20 @@ class Player:
         entrées: 
             dx : int  
             grid_width : int
-            tile_size : int
             past_self : Past_self
         sorties: none
         '''
         new_x = self.grid_x + dx
         if 0 <= new_x and new_x < grid_width:
             self.grid_x = new_x
-            self.target_x = new_x * tile_size + (tile_size - self.width) // 2
+            self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
 
 
             self.update_moves()
             past_self.moves = self.moves
-            past_self.detection_key(tile_size)
+            past_self.detection_key()
 
-    def try_move_vertical(self,dy:int,grid_height,tile_size,past_self):
+    def try_move_vertical(self,dy:int,grid_height,past_self):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target y pour déplacement et animation
@@ -95,29 +95,27 @@ class Player:
         entrées: 
             dy : int  
             grid_height : int
-            tile_size : int
             past_self : Past_self
         sorties: none
         '''
         new_y = self.grid_y + dy
         if 0 <= new_y and new_y < grid_height:
             self.grid_y = new_y
-            self.target_y = new_y * tile_size + int(tile_size*0.8) - self.height
+            self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
 
             self.update_moves()
             past_self.moves = self.moves
-            past_self.detection_key(tile_size)
+            past_self.detection_key()
 
 
 
-    def update(self, dt:float, level:list, tile_size:int):
+    def update(self, dt:float, level:list):
         '''
         fonction qui actualise différents élements relatifs au joueur (à chaque frame)
         entrées: 
             dt : float
             level : list of list
-            tile_size : int
         sorties: none
         '''
         self.current_tile = level[self.grid_y][self.grid_x]
@@ -139,8 +137,8 @@ class Player:
             self.deplacement_vertical(dt)
 
         
-        self.grid_x = int(self.pixel_x // tile_size) # nécessaire pour y à cause de la gravité, x et update par securité
-        self.grid_y = int(self.pixel_y // tile_size)
+        self.grid_x = int(self.pixel_x // TILE_SIZE) # nécessaire pour y à cause de la gravité, x et update par securité
+        self.grid_y = int(self.pixel_y // TILE_SIZE)
 
         
 
