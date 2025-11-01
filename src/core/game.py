@@ -91,7 +91,6 @@ class Game:
         """
         Charge un niveau donné
         """
-        level_path = config.get_level_path(level_num)
         file_map = f"assets/levels/level{level_num}.txt"
         self.level_str = cree_tableau_de_la_map(file_map)
         
