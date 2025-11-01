@@ -47,7 +47,7 @@ class Tile:
         sorties: none
         '''
         pygame.draw.rect(screen,self.background,(self.pixel_x, self.pixel_y, self.width, self.height))
-        for structure in self.structures:
+        for _, structure in self.structures.items():
             pygame.draw.rect(screen,structure.color,structure.rect)
 
 
@@ -59,13 +59,13 @@ class Tile:
         sorties: 
             la liste contenant les structures
         '''
-        res= []
+        res= {}
         if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end" or self.tile_type=="ladder" or self.tile_type == "door" or self.tile_type == "button":
-            res.append(Ground(self.pixel_x,self.pixel_y,self.width,self.height))
+            res["ground"]=Ground(self.pixel_x,self.pixel_y,self.width,self.height)
         if self.tile_type == "door":
-            res.append(Door(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id))
+            res["door"]=Door(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id)
         elif self.tile_type == "button":
-            res.append(Button(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id))
+            res["button"]=Button(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id)
         
         
         return res

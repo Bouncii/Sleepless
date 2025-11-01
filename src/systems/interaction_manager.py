@@ -70,8 +70,7 @@ class InteractionManagerButtonsDoors:
         affected_doors = []
         for button_id in self.pressed_buttons:
             if button_id in self.connections:
-                affected_doors.append(self.connections[button_id])
-        
+                affected_doors += self.connections[button_id]
         # Ouvre/ferme les portes
         for door_id, door_obj in self.doors.items():
             if door_id in affected_doors:
@@ -87,3 +86,4 @@ class InteractionManagerButtonsDoors:
         sortie : none
         '''
         return door_id in self.doors and self.doors[door_id].is_open
+    

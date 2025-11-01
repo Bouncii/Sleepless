@@ -1,5 +1,6 @@
 import pygame
 from src.core.constants import *
+from src.core.game_misc_functions import *
 
 class Player:
     def __init__ (self, grid_x:int,grid_y:int,level:list):
@@ -28,6 +29,7 @@ class Player:
         self.moving_horizontal = False
         self.moving_vertical = False
         self.moving_gravite = False
+        self.moving = False
 
         self.frame_dans_air = 0
 
@@ -43,30 +45,30 @@ class Player:
 
 
  
-    def detection_key(self, grid_width, grid_height, past_self):
+    def detection_key(self, grid_width, grid_height, past_self_tab):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence
         '''
-        if not self.moving_horizontal and not self.moving_vertical and not self.moving_gravite and not past_self.moving_gravite:
+        if not self.moving_horizontal and not self.moving_vertical and not self.moving_gravite and are_all_past_self_idle(past_self_tab):
             current_time = pygame.time.get_ticks()
             if current_time - self.last_move_time >= self.move_delay:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_q]:
                     self.moving_horizontal = True
-                    self.try_move_horizontal(-1, grid_width, past_self)
+                    self.try_move_horizontal(-1, grid_width, past_self_tab)
                     self.last_move_time = current_time
                 elif keys[pygame.K_d]:
                     self.moving_horizontal = True
-                    self.try_move_horizontal(1, grid_width, past_self)
+                    self.try_move_horizontal(1, grid_width, past_self_tab)
                     self.last_move_time = current_time
                 elif keys[pygame.K_z]:
                     if self.current_tile.tile_type == "ladder":
                         self.moving_vertical = True
-                        self.try_move_vertical(-1, grid_height, past_self)
+                        self.try_move_vertical(-1, grid_height, past_self_tab)
                         self.last_move_time = current_time
 
   
-    def try_move_horizontal(self,dx:int,grid_width,past_self):
+    def try_move_horizontal(self, dx:int, grid_width, past_self_tab):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target x pour déplacement et animation
@@ -74,20 +76,21 @@ class Player:
         entrées: 
             dx : int  
             grid_width : int
-            past_self : Past_self
+            past_self_tab : list of Past_self
         sorties: none
         '''
         new_x = self.grid_x + dx
-        if 0 <= new_x and new_x < grid_width:
+        if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
             self.grid_x = new_x
             self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
 
 
             self.update_moves()
-            past_self.moves = self.moves
-            past_self.detection_key()
+            for past_self in past_self_tab:
+                past_self.moves = self.moves
+                past_self.detection_key()
 
-    def try_move_vertical(self,dy:int,grid_height,past_self):
+    def try_move_vertical(self,dy:int,grid_height,past_self_tab):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target y pour déplacement et animation
@@ -95,7 +98,7 @@ class Player:
         entrées: 
             dy : int  
             grid_height : int
-            past_self : Past_self
+            past_self_tab : list of Past_self
         sorties: none
         '''
         new_y = self.grid_y + dy
@@ -105,8 +108,9 @@ class Player:
 
 
             self.update_moves()
-            past_self.moves = self.moves
-            past_self.detection_key()
+            for past_self in past_self_tab:
+                past_self.moves = self.moves
+                past_self.detection_key()
 
 
 
@@ -139,6 +143,8 @@ class Player:
         
         self.grid_x = int(self.pixel_x // TILE_SIZE) # nécessaire pour y à cause de la gravité, x et update par securité
         self.grid_y = int(self.pixel_y // TILE_SIZE)
+
+        self.moving = self.moving_horizontal or self.moving_vertical or self.moving_gravite
 
         
 
@@ -211,12 +217,11 @@ class Player:
         self.on_ground = False
         for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+1)): # on check que les tiles à droite et à gauche pour verifier le sol
             tile = level[self.grid_y][i_col]
-            for structure in tile.structures:
-                if structure.type == "ground":
-                    if player_rect.colliderect(structure.rect):
-                        if self.speed_gravity_y >= 0:
-                            self.pixel_y = structure.rect.top - self.height
-                            self.on_ground = True
+            if "ground" in tile.structures:
+                if player_rect.colliderect(tile.structures["ground"].rect):
+                    if self.speed_gravity_y >= 0:
+                        self.pixel_y = tile.structures["ground"].rect.top - self.height
+                        self.on_ground = True
 
         self.target_y = self.pixel_y
 
@@ -244,3 +249,21 @@ class Player:
         if self.current_tile.tile_type == "end":
             return True
         return False
+    
+    def target_is_door_and_open(self,dx):
+        '''
+        Fonction qui vérifie si la tile sur laquelle le player va aller et une porte ouverte
+        entrées:
+            dx: -1 ou 1 pour savoir si on va à droite au à gauche
+            level : la grille du level
+        sortie: bool
+        '''
+        res = True
+        if dx == 1 and self.tile_right.tile_type == "door": 
+            res = self.tile_right.structures["door"].is_open
+        elif dx == -1 and self.tile_left.tile_type == "door":
+            res = self.tile_left.structures["door"].is_open
+        return res
+            
+
+

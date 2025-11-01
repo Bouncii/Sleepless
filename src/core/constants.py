@@ -15,18 +15,6 @@ class _GameConstants:
 
     PAST_SELF_DELAY = 3
     
-    class Colors:
-        RED = (255, 0, 0)
-        ORANGE = (255, 165, 0)
-        GREEN = (0, 255, 0)
-        BLUE = (0, 0, 255)
-        BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        
-        GROUND = (100, 100, 150)
-        START = (0, 250, 50)
-        END = (0, 50, 250)
-    
     class States:
         MENU = "menu"
         PLAYING = "playing"
@@ -47,6 +35,5 @@ GRAVITY = _GameConstants.GRAVITY
 ENTITIES_SPEED_X = _GameConstants.ENTITIES_SPEED_X  # ← EXPORTER
 ENTITIES_SPEED_Y = _GameConstants.ENTITIES_SPEED_Y  # ← EXPORTER
 PAST_SELF_DELAY = _GameConstants.PAST_SELF_DELAY    # ← EXPORTER
-Colors = _GameConstants.Colors
 GameState = _GameConstants.States
 Paths = _GameConstants.Paths

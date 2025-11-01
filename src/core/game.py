@@ -5,15 +5,17 @@ import pygame_gui
 import random
 from .constants import *
 from .config import *
-from src.entities import Player, Past_self
+from .game_misc_functions import *
+from src.entities import *
 from src.build import *
 from src.ui import *
+from src.systems import *
 
 class Game:
     def __init__(self):
-        """
+        '''
         Initialise le jeu et tous ses systèmes
-        """
+        '''
         pygame.init()
 
 
@@ -26,39 +28,26 @@ class Game:
         self.running = True
         self.state = GameState.MENU
         
+        self.interactionManagerDoorButton = None
 
         self.current_level_num = 0
         self.nb_levels = 2
 
         self.player = None #initialisés dans load level
-        self.past_self = []
+        self.past_self_tab = []
 
 
     def _init_screens(self):
-        """Initialise les différents écrans du jeu"""
+        '''Initialise les différents écrans du jeu'''
         self.menu = Menu()
         self.win_screen = Fin()
         self.current_screen = self.menu
         self.background = pygame.Surface((self.window_width, self.window_height))
 
-
-    def level_builder(self, grid_width: int, grid_height: int, level_str: str) -> list:
-        """
-        Fonction qui construit le niveau sous forme de tableau 2D d'objets Tile
-        """
-        res = []
-        for row in range(grid_height):
-            tab_row = []
-            for col in range(grid_width):
-                type = level_str[row][col]
-                tile = Tile(col, row, TILE_SIZE, TILE_SIZE, type, TILE_SIZE)
-                tab_row.append(tile)
-            res.append(tab_row)
-        return res
     
 
     def handle_events(self):
-        """Gère tous les événements du jeu"""
+        '''Gère tous les événements du jeu'''
         for event in pygame.event.get():
             keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
@@ -73,7 +62,7 @@ class Game:
 
 
     def handle_button_events(self, event):
-        """Gère les événements de boutons"""
+        '''Gère les événements de boutons'''
         if event.ui_element == self.menu.play_button:
             self.state = GameState.RESET_GAME
             
@@ -88,9 +77,9 @@ class Game:
 
 
     def load_level(self, level_num: int):
-        """
+        '''
         Charge un niveau donné
-        """
+        '''
         file_map = f"assets/levels/level{level_num}.txt"
         self.level_str = cree_tableau_de_la_map(file_map)
         
@@ -99,7 +88,8 @@ class Game:
         self.GRID_HEIGHT = len(self.level_str)
         
         # Construction du niveau
-        self.level = self.level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str)
+        self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
+        self.level = level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str, self.interactionManagerDoorButton)
         
         # Redimensionnement de l'écran
         self.background = pygame.Surface((self.window_width, self.window_height))
@@ -110,7 +100,8 @@ class Game:
         
         # Création des entités
         self.player = Player(0, 0, self.level)
-        self.past_self = Past_self(0, 0)
+        self.past_self_tab = []
+        self.past_self_tab.append(Past_self(0, 0))
         
         self.state = GameState.PLAYING
 
@@ -119,7 +110,7 @@ class Game:
 
 
     def update(self):
-        """Gère le changement de fenêtre"""
+        '''Gère le changement de fenêtre'''
         
         if self.state == GameState.MENU:
             self.menu.update(self.dt)
@@ -129,25 +120,61 @@ class Game:
             
         elif self.state == GameState.PLAYING:
             # Mise à jour du joueur
-            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self)
+            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_tab)
             self.player.update(self.dt, self.level)
             
             # Mise à jour du past_self
-            if self.past_self.timer_spawn == 0:
-                self.past_self.update(self.dt, self.level)
+            for past_self in self.past_self_tab:
+                if past_self.timer_spawn == 0:
+                    past_self.update(self.dt, self.level)
+
+            if are_all_entities_idle(self.player,self.past_self_tab):
+                self.update_buttons_state()
                 
-            # Vérification de la victoire
-            if self.player.on_finish():
-                self.state = GameState.WIN
+                # Vérification de la victoire
+                if self.player.on_finish():
+                    self.state = GameState.WIN
                 
         elif self.state == GameState.WIN:
             self.win_screen.update(self.dt)
 
 
+    def update_buttons_state(self):
+        '''
+        Met à jour l'état des boutons basé sur la position des entités
+        '''
+        # Réinitialiser l'état de tous les boutons
+        for button_id in list(self.interactionManagerDoorButton.pressed_buttons):
+            self.interactionManagerDoorButton.button_released(button_id)
+        
+        # Vérif entités sur boutons
+        entities = [self.player]
+        for past_self in self.past_self_tab:
+            if past_self.timer_spawn == 0:
+                entities.append(past_self)
+        
+        pressed_buttons = []
+        
+        for entity in entities:
+            tile_x = entity.grid_x
+            tile_y = entity.grid_y
+            
+            if 0 <= tile_y < len(self.level) and 0 <= tile_x < len(self.level[0]):
+                current_tile = self.level[tile_y][tile_x]
+                
+                # Vérifier si cette tile contient un bouton
+                if current_tile.tile_type == "button":
+                    pressed_buttons.append(current_tile.tile_id)
+        
+        # Activer les boutons pressés
+        for button_id in pressed_buttons:
+            if button_id not in self.interactionManagerDoorButton.pressed_buttons:
+                self.interactionManagerDoorButton.button_pressed(button_id)
+
 
 
     def render(self):
-        """Affiche le jeu"""
+        '''Affiche le jeu'''
         self.screen.fill((0, 0, 0))
         
         if self.state == GameState.MENU:
@@ -162,8 +189,9 @@ class Game:
             
             # Dessin des entités
             self.player.show(self.screen)
-            if self.past_self.timer_spawn == 0:
-                self.past_self.show(self.screen)
+            for past_self in self.past_self_tab:
+                if past_self.timer_spawn == 0:
+                    past_self.show(self.screen)
                 
         elif self.state == GameState.WIN:
             self.screen.blit(self.background, (0, 0))

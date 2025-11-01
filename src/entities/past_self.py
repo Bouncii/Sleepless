@@ -26,6 +26,7 @@ class Past_self:
         self.moving_horizontal = False
         self.moving_vertical = False
         self.moving_gravite = False
+        self.moving = False
 
         self.moves = []
         self.tour = 0
@@ -122,6 +123,8 @@ class Past_self:
         self.grid_x = int(self.pixel_x // TILE_SIZE) # nécessaire pour y à cause de la gravité, x et update par securité
         self.grid_y = int(self.pixel_y // TILE_SIZE)
 
+        self.moving = self.moving_horizontal or self.moving_vertical or self.moving_gravite
+
 
 
     def deplacement_horizontal(self,dt:float):
@@ -193,11 +196,10 @@ class Past_self:
         self.on_ground = False
         for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+2)): # on check que les tiles à droite et à gauche pour verifier le sol
             tile = level[self.grid_y][i_col]
-            for structure in tile.structures:
-                if structure.type == "ground":
-                    if player_rect.colliderect(structure.rect):
+            if "ground" in tile.structures:
+                    if player_rect.colliderect(tile.structures["ground"].rect):
                         if self.speed_gravity_y >= 0:
-                            self.pixel_y = structure.rect.top - self.height
+                            self.pixel_y = tile.structures["ground"].rect.top - self.height
                             self.on_ground = True
 
         self.target_y = self.pixel_y

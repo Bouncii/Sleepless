@@ -4,6 +4,6 @@
 Package system
 """
 
-from . import interaction_manager
+from .interaction_manager import *
 
 __all__ = ['InteractionManagerButtonsDoors']

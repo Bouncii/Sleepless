@@ -9,14 +9,14 @@ from .constants import (
     ENTITIES_SPEED_X,
     ENTITIES_SPEED_Y,
     PAST_SELF_DELAY,
-    Colors,
     GameState,
     Paths
 )
 
 from .config import config
+from .game_misc_functions import *
 
-# from .game import Game  # ← DÉCOMMENTER quand game.py sera prêt
+from .game import Game 
 
 __all__ = [
     # Constantes
@@ -26,13 +26,16 @@ __all__ = [
     'ENTITIES_SPEED_X',
     'ENTITIES_SPEED_Y',
     'PAST_SELF_DELAY',
-    'Colors',
     'GameState',
     'Paths',
 
     # Config modifiable
     'config',
+
+    #GameMiscFunctions
+    'are_all_past_self_idle',
+    'are_all_entities_idle',
     
-    # Classes principales
-    # 'Game'
+
+    'Game'
 ]
