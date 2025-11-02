@@ -8,7 +8,6 @@ from .constants import (
     GRAVITY,
     ENTITIES_SPEED_X,
     ENTITIES_SPEED_Y,
-    PAST_SELF_DELAY,
     GameState,
     Paths
 )
@@ -25,7 +24,6 @@ __all__ = [
     'GRAVITY',
     'ENTITIES_SPEED_X',
     'ENTITIES_SPEED_Y',
-    'PAST_SELF_DELAY',
     'GameState',
     'Paths',
 

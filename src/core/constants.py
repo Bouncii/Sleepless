@@ -12,8 +12,6 @@ class _GameConstants:
     GRAVITY = 600
     ENTITIES_SPEED_X = 300  
     ENTITIES_SPEED_Y = 300 
-
-    PAST_SELF_DELAY = 3
     
     class States:
         MENU = "menu"
@@ -34,6 +32,5 @@ FPS = _GameConstants.FPS
 GRAVITY = _GameConstants.GRAVITY
 ENTITIES_SPEED_X = _GameConstants.ENTITIES_SPEED_X  # ← EXPORTER
 ENTITIES_SPEED_Y = _GameConstants.ENTITIES_SPEED_Y  # ← EXPORTER
-PAST_SELF_DELAY = _GameConstants.PAST_SELF_DELAY    # ← EXPORTER
 GameState = _GameConstants.States
 Paths = _GameConstants.Paths
