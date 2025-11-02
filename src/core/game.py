@@ -81,6 +81,7 @@ class Game:
         Charge un niveau donné
         '''
         file_map = f"assets/levels/level{level_num}.txt"
+        settings = get_settings_by_level_number(self.current_level_num)
         self.level_str = cree_tableau_de_la_map(file_map)
         
         # Mise à jour des dimensions
@@ -101,7 +102,7 @@ class Game:
         # Création des entités
         self.player = Player(0, 0, self.level)
         self.past_self_tab = []
-        self.past_self_tab.append(Past_self(0, 0))
+        self.past_self_tab.append(Past_self(0, 0,settings["past_self_timer_spawn"]))
         
         self.state = GameState.PLAYING
 

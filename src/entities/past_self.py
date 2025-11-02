@@ -2,7 +2,7 @@ import pygame
 from src.core.constants import *
 
 class Past_self:
-    def __init__ (self, grid_x:int, grid_y:int):
+    def __init__ (self, grid_x:int, grid_y:int, timer_spawn:int):
 
         self.height = 0.5*TILE_SIZE
         self.width = 0.3*TILE_SIZE
@@ -31,7 +31,7 @@ class Past_self:
         self.moves = []
         self.tour = 0
 
-        self.timer_spawn = 4
+        self.timer_spawn = timer_spawn
         
 
 
