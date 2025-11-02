@@ -1,0 +1,11 @@
+{
+    "level0":
+    {
+        "past_self_timer_spawn": 4
+    },
+    
+    "level1":
+    {
+        "past_self_timer_spawn": 2
+    }
+}
