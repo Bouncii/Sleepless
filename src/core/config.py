@@ -13,4 +13,7 @@ class Config:
     def get_level_path(self, level_num):
         """Retourne le chemin complet vers un fichier de niveau"""
         return os.path.join(Paths.LEVELS, f"level{level_num}.txt")
+    def get_img_path(self, nom_image):
+        """Retourne le chemin complet vers un fichier image"""
+        return os.path.join(Paths.IMAGES, f"{nom_image}.png")
 config = Config()

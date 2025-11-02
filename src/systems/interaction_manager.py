@@ -1,3 +1,4 @@
+# src/systems/interaction_manager.py
 class InteractionManagerButtonsDoors:
     def __init__(self):
         self.connections = {}  # {button_id: [door_id1, door_id2, ...]}
