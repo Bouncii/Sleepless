@@ -36,6 +36,8 @@ class Game:
         self.player = None #initialisés dans load level
         self.past_self_tab = []
 
+        self.asset_manager = AssetManager()
+
 
     def _init_screens(self):
         '''Initialise les différents écrans du jeu'''
@@ -198,7 +200,7 @@ class Game:
             # Dessin du niveau
             for row in range(self.GRID_HEIGHT):
                 for col in range(self.GRID_WIDTH):
-                    self.level[row][col].draw(self.screen)
+                    self.level[row][col].draw(self.screen,self.asset_manager)
             
             # Dessin des entités
             self.player.show(self.screen)

@@ -40,15 +40,19 @@ class Tile:
             return (100,0,100)
         
 
-    def draw(self,screen):
+    def draw(self,screen,asset_manager):
         '''
         Fonction qui dessine la tile puis les structures qu'elle conttient
         entrées: screen
         sorties: none
         '''
-        pygame.draw.rect(screen,self.background,(self.pixel_x, self.pixel_y, self.width, self.height))
-        for _, structure in self.structures.items():
-            pygame.draw.rect(screen,structure.color,structure.rect)
+        # Image de fond selon le type de tile
+        image = asset_manager.get_scaled_image('tile', self.width, self.height)
+        screen.blit(image, (self.pixel_x, self.pixel_y))
+    
+        # Dessiner les structures par-dessus
+        for _,structure in self.structures.items():
+            structure.draw(screen, asset_manager)
 
 
     def structures_builder(self) -> list:
