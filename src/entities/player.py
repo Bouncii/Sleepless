@@ -40,7 +40,7 @@ class Player:
         self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
 
         self.last_move_time = 0
-        self.move_delay = 500
+        self.move_delay = 750
         
 
 

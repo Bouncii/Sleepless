@@ -25,7 +25,7 @@ class AssetManager:
         for key, path in image_paths.items():
             if os.path.exists(path):
                 
-                self.images[key] = pygame.image.load(path)#.convert_alpha()
+                self.images[key] = pygame.image.load(path).convert_alpha()
             # else:
             #     self.images[key] = pygame.image.load(image_paths["missing_texture"]).convert_alpha()
 

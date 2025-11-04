@@ -31,9 +31,10 @@
 
 
 TODO :
- - implémenter porte / bouton (attribut id qui est le numéro après le B ou le D pour assigner des couple)
- - implémenter autre fichier pour chaque niveau avec les paramètres
- - début/fin du niveau, GUI , ect
+Modifier stockage deplacement joueur
+implémenter spawn joueur et pas self
+json pour charger past self et joueur
+transformer porte en sol qui disparait
 
 
 

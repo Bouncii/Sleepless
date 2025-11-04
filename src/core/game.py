@@ -54,7 +54,9 @@ class Game:
             keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                 self.running = False
-                
+            elif keys[pygame.K_r]: #reset le niveau avec R
+                self.state = GameState.RESET_GAME
+            
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 self.handle_button_events(event)
                 
