@@ -30,4 +30,4 @@ def get_start_location(level:list):
             tile = level[y][x]
             if tile.tile_type == "start":
                 res = (tile.grid_x,tile.grid_y)
-        return res
+    return res
