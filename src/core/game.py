@@ -31,7 +31,7 @@ class Game:
         self.interactionManagerDoorButton = None
 
         self.current_level_num = 0
-        self.nb_levels = 2
+        self.nb_levels = get_number_of_level()
 
         self.player = None #initialisés dans load level
         self.past_self_tab = []
