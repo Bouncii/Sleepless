@@ -11,4 +11,4 @@ def get_settings_by_level_number(level_num:int):
         data = json.load(file)
     return data["level" + str(level_num)]
 
-# Exemple : get_settings_by_level_number(1) -> {'past_self_timer_spawn': 2}
+# Exemple : get_settings_by_level_number(1) -> {'past_selfs': [{'past_self_timer_spawn': 8}, {'past_self_timer_spawn': 2}]}

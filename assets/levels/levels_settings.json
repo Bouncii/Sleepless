@@ -1,11 +1,16 @@
 {
     "level0":
     {
-        "past_self_timer_spawn": 4
+        "past_selfs":[
+            {"past_self_timer_spawn": 4}
+        ]
     },
     
     "level1":
     {
-        "past_self_timer_spawn": 8
+        "past_selfs":[
+            {"past_self_timer_spawn": 8},
+            {"past_self_timer_spawn": 2}
+        ]
     }
 }

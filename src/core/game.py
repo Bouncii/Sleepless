@@ -107,8 +107,10 @@ class Game:
         start_location = get_start_location(self.level)
         self.player = Player(start_location[0], start_location[1], self.level)
         self.past_self_tab = []
-        self.past_self_tab.append(Past_self(start_location[0], start_location[1],settings["past_self_timer_spawn"]))
-        
+
+        for delay in settings["past_selfs"]:
+            self.past_self_tab.append(Past_self(start_location[0], start_location[1],delay["past_self_timer_spawn"]))
+        print(self.past_self_tab)
         self.state = GameState.PLAYING
 
 
