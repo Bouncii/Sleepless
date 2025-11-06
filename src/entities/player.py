@@ -55,20 +55,20 @@ class Player:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_q]:
                     self.moving_horizontal = True
-                    self.try_move_horizontal(-1, grid_width, past_self_tab)
+                    self.try_move_horizontal(-1, grid_width, grid_height, past_self_tab)
                     self.last_move_time = current_time
                 elif keys[pygame.K_d]:
                     self.moving_horizontal = True
-                    self.try_move_horizontal(1, grid_width, past_self_tab)
+                    self.try_move_horizontal(1, grid_width, grid_height, past_self_tab)
                     self.last_move_time = current_time
                 elif keys[pygame.K_z]:
                     if self.current_tile.tile_type == "ladder":
                         self.moving_vertical = True
-                        self.try_move_vertical(-1, grid_height, past_self_tab)
+                        self.try_move_vertical(-1, grid_width, grid_height, past_self_tab)
                         self.last_move_time = current_time
 
   
-    def try_move_horizontal(self, dx:int, grid_width, past_self_tab):
+    def try_move_horizontal(self, dx:int, grid_width, grid_height, past_self_tab):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target x pour déplacement et animation
@@ -76,6 +76,7 @@ class Player:
         entrées: 
             dx : int  
             grid_width : int
+            grid_height : int
             past_self_tab : list of Past_self
         sorties: none
         '''
@@ -84,19 +85,23 @@ class Player:
             self.grid_x = new_x
             self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
 
-
-            self.update_moves()
+            if dx == -1:
+                direction = "left"
+            elif dx == 1:
+                direction = "right"
+            self.update_moves(direction)
             for past_self in past_self_tab:
                 past_self.moves = self.moves
-                past_self.detection_key()
+                past_self.detection_key(grid_width,grid_height)
 
-    def try_move_vertical(self,dy:int,grid_height,past_self_tab):
+    def try_move_vertical(self,dy:int, grid_width, grid_height, past_self_tab):
         '''
         Fonction qui vérifie si le déplacement est possible
         si faisable : update target y pour déplacement et animation
         si pas faisable : ne fait rien
         entrées: 
             dy : int  
+            grid_width : int
             grid_height : int
             past_self_tab : list of Past_self
         sorties: none
@@ -106,11 +111,10 @@ class Player:
             self.grid_y = new_y
             self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
-
-            self.update_moves()
+            self.update_moves("up")
             for past_self in past_self_tab:
                 past_self.moves = self.moves
-                past_self.detection_key()
+                past_self.detection_key(grid_width,grid_height)
 
 
 
@@ -234,11 +238,11 @@ class Player:
         '''
         pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
 
-    def update_moves (self):
+    def update_moves (self,direction):
         '''
         Fonction qui ajoute chaque nouvelles coordonnées que prends joueur à un tableau sous forme de tuple (x,y)
         '''
-        self.moves.append((self.grid_x,self.grid_y))
+        self.moves.append(direction)
 
     def on_finish(self):
         '''

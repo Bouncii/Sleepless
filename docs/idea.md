@@ -36,6 +36,8 @@ implémenter spawn joueur et pas self
 json pour charger past self et joueur
 transformer porte en sol qui disparait
 
+BUG si past self et player se croisent mais ne tombent pas sur la même case rien ne se passe
+
 
 
 

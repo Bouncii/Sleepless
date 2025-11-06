@@ -109,7 +109,7 @@ class Game:
         self.past_self_tab = []
 
         for delay in settings["past_selfs"]:
-            self.past_self_tab.append(Past_self(start_location[0], start_location[1],delay["past_self_timer_spawn"]))
+            self.past_self_tab.append(Past_self(start_location[0], start_location[1],delay["past_self_timer_spawn"],self.level))
         self.state = GameState.PLAYING
 
 

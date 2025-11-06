@@ -2,7 +2,7 @@ import pygame
 from src.core.constants import *
 
 class Past_self:
-    def __init__ (self, grid_x:int, grid_y:int, timer_spawn:int):
+    def __init__ (self, grid_x:int, grid_y:int, timer_spawn:int,level:list):
 
         self.height = 0.5*TILE_SIZE
         self.width = 0.3*TILE_SIZE
@@ -28,6 +28,14 @@ class Past_self:
         self.moving_gravite = False
         self.moving = False
 
+        self.frame_dans_air = 0
+
+        self.current_tile = level[self.grid_y][self.grid_x]
+        self.tile_below = level[self.grid_y+1][self.grid_x] if self.grid_y+1 < len(level) else None
+        self.tile_above = level[self.grid_y-1][self.grid_x] if self.grid_y-1 >= 0 else None
+        self.tile_left = level[self.grid_y][self.grid_x-1] if self.grid_x-1 >= 0 else None
+        self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
+
         self.moves = []
         self.tour = 0
 
@@ -35,65 +43,71 @@ class Past_self:
         
 
 
-    def detection_key(self):
+    def detection_key(self, grid_width, grid_height):
         '''
         Fonction qui détecte une pression des touches et agit en conséquence (on bouge si le délai de spawn est écoulé ou alors on décrémente celui-ci)
-        entrées: none
+        entrées:
+            grid_width : int
+            grid_height : int
         sorties: none
         '''
 
 
         if self.timer_spawn == 0:
-            self.move()
+
+            next_move = self.moves[self.tour]
+        
+            if next_move == "right":
+                self.try_move_horizontal(1,grid_width)
+                self.moving_horizontal = True
+            elif next_move == "left":
+                self.try_move_horizontal(-1,grid_width)
+            elif next_move == "up":
+                self.try_move_vertical(-1,grid_height)
+                self.moving_vertical = True
+
+            self.tour += 1
+
+
         else:
             self.timer_spawn -= 1
 
             
 
-    def move_horizontal(self,new_x:int):
+    def try_move_horizontal(self, dx:int, grid_width):
         '''
-        Fonction qui déplace horizontalement past self a partir de new_x
+        Fonction qui vérifie si le déplacement est possible
+        si faisable : update target x pour déplacement et animation
+        si pas faisable : ne fait rien
         entrées: 
-            new_x : int
+            dx : int  
+            grid_width : int
+            grid_height : int
+            past_self_tab : list of Past_self
         sorties: none
         '''
+        new_x = self.grid_x + dx
+        if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
+            self.grid_x = new_x
+            self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
 
-        self.grid_x = new_x
-        self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
 
-
-    def move_vertical(self,new_y:int):
+    def try_move_vertical(self, dy:int, grid_height):
         '''
-        Fonction qui déplace verticalement past self a partir de new_y
+        Fonction qui vérifie si le déplacement est possible
+        si faisable : update target y pour déplacement et animation
+        si pas faisable : ne fait rien
         entrées: 
-            new_y : int
+            dy : int  
+            grid_width : int
+            grid_height : int
+            past_self_tab : list of Past_self
         sorties: none
         '''
-
-        self.grid_y = new_y
-        self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
-
-
-
-    def move(self):
-        '''
-        Fonction qui assigne la cible du deplacement du past self en fonction de la liste des moves et incrémente self.tour(indice dans moves)
-        entrées: none
-        sorties: none
-        '''
-
-
-        next_move = self.moves[self.tour]
-        
-        if self.grid_x != next_move[0]:
-            self.move_horizontal(next_move[0])
-            self.moving_horizontal = True
-        elif self.grid_y != next_move[1]:
-            self.move_vertical(next_move[1])
-            self.moving_vertical = True
-        self.tour += 1
-
-            
+        new_y = self.grid_y + dy
+        if 0 <= new_y and new_y < grid_height:
+            self.grid_y = new_y
+            self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
             
 
@@ -105,6 +119,11 @@ class Past_self:
             level : list of list
         sorties: none
         '''
+        self.current_tile = level[self.grid_y][self.grid_x]
+        self.tile_below = level[self.grid_y+1][self.grid_x] if self.grid_y+1 < len(level) else None
+        self.tile_above = level[self.grid_y-1][self.grid_x] if self.grid_y-1 >= 0 else None
+        self.tile_left = level[self.grid_y][self.grid_x-1] if self.grid_x-1 >= 0 else None
+        self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
 
         # Chute veticale
         if not self.moving_vertical:
@@ -180,27 +199,27 @@ class Past_self:
         '''
         if not self.on_ground:
             self.speed_gravity_y += self.gravity * dt
-            if self.debug > 4 :
+            if self.frame_dans_air > 4 : #Au bout de 4 frame de on_ground à l'etat faux on considère que le player tombe, sinon il est toujour sur le sol
                 self.moving_gravite = True
-            self.debug +=1
+            self.frame_dans_air +=1
         else:
             self.speed_gravity_y = 0
-            self.debug = 0
+            self.frame_dans_air = 0
             self.moving_gravite = False
 
-        self.pixel_y += self.speed_gravity_y * dt
+        self.pixel_y += self.speed_gravity_y * dt   
 
         player_rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
         # Détection structure
         self.on_ground = False
-        for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+2)): # on check que les tiles à droite et à gauche pour verifier le sol
+        for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+1)): # on check que les tiles à droite et à gauche pour verifier le sol
             tile = level[self.grid_y][i_col]
             if "ground" in tile.structures:
-                    if player_rect.colliderect(tile.structures["ground"].rect):
-                        if self.speed_gravity_y >= 0:
-                            self.pixel_y = tile.structures["ground"].rect.top - self.height
-                            self.on_ground = True
+                if player_rect.colliderect(tile.structures["ground"].rect):
+                    if self.speed_gravity_y >= 0:
+                        self.pixel_y = tile.structures["ground"].rect.top - self.height
+                        self.on_ground = True
 
         self.target_y = self.pixel_y
 
@@ -212,3 +231,19 @@ class Past_self:
         sorties: none
         '''
         pygame.draw.rect(screen, "orange", (self.pixel_x, self.pixel_y, self.width, self.height ))
+
+
+    def target_is_door_and_open(self,dx):
+        '''
+        Fonction qui vérifie si la tile sur laquelle le player va aller et une porte ouverte
+        entrées:
+            dx: -1 ou 1 pour savoir si on va à droite au à gauche
+            level : la grille du level
+        sortie: bool
+        '''
+        res = True
+        if dx == 1 and self.tile_right.tile_type == "door": 
+            res = self.tile_right.structures["door"].is_open
+        elif dx == -1 and self.tile_left.tile_type == "door":
+            res = self.tile_left.structures["door"].is_open
+        return res
