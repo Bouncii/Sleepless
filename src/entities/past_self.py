@@ -13,6 +13,8 @@ class Past_self:
         self.pixel_x = self.grid_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
         self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
+        self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
+
         self.target_x = self.pixel_x
         self.target_y = self.pixel_y
 
@@ -125,6 +127,8 @@ class Past_self:
         self.tile_left = level[self.grid_y][self.grid_x-1] if self.grid_x-1 >= 0 else None
         self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
 
+        self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
+
         # Chute veticale
         if not self.moving_vertical:
             self.gestion_gravite(dt,level)
@@ -209,14 +213,14 @@ class Past_self:
 
         self.pixel_y += self.speed_gravity_y * dt   
 
-        player_rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
+        self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
         # Détection structure
         self.on_ground = False
         for i_col in range(max(0, self.grid_x-1), min(len(level[0]), self.grid_x+1)): # on check que les tiles à droite et à gauche pour verifier le sol
             tile = level[self.grid_y][i_col]
             if "ground" in tile.structures:
-                if player_rect.colliderect(tile.structures["ground"].rect):
+                if self.rect.colliderect(tile.structures["ground"].rect):
                     if self.speed_gravity_y >= 0:
                         self.pixel_y = tile.structures["ground"].rect.top - self.height
                         self.on_ground = True

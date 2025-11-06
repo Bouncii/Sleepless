@@ -135,11 +135,11 @@ class Game:
                 if past_self.timer_spawn == 0:
                     past_self.update(self.dt, self.level)
 
+            #Verif meme case que past self
+            self.verif_player_on_same_tile_as_past_self()
+
             if are_all_entities_idle(self.player,self.past_self_tab):
                 self.update_buttons_state()
-                
-                #Verif meme case que past self
-                self.verif_same_tile_as_past_self()
 
                 # Vérification de la victoire
                 if self.player.on_finish():
@@ -181,12 +181,12 @@ class Game:
             if button_id not in self.interactionManagerDoorButton.pressed_buttons:
                 self.interactionManagerDoorButton.button_pressed(button_id)
 
-    def verif_same_tile_as_past_self(self):
+    def verif_player_on_same_tile_as_past_self(self):
         '''
         Fonction qui vérifie si le joueur est sur la même case que past self et agit en conséquence
         '''
         for past_self in self.past_self_tab:
-            if past_self.grid_x == self.player.grid_x and past_self.grid_y == self.player.grid_y and past_self.timer_spawn == 0:
+            if self.player.rect.colliderect(past_self.rect) and past_self.timer_spawn == 0:
                 self.state = GameState.RESET_GAME
 
 
