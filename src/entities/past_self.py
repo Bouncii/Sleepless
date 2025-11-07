@@ -246,8 +246,13 @@ class Past_self:
         sortie: bool
         '''
         res = True
+        
         if dx == 1 and self.tile_right.tile_type == "door_left": 
             res = self.tile_right.structures["door_left"].is_open
         elif dx == -1 and self.tile_left.tile_type == "door_right":
             res = self.tile_left.structures["door_right"].is_open
+        elif dx == -1 and self.current_tile.tile_type == "door_left": 
+            res = self.current_tile.structures["door_left"].is_open
+        elif dx == 1 and self.current_tile.tile_type == "door_right":
+            res = self.current_tile.structures["door_right"].is_open
         return res
