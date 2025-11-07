@@ -30,11 +30,12 @@
   Interagir ↔ Ne rien faire.
 
 
-TODO :
-Modifier stockage deplacement joueur
-implémenter spawn joueur et pas self
-json pour charger past self et joueur
-transformer porte en sol qui disparait
+objets:
+  - la sélection d'un objet se fait avec in inventaire soit en bas, soit en haut de l'écran, on sélectionne l'objet dans l'inventaire avec les touches & é " ect et on l'utilise avec entrer
+  - stun de fantome (1 tour)
+  - teleporteur permet de placer un warp et de ce tp à ce warp une fois
+
+
 
 
 
@@ -48,5 +49,3 @@ transformer porte en sol qui disparait
 - case qui se ferme et s'ouvre tout les deux tours par exemple
 
 
-
-- demi seconde de pose entre deplacement

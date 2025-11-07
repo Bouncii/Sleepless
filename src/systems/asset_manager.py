@@ -19,6 +19,7 @@ class AssetManager:
             'end': config.get_img_path("end"),
             'tile': config.get_img_path("tile"),
             'background': config.get_img_path("background"),
+            'portalMakerItem': config.get_img_path("portalMakerItem"),
             'missing_texture': config.get_img_path("missing_texture")
         }
         
