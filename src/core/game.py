@@ -95,7 +95,6 @@ class Game:
         # Construction du niveau
         self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
         self.level = level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str, self.interactionManagerDoorButton)
-        
         # Redimensionnement de l'écran
         self.background = pygame.Surface((self.window_width, self.window_height))
         

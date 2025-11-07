@@ -15,10 +15,10 @@ class Tile:
         self.tile_type = tile_type # type de la tile (exemple : "sol", "échelle", "bouton", "vide")
         self.tile_id = "0"  # id par défaut (sert pour le link de tile)
 
-        if "_" in self.tile_type:
-            parts = self.tile_type.split("_")
-            self.tile_type = parts[0]
-            self.tile_id = parts[1]
+        
+        if "_" in self.tile_type[-2]:
+            self.tile_id = tile_type[-1]
+            self.tile_type = self.tile_type[:-2]
 
         self.background = self.find_color()
 
@@ -30,7 +30,7 @@ class Tile:
         Fonction qui choisit la couleur en fonction du type de la tile
         sorties: la couleur en rgb
         '''
-        if self.tile_type == "sol" or self.tile_type == "vide"or self.tile_type == "ladder" or self.tile_type == "door":
+        if self.tile_type == "sol" or self.tile_type == "vide"or self.tile_type == "ladder" or self.tile_type == "door_left" or self.tile_type == "door_right":
             return (100,100,150)
         elif self.tile_type == "start":
             return (000,250,50)
@@ -64,12 +64,12 @@ class Tile:
             la liste contenant les structures
         '''
         res= {}
-        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end" or self.tile_type=="ladder" or self.tile_type == "door" or self.tile_type == "button":
+        if self.tile_type == "sol" or self.tile_type == "start" or self.tile_type=="end" or self.tile_type=="ladder" or self.tile_type == "door_left" or self.tile_type == "door_right" or self.tile_type == "button":
             res["ground"]=Ground(self.pixel_x,self.pixel_y,self.width,self.height)
-        if self.tile_type == "door":
-            res["door"]=Door(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id)
+        if self.tile_type == "door_left":
+            res["door_left"]=Door(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id,"left")
+        if self.tile_type == "door_right":
+            res["door_right"]=Door(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id,"right")
         elif self.tile_type == "button":
             res["button"]=Button(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id)
-        
-        
         return res

@@ -9,8 +9,10 @@ def cree_tableau_de_la_map(file:str):
         'S'  ou 's' -> start
         'E' ou 'e' -> end
         '#' -> ladder
+        'B' suivis d'un nombre -> Bouton et son id
+        '{' ou '}' suivis d'un nombre -> porte et son id
         '\n' ne cree rien, il est ignoré
-        Tout autre caractère -> vide
+        Tout autre caractère -> case vide
     """
     map = []
     with open(file, "r") as lvl_map:
@@ -45,13 +47,22 @@ def cree_tableau_de_la_map(file:str):
                         niveau += ["button_0"]  # id par défaut
                         i += 1
                     
-                elif crt == 'D':
+                elif crt == '{':
                     if i + 1 < len(etage) and etage[i + 1].isdigit(): #regarde si il y a un numero après la lettre
                         door_id = etage[i + 1]
-                        niveau += ["door_"+ str(door_id)]
+                        niveau += ["door_left_"+ str(door_id)]
                         i += 2
                     else:
-                        niveau += ["door_0"]  # id par défaut
+                        niveau += ["door_left_0"]  # id par défaut
+                        i += 1
+
+                elif crt == '}':
+                    if i + 1 < len(etage) and etage[i + 1].isdigit(): #regarde si il y a un numero après la lettre
+                        door_id = etage[i + 1]
+                        niveau += ["door_right_"+ str(door_id)]
+                        i += 2
+                    else:
+                        niveau += ["door_right_0"]  # id par défaut
                         i += 1
                     
                 elif crt == '\n':

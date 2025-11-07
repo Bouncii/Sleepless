@@ -33,9 +33,13 @@ def link_door_button(tile,interaction_manager):
         interactionManagerDoorButton : InteractionManagerButtonsDoors
     sortie : None
     '''
-    if "door" in tile.structures:
-        interaction_manager.register_door(tile.structures["door"].door_id, tile.structures["door"])
+    if "door_left" in tile.structures:
+        interaction_manager.register_door(tile.structures["door_left"].door_id, tile.structures["door_left"])
         # Connecte automatiquement les boutons et portes de même ID
-        interaction_manager.add_connection(tile.structures["door"].door_id, tile.structures["door"].door_id)
+        interaction_manager.add_connection(tile.structures["door_left"].door_id, tile.structures["door_left"].door_id)
+    elif "door_right" in tile.structures:
+        interaction_manager.register_door(tile.structures["door_right"].door_id, tile.structures["door_right"])
+        # Connecte automatiquement les boutons et portes de même ID
+        interaction_manager.add_connection(tile.structures["door_right"].door_id, tile.structures["door_right"].door_id)
     elif "button" in tile.structures:
         interaction_manager.register_button(tile.structures["button"].button_id, tile.structures["button"])
