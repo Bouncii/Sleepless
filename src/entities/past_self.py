@@ -67,6 +67,9 @@ class Past_self:
             elif next_move == "up":
                 self.try_move_vertical(-1,grid_height)
                 self.moving_vertical = True
+            elif next_move == "down":
+                self.try_move_vertical(1,grid_height)
+                self.moving_vertical = True
 
             self.tour += 1
 

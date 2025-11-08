@@ -68,6 +68,12 @@ class Player:
                         self.moving_vertical = True
                         self.try_move_vertical(-1, grid_width, grid_height, past_self_tab)
                         self.last_move_time = current_time
+                elif keys[pygame.K_s]:
+                    if self.tile_below and self.tile_below.tile_type == "ladder":
+                        self.moving_vertical = True
+                        self.try_move_vertical(1, grid_width, grid_height, past_self_tab)
+                        self.last_move_time = current_time
+
 
   
     def try_move_horizontal(self, dx:int, grid_width, grid_height, past_self_tab):
@@ -113,7 +119,11 @@ class Player:
             self.grid_y = new_y
             self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
 
-            self.update_moves("up")
+            if dy == -1:
+                direction = "up"
+            elif dy == 1:
+                direction = "down"
+            self.update_moves(direction)
             for past_self in past_self_tab:
                 past_self.moves = self.moves
                 past_self.detection_key(grid_width,grid_height)
