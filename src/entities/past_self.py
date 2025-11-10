@@ -71,7 +71,6 @@ class Past_self:
                 self.try_move_vertical(1,grid_height)
                 self.moving_vertical = True
 
-            self.tour += 1
 
 
         else:
@@ -95,6 +94,7 @@ class Past_self:
         if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
             self.grid_x = new_x
             self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
+            self.tour += 1
 
 
     def try_move_vertical(self, dy:int, grid_height):
@@ -113,6 +113,7 @@ class Past_self:
         if 0 <= new_y and new_y < grid_height:
             self.grid_y = new_y
             self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
+            self.tour += 1
 
             
 

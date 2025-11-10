@@ -30,7 +30,7 @@ class Game:
         
         self.interactionManagerDoorButton = None
 
-        self.current_level_num = 0
+        self.current_level_num = 2
         self.nb_levels = get_number_of_level()
 
         self.player = None #initialisés dans load level

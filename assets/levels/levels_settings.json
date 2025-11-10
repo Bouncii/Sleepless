@@ -20,9 +20,9 @@
     {
         "past_selfs":[
             {"past_self_timer_spawn": 2},
-            {"past_self_timer_spawn": 4},
+            {"past_self_timer_spawn": 6},
+            {"past_self_timer_spawn": 7},
             {"past_self_timer_spawn": 12},
-            {"past_self_timer_spawn": 14},
             {"past_self_timer_spawn": 16}
         ]
     }
