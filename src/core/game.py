@@ -57,7 +57,7 @@ class Game:
             elif keys[pygame.K_r]: #reset le niveau avec R
                 self.state = GameState.RESET_GAME
             
-            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element.state == self.state:
                 self.handle_button_events(event)
                 
             # Traitement des événements par les managers UI

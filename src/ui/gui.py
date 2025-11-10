@@ -8,7 +8,7 @@ class Menu:
         self.manager = pygame_gui.UIManager((self.window_width, self.window_height), 'theme.json')
         self.elements = []
         self.build_ui()
-
+        
     def build_ui(self):
         # Supprimer les anciens éléments
         for e in self.elements:
@@ -30,6 +30,7 @@ class Menu:
             text='Play',
             manager=self.manager
         )
+        self.play_button.state = "menu"
         self.elements.append(self.play_button)
 
     # Fonction pour rebuild l'UI qui rappelle build_ui
@@ -81,6 +82,7 @@ class Fin:
             text='Replay this level ?',
             manager=self.manager
         )
+        self.replay_button.state = "win"
         self.elements.append(self.replay_button)
 
         # Ajoute un boutton pour changer de niveau
@@ -89,6 +91,7 @@ class Fin:
             text='Next Level',
             manager=self.manager
         )
+        self.next_button.state = "win"
         self.elements.append(self.next_button)
 
     # Fonction pour rebuild l'UI qui rappelle build_ui
