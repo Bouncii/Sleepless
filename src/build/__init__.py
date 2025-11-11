@@ -3,7 +3,7 @@
 
 from .tile import Tile
 from .level_design import cree_tableau_de_la_map
-from .structures import Ground, Door, Button
+from .structures import Ground, Door, Button, Ladder
 from .build_functions import *
 from .map_settings_functions import *
 
@@ -13,6 +13,7 @@ __all__ = [
     'Ground',
     'Door',
     'Button',
+    'Ladder',
     'level_builder',
     'link_door_button',
     'get_settings_by_level_number',

@@ -18,6 +18,25 @@ class Ground:
         image = asset_manager.get_scaled_image('door', self.width, self.height)
         screen.blit(image, (self.pixel_x, self.pixel_y))
 
+class Ladder:
+    def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
+        self.type = "ladder"
+
+        self.pixel_x = pixel_x
+        self.pixel_y = pixel_y
+
+        self.width = tile_width
+        self.height = tile_height*0.1
+
+        self.rects = [Rect(self.pixel_x, self.pixel_y+self.height*1.75*i,self.width,self.height)for i in range(1,4)]
+        self.color = (100,100,0)
+
+    def draw(self, screen, asset_manager):
+        '''Dessine le sol avec une image'''
+        image = asset_manager.get_scaled_image('ladder', self.width, self.height)
+        for rect in self.rects:
+            screen.blit(image, rect.topleft)
+
 
 
 class Door:

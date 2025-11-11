@@ -1,7 +1,5 @@
 TODO : 
 - clean le code : def méthodes privées / publique, vérif docstring, ect
-- descente échelles
-- affichage échelles
 - debut implémentation objets pour plus tard
 - barre d'inventaire
 - animation/affichage

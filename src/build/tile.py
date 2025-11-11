@@ -68,8 +68,10 @@ class Tile:
             res["ground"]=Ground(self.pixel_x,self.pixel_y,self.width,self.height)
         if self.tile_type == "door_left":
             res["door_left"]=Door(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id,"left")
-        if self.tile_type == "door_right":
+        elif self.tile_type == "door_right":
             res["door_right"]=Door(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id,"right")
         elif self.tile_type == "button":
             res["button"]=Button(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id)
+        elif self.tile_type == "ladder":
+            res["ladder"]=Ladder(self.pixel_x,self.pixel_y,self.width,self.height)
         return res
