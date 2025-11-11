@@ -37,6 +37,23 @@ class Ladder:
         for rect in self.rects:
             screen.blit(image, rect.topleft)
 
+class End:
+    def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
+        self.type = "ground"
+
+        self.pixel_x = pixel_x
+        self.pixel_y = pixel_y
+
+        self.width = tile_width
+        self.height = tile_height
+
+        self.rect = Rect(self.pixel_x, self.pixel_y,self.width,self.height)
+        self.color = (100,100,0)
+
+    def draw(self, screen, asset_manager):
+        '''Dessine le sol avec une image'''
+        image = asset_manager.get_scaled_image('end', self.width, self.height)
+        screen.blit(image, self.rect.topleft)
 
 
 class Door:

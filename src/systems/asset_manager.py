@@ -15,6 +15,7 @@ class AssetManager:
             'past_self': config.get_img_path("past_self"),
             'ground': config.get_img_path("ground"),
             'ladder': config.get_img_path("ladder"),
+            'button': config.get_img_path("button"),
             'start': config.get_img_path("start"),
             'end': config.get_img_path("end"),
             'tile': config.get_img_path("tile"),

@@ -74,4 +74,6 @@ class Tile:
             res["button"]=Button(self.pixel_x,self.pixel_y,self.width,self.height,self.tile_id)
         elif self.tile_type == "ladder":
             res["ladder"]=Ladder(self.pixel_x,self.pixel_y,self.width,self.height)
+        elif self.tile_type == "end":
+            res["end"]=End(self.pixel_x,self.pixel_y,self.width,self.height)
         return res
