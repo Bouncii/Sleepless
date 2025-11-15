@@ -2,9 +2,10 @@ import pygame
 from src.core.constants import *
 from src.core.game_misc_functions import *
 
-class Player:
+class Player(pygame.sprite.Sprite):
     def __init__ (self, grid_x:int,grid_y:int,level:list):
-
+        pygame.sprite.Sprite.__init__(self)
+        
         self.height = 0.5*TILE_SIZE
         self.width = 0.3*TILE_SIZE
 
@@ -243,7 +244,7 @@ class Player:
 
         self.target_y = self.pixel_y
 
-    def show(self,screen):
+    def draw(self,screen):
         '''
         Fonction qui dessine le joueur en fonction de ses attributs
         entrée: 

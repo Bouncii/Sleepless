@@ -34,7 +34,7 @@ class Game:
         self.nb_levels = get_number_of_level()
 
         self.player = None #initialisés dans load level
-        self.past_self_tab = []
+        self.past_self_group = pygame.sprite.Group()
 
         self.asset_manager = AssetManager()
 
@@ -105,10 +105,10 @@ class Game:
         # Création des entités
         start_location = get_start_location(self.level)
         self.player = Player(start_location[0], start_location[1], self.level)
-        self.past_self_tab = []
+        self.past_self_group.empty()
 
         for delay in settings["past_selfs"]:
-            self.past_self_tab.append(Past_self(start_location[0], start_location[1],delay["past_self_timer_spawn"],self.level))
+            self.past_self_group.add(Past_self(start_location[0], start_location[1],delay["past_self_timer_spawn"],self.level))
         self.state = GameState.PLAYING
 
 
@@ -126,18 +126,16 @@ class Game:
             
         elif self.state == GameState.PLAYING:
             # Mise à jour du joueur
-            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_tab)
+            self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
             self.player.update(self.dt, self.level)
             
             # Mise à jour du past_self
-            for past_self in self.past_self_tab:
-                if past_self.timer_spawn == 0:
-                    past_self.update(self.dt, self.level)
+            self.past_self_group.update(self.dt, self.level)
 
             #Verif meme case que past self
             self.verif_player_on_same_tile_as_past_self()
 
-            if are_all_entities_idle(self.player,self.past_self_tab):
+            if are_all_entities_idle(self.player,self.past_self_group):
                 self.update_buttons_state()
 
                 # Vérification de la victoire
@@ -158,7 +156,7 @@ class Game:
         
         # Vérif entités sur boutons
         entities = [self.player]
-        for past_self in self.past_self_tab:
+        for past_self in self.past_self_group:
             if past_self.timer_spawn == 0:
                 entities.append(past_self)
         
@@ -184,7 +182,7 @@ class Game:
         '''
         Fonction qui vérifie si le joueur est sur la même case que past self et agit en conséquence
         '''
-        for past_self in self.past_self_tab:
+        for past_self in self.past_self_group:
             if self.player.rect.colliderect(past_self.rect) and past_self.timer_spawn == 0:
                 self.state = GameState.RESET_GAME
 
@@ -206,10 +204,10 @@ class Game:
                     self.level[row][col].draw(self.screen,self.asset_manager)
             
             # Dessin des entités
-            self.player.show(self.screen)
-            for past_self in self.past_self_tab:
+            self.player.draw(self.screen,self.asset_manager)
+            for past_self in self.past_self_group:
                 if past_self.timer_spawn == 0:
-                    past_self.show(self.screen)
+                    past_self.draw(self.screen)
                 
         elif self.state == GameState.WIN:
             self.screen.blit(self.background, (0, 0))
