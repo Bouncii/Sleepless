@@ -48,7 +48,8 @@ class Tile:
         '''
         # Image de fond selon le type de tile
         image = asset_manager.get_scaled_image('tile', self.width, self.height)
-        screen.blit(image, (self.pixel_x, self.pixel_y))
+        # screen.blit(image, (self.pixel_x, self.pixel_y))
+        image = asset_manager.getTransparentImage(self.width,self.height)
     
         # Dessiner les structures par-dessus
         for _,structure in self.structures.items():

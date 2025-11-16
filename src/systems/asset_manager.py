@@ -21,6 +21,8 @@ class AssetManager:
             'tile': config.get_img_path("tile"),
             'background': config.get_img_path("background"),
             'portalMakerItem': config.get_img_path("portalMakerItem"),
+            'BackgroundLayer1': config.get_img_path("BackgroundLayer1"),
+            'BackgroundLayer2': config.get_img_path("BackgroundLayer2"),
             'missing_texture': config.get_img_path("missing_texture")
         }
         
@@ -41,3 +43,8 @@ class AssetManager:
         '''Récupère une image redimensionnée à la taille spécifiée'''
         original_image = self.get_image(key)
         return pygame.transform.scale(original_image, (int(target_width), int(target_height)))
+    
+    def getTransparentImage(self,target_width, target_height):
+        image = pygame.Surface((target_width,target_height)).convert_alpha()
+        image = pygame.transform.scale(image, (int(target_width), int(target_height)))
+        return image

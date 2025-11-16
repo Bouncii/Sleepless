@@ -20,7 +20,7 @@ class Game:
 
 
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.window_width, self.window_height = pygame.display.get_surface().get_size()
+        self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
 
         self.clock = pygame.time.Clock()
         self.dt = 0
@@ -44,7 +44,7 @@ class Game:
         self.menu = Menu()
         self.win_screen = Fin()
         self.current_screen = self.menu
-        self.background = pygame.Surface((self.window_width, self.window_height))
+        self.background = Background(self.screen_width,self.screen_height)
 
     
 
@@ -95,8 +95,9 @@ class Game:
         # Construction du niveau
         self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
         self.level = level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str, self.interactionManagerDoorButton)
-        # Redimensionnement de l'écran
-        self.background = pygame.Surface((self.window_width, self.window_height))
+
+        # initialisation du background
+        self.background = Background(self.screen_width,self.screen_height)
         
         # Mise à jour des UI
         self.menu.rebuild_ui()
@@ -126,6 +127,7 @@ class Game:
             
         elif self.state == GameState.PLAYING:
             # Mise à jour du joueur
+            self.background.update_camera(self.player.pixel_x)
             self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
             self.player.update(self.dt, self.level)
             
@@ -194,11 +196,14 @@ class Game:
         self.screen.fill((0, 0, 0))
         
         if self.state == GameState.MENU:
-            self.screen.blit(self.background, (0, 0))
+            self.background.draw(self.screen,self.asset_manager)
             self.menu.draw(self.screen)
             
         elif self.state == GameState.PLAYING:
             # Dessin du niveau
+
+            self.background.draw(self.screen,self.asset_manager)
+
             for row in range(self.GRID_HEIGHT):
                 for col in range(self.GRID_WIDTH):
                     self.level[row][col].draw(self.screen,self.asset_manager)
@@ -210,7 +215,7 @@ class Game:
                     past_self.draw(self.screen)
                 
         elif self.state == GameState.WIN:
-            self.screen.blit(self.background, (0, 0))
+            self.background.draw(self.screen,self.asset_manager)
             self.win_screen.draw(self.screen)
             
         pygame.display.flip()

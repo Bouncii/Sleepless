@@ -6,5 +6,6 @@ Package system
 
 from .interaction_manager import *
 from .asset_manager import *
+from .background import *
 
-__all__ = ['InteractionManagerButtonsDoors','AssetManager']
+__all__ = ['InteractionManagerButtonsDoors','AssetManager','Background']
