@@ -32,7 +32,7 @@ class Item():
     def animate(self,dt):
         self.time += dt
 
-        amplitude = 15
+        amplitude = 10
         speed = 2
         
         offset = math.sin(self.time * speed) * amplitude
@@ -44,7 +44,7 @@ class Item():
 class PortalMakerItem(Item):
     def __init__(self,grid_x:int, grid_y:int, durability:int):
         super().__init__(grid_x,grid_y,durability)
-        self.type = "portalMakerItem"
+        self.type = "portalMaker"
 
     def display(self, screen, asset_manager):
         image = asset_manager.get_scaled_image(self.type, self.width, self.height)
@@ -56,7 +56,7 @@ class PortalMakerItem(Item):
 class StunItem(Item):
     def __init__(self,grid_x:int, grid_y:int, durability:int):
         super().__init__(grid_x,grid_y,durability)
-        self.type = "StunItem"
+        self.type = "StunMaker"
 
     def display(self, screen, asset_manager):
         image = asset_manager.get_scaled_image(self.type, self.width, self.height)
