@@ -9,3 +9,6 @@ TODO :
 - multi layer en background (à tester)
 - faire passer un filtre de 100% d'opacité à 0% ? possible ?
 - possible de faire une aura autour des entités ?
+
+- Dans Menu pricipal ajouter un bouton contrôle -> Contrôle GUI -> Toutes les touches du jeu listée
+- Implémentation des items quand le level load
