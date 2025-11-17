@@ -5,7 +5,8 @@
     {
         "past_selfs":[
             {"past_self_timer_spawn": 4}
-        ]
+        ],
+        "items":[]
     },
     
     "level1":
@@ -13,7 +14,8 @@
         "past_selfs":[
             {"past_self_timer_spawn": 8},
             {"past_self_timer_spawn": 4}
-        ]
+        ],
+        "items":[]
     },
 
     "level2":
@@ -24,6 +26,10 @@
             {"past_self_timer_spawn": 7},
             {"past_self_timer_spawn": 12},
             {"past_self_timer_spawn": 16}
+        ],
+        "items":[
+            {"stun": [2,2]},
+            {"portal": [1,3]}
         ]
     }
 }
