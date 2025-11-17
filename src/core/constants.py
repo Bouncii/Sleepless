@@ -25,6 +25,7 @@ class _GameConstants:
         LEVELS = os.path.join(BASE_DIR, "assets", "levels")
         IMAGES = os.path.join(BASE_DIR, "assets", "images")
         SOUNDS = os.path.join(BASE_DIR, "assets", "sounds")
+        SETTINGS = os.path.join(BASE_DIR, "assets", "levels","levels_settings.json")
 
 
 TILE_SIZE = _GameConstants.TILE_SIZE
