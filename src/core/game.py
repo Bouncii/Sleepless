@@ -38,6 +38,8 @@ class Game:
 
         self.asset_manager = AssetManager()
 
+        self.inventory = None
+
 
     def _init_screens(self):
         '''Initialise les différents écrans du jeu'''
@@ -98,6 +100,9 @@ class Game:
 
         # initialisation du background
         self.background = Background(self.screen_width,self.screen_height)
+
+        # Initialisation de l'inventaire
+        self.inventory = Inventory()
         
         # Mise à jour des UI
         self.menu.rebuild_ui()
@@ -129,6 +134,7 @@ class Game:
             # Mise à jour du joueur
             self.background.update_camera(self.player.pixel_x)
             self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
+            self.inventory.update()
             self.player.update(self.dt, self.level)
             
             # Mise à jour du past_self
@@ -213,6 +219,8 @@ class Game:
             for past_self in self.past_self_group:
                 if past_self.timer_spawn == 0:
                     past_self.draw(self.screen)
+            
+            self.inventory.display(self.screen,self.asset_manager,self.screen_width)
                 
         elif self.state == GameState.WIN:
             self.background.draw(self.screen,self.asset_manager)

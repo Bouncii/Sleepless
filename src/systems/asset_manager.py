@@ -20,7 +20,7 @@ class AssetManager:
             'end': config.get_img_path("end"),
             'tile': config.get_img_path("tile"),
             'background': config.get_img_path("background"),
-            'portalMakerItem': config.get_img_path("portalMakerItem"),
+            'portalMaker': config.get_img_path("portalMaker"),
             'BackgroundLayer1': config.get_img_path("BackgroundLayer1"),
             'BackgroundLayer2': config.get_img_path("BackgroundLayer2"),
             'missing_texture': config.get_img_path("missing_texture")
@@ -46,5 +46,4 @@ class AssetManager:
     
     def getTransparentImage(self,target_width, target_height):
         image = pygame.Surface((target_width,target_height)).convert_alpha()
-        image = pygame.transform.scale(image, (int(target_width), int(target_height)))
         return image
