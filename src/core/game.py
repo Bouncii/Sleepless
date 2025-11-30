@@ -97,7 +97,7 @@ class Game:
         # Construction du niveau
         self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
         self.level = level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str, self.interactionManagerDoorButton)
-        self.level[2][1].items.append(Item(1,2,ItemTypes.PORTALMAKER))
+        add_item_to_tiles(settings["items"], self.level)
 
         # initialisation du background
         self.background = Background(self.screen_width,self.screen_height)

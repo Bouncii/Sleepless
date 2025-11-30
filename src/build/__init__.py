@@ -18,5 +18,6 @@ __all__ = [
     'level_builder',
     'link_door_button',
     'get_settings_by_level_number',
-    'get_number_of_level'
+    'get_number_of_level',
+    'add_item_to_tiles'
 ]
