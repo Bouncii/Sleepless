@@ -5,7 +5,7 @@ import math
 
 #Class qui va être hérité des différents types d'items
 class Item():
-    def __init__(self, grid_x:int, grid_y:int, durability:int):
+    def __init__(self, grid_x:int, grid_y:int,ItemType:str):
         self.height = 0.2*TILE_SIZE
         self.width = 0.2*TILE_SIZE
 
@@ -19,7 +19,7 @@ class Item():
 
         self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
-        self.durability = durability
+        self.type = ItemType
 
         self.is_in_inventory = False
 
@@ -39,28 +39,6 @@ class Item():
 
         self.pixel_y = self.base_mid_vertival_point - (self.height // 2) + offset
 
-
-
-class PortalMakerItem(Item):
-    def __init__(self,grid_x:int, grid_y:int, durability:int):
-        super().__init__(grid_x,grid_y,durability)
-        self.type = "portalMaker"
-
     def display(self, screen, asset_manager):
         image = asset_manager.get_scaled_image(self.type, self.width, self.height)
         screen.blit(image, (self.pixel_x, self.pixel_y))
-        
-    def using(self):
-        pass
-
-class StunItem(Item):
-    def __init__(self,grid_x:int, grid_y:int, durability:int):
-        super().__init__(grid_x,grid_y,durability)
-        self.type = "StunMaker"
-
-    def display(self, screen, asset_manager):
-        image = asset_manager.get_scaled_image(self.type, self.width, self.height)
-        screen.blit(image, (self.pixel_x, self.pixel_y))
-
-    def using(self):
-        pass

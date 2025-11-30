@@ -21,6 +21,7 @@ class AssetManager:
             'tile': config.get_img_path("tile"),
             'background': config.get_img_path("background"),
             'portalMaker': config.get_img_path("portalMaker"),
+            'StunMaker': config.get_img_path("StunMaker"),
             'BackgroundLayer1': config.get_img_path("BackgroundLayer1"),
             'BackgroundLayer2': config.get_img_path("BackgroundLayer2"),
             'missing_texture': config.get_img_path("missing_texture")
@@ -47,3 +48,22 @@ class AssetManager:
     def getTransparentImage(self,target_width, target_height):
         image = pygame.Surface((target_width,target_height)).convert_alpha()
         return image
+    
+    def surface_to_grayscale(self,surface):
+        '''
+        Transforme une surface Pygame en noir et blanc (nuances de gris).
+        '''
+        surface_gris = pygame.Surface(surface.get_size())
+        surface_gris = surface_gris.convert_alpha()
+        
+        # Parcourir tous les pixels
+        for x in range(surface.get_width()):
+            for y in range(surface.get_height()):
+                couleur = surface.get_at((x, y))
+                # Calculer la valeur de gris
+                gris = int(0.299 * couleur.r + 0.587 * couleur.g + 0.114 * couleur.b)
+                # Créer la nouvelle couleur en nuances de gris
+                couleur_gris = (gris, gris, gris, couleur.a)  # Conserver l'alpha
+                surface_gris.set_at((x, y), couleur_gris)
+        
+        return surface_gris

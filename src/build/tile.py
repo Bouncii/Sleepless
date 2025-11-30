@@ -24,6 +24,8 @@ class Tile:
 
         self.structures = self.structures_builder() #Tab contenant l'ensemble des structures (sous forme d'objet rect pygames) présentent dans la tile
 
+        self.items = []
+
 
     def find_color(self):
         '''

@@ -42,6 +42,20 @@ class Inventory():
             return True
         return False
     
+    def getPosItemInv(self,type):
+        for i in range(len(self.slots)):
+            if self.slots[i]["type"] == type:
+                return i
+        return None
+
+    
+    def MakeTypeUsable(self,type:str):
+        pos = self.getPosItemInv(type)
+        if pos != None:
+            self.slots[pos]["usable"] = True
+            return True
+        return False
+    
     def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
@@ -53,10 +67,12 @@ class Inventory():
         image = asset_manager.getTransparentImage(self.SlotSize*len(self.slots), self.SlotSize)
         for i in range(len(self.slots)):
             ItemImage = asset_manager.get_scaled_image(self.slots[i]["type"], self.SlotSize, self.SlotSize)
+            if not self.slots[i]["usable"]:
+                ItemImage = asset_manager.surface_to_grayscale(ItemImage)
             image.blit(ItemImage, (self.SlotSize*i, 0))
-        pygame.draw.line(image,(0,0,0),(self.selected_slot*self.SlotSize,0),(self.selected_slot*self.SlotSize + self.SlotSize,0),10)
-        pygame.draw.line(image,(0,0,0),(self.selected_slot*self.SlotSize,0),(self.selected_slot*self.SlotSize,self.SlotSize),10)
-        pygame.draw.line(image,(0,0,0),(self.selected_slot*self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,self.SlotSize),10)
-        pygame.draw.line(image,(0,0,0),(self.selected_slot*self.SlotSize+self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,0),10)
+        pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,0),(self.selected_slot*self.SlotSize + self.SlotSize,0),10)
+        pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,0),(self.selected_slot*self.SlotSize,self.SlotSize),10)
+        pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,self.SlotSize),10)
+        pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize+self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,0),10)
 
         screen.blit(image, (screen_width - self.width, 0))

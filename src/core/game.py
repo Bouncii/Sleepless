@@ -97,6 +97,7 @@ class Game:
         # Construction du niveau
         self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
         self.level = level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str, self.interactionManagerDoorButton)
+        self.level[2][1].items.append(Item(1,2,"portalMaker"))
 
         # initialisation du background
         self.background = Background(self.screen_width,self.screen_height)
@@ -135,7 +136,14 @@ class Game:
             self.background.update_camera(self.player.pixel_x)
             self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
             self.inventory.update()
-            self.player.update(self.dt, self.level)
+            self.player.update(self.dt, self.level,self.inventory)
+
+            # animation objet
+            for i in range(len(self.level)):
+                for j in range(len(self.level[0])):
+                    tile = self.level[i][j]
+                    for item in tile.items:
+                        item.animate(self.dt)
             
             # Mise à jour du past_self
             self.past_self_group.update(self.dt, self.level)
@@ -212,7 +220,11 @@ class Game:
 
             for row in range(self.GRID_HEIGHT):
                 for col in range(self.GRID_WIDTH):
-                    self.level[row][col].draw(self.screen,self.asset_manager)
+                    tile = self.level[row][col]
+                    tile.draw(self.screen,self.asset_manager)
+                    for item in tile.items:
+                        item.display(self.screen,self.asset_manager)
+
             
             # Dessin des entités
             self.player.draw(self.screen,self.asset_manager)

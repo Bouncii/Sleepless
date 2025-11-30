@@ -131,7 +131,7 @@ class Player(pygame.sprite.Sprite):
 
 
 
-    def update(self, dt:float, level:list):
+    def update(self, dt:float, level:list,inventory):
         '''
         fonction qui actualise différents élements relatifs au joueur (à chaque frame)
         entrées: 
@@ -147,6 +147,7 @@ class Player(pygame.sprite.Sprite):
 
         self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
+        self.checkCollisionObject(inventory)
 
         # Chute veticale
         if not self.moving_vertical:
@@ -288,6 +289,22 @@ class Player(pygame.sprite.Sprite):
         elif dx == 1 and self.current_tile.tile_type == "door_right":
             res = self.current_tile.structures["door_right"].is_open
         return res
+    
+    def checkCollisionObject(self,inventory):
+        '''
+        Fonction qui vérifie si le joueur touche un objet
+        entrée : 
+            level: list
+            inventaire : Inventaire
+        sortie : None
+        '''
+        print(inventory.slots)
+        for i in range(len(self.current_tile.items)):
+            if self.rect.colliderect(self.current_tile.items[i]):
+                item = self.current_tile.items.pop(i)
+                inventory.MakeTypeUsable(item.type)
+                        
+
             
 
 

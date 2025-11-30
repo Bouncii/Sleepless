@@ -5,7 +5,7 @@ Package entities
 
 from .player import Player
 from .past_self import Past_self
-from .objects import PortalMakerItem,StunItem
+from .objects import Item
 
 
-__all__ = ['Player', 'Past_self','PortalMakerItem','StunItem']
+__all__ = ['Player', 'Past_self','Item']
