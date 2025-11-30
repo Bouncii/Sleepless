@@ -5,7 +5,7 @@ import math
 
 #Class qui va être hérité des différents types d'items
 class Item():
-    def __init__(self, grid_x:int, grid_y:int,ItemType:str):
+    def __init__(self, grid_x:int, grid_y:int,ItemType:ItemTypes):
         self.height = 0.2*TILE_SIZE
         self.width = 0.2*TILE_SIZE
 

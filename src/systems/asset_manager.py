@@ -21,7 +21,7 @@ class AssetManager:
             'tile': config.get_img_path("tile"),
             'background': config.get_img_path("background"),
             'portalMaker': config.get_img_path("portalMaker"),
-            'StunMaker': config.get_img_path("StunMaker"),
+            'stunMaker': config.get_img_path("StunMaker"),
             'BackgroundLayer1': config.get_img_path("BackgroundLayer1"),
             'BackgroundLayer2': config.get_img_path("BackgroundLayer2"),
             'missing_texture': config.get_img_path("missing_texture")

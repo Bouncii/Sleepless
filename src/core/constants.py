@@ -18,6 +18,10 @@ class _GameConstants:
         PLAYING = "playing"
         WIN = "win"
         RESET_GAME = "reset_game"
+
+    class ItemTypes:
+        PORTALMAKER = "portalMaker"
+        STUNMAKER = "stunMaker"
     
     
     class Paths:
@@ -35,3 +39,4 @@ ENTITIES_SPEED_X = _GameConstants.ENTITIES_SPEED_X  # ← EXPORTER
 ENTITIES_SPEED_Y = _GameConstants.ENTITIES_SPEED_Y  # ← EXPORTER
 GameState = _GameConstants.States
 Paths = _GameConstants.Paths
+ItemTypes = _GameConstants.ItemTypes

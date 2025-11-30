@@ -2,12 +2,13 @@
 
 import pygame
 from src.entities.objects import Item
+from src.core import ItemTypes
 
     
 class Inventory():
     def __init__(self):
-        self.slots = [{"type":"portalMaker","usable":False},
-                      {"type":"StunMaker","usable":False}]
+        self.slots = [{"type":ItemTypes.PORTALMAKER,"usable":False},
+                      {"type":ItemTypes.STUNMAKER,"usable":False}]
         self.selected_slot = 0
         self.SlotSize = 100
         self.width = self.SlotSize * len(self.slots)
