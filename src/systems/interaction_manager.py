@@ -88,3 +88,5 @@ class InteractionManagerButtonsDoors:
         '''
         return door_id in self.doors and self.doors[door_id].is_open
     
+class InteractionInventoryLevel:
+    pass

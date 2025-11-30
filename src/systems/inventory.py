@@ -63,6 +63,13 @@ class Inventory():
             self.UpdateSelected(1)
         elif keys[pygame.K_LEFT]:
             self.UpdateSelected(-1)
+        elif keys[pygame.K_RETURN]:
+            self.tryActionItem()
+
+    def tryActionItem(self):
+        if self.SelectedIsUsable():
+            pass
+
     
     def display(self,screen,asset_manager,screen_width):
         image = asset_manager.getTransparentImage(self.SlotSize*len(self.slots), self.SlotSize)
