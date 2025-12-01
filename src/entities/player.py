@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.grid_y = grid_y
 
         self.pixel_x = self.grid_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
-        self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
+        self.pixel_y = self.grid_y * TILE_SIZE + TILE_SIZE - self.height
 
         self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
