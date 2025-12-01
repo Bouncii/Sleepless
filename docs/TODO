@@ -1,12 +1,12 @@
 TODO : 
 - clean le code : def méthodes privées / publique, vérif docstring, ect
-- debut implémentation objets pour plus tard
-- barre d'inventaire
+- debut implémentation objets
 - animation/affichage
+- taille du niveau dynamique (par rapport à la taille de l'écran)
+- niveaux objets
 
 
 
-- multi layer en background (à tester)
 - faire passer un filtre de 100% d'opacité à 0% ? possible ?
 - possible de faire une aura autour des entités ?
 

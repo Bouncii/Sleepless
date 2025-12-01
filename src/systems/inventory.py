@@ -68,7 +68,7 @@ class Inventory():
 
     def tryActionItem(self):
         if self.SelectedIsUsable():
-            pass
+            self.MakeSelectedUnusable()
 
     
     def display(self,screen,asset_manager,screen_width):
