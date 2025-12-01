@@ -24,7 +24,9 @@ class AssetManager:
             'stunMaker': config.get_img_path("StunMaker"),
             'BackgroundLayer1': config.get_img_path("BackgroundLayer1"),
             'BackgroundLayer2': config.get_img_path("BackgroundLayer2"),
-            'missing_texture': config.get_img_path("missing_texture")
+            'missing_texture': config.get_img_path("missing_texture"),
+            'walk': config.get_img_path("Walk"),
+            'idle': config.get_img_path("Idle")
         }
         
         for key, path in image_paths.items():
@@ -46,7 +48,7 @@ class AssetManager:
         return pygame.transform.scale(original_image, (int(target_width), int(target_height)))
     
     def getTransparentImage(self,target_width, target_height):
-        image = pygame.Surface((target_width,target_height)).convert_alpha()
+        image = pygame.Surface((target_width,target_height), pygame.SRCALPHA)
         return image
     
     def surface_to_grayscale(self,surface):

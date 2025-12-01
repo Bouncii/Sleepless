@@ -10,7 +10,8 @@ from .constants import (
     ENTITIES_SPEED_Y,
     GameState,
     Paths,
-    ItemTypes
+    ItemTypes,
+    Frames
 )
 
 from .config import config
@@ -28,6 +29,7 @@ __all__ = [
     'GameState',
     'Paths',
     'ItemTypes',
+    'Frames',
 
     # Config modifiable
     'config',

@@ -19,6 +19,9 @@ class Player(pygame.sprite.Sprite):
 
         self.target_x = self.pixel_x
         self.target_y = self.pixel_y
+        self.nbr_pxel_animation = 0
+        self.start_animation = self.pixel_x
+        self.duree_pixel_animation = 0
 
         self.speed_x = 300  
         self.speed_y = 300  
@@ -93,6 +96,9 @@ class Player(pygame.sprite.Sprite):
         if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
             self.grid_x = new_x
             self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
+            self.nbr_pxel_animation = self.target_x - self.pixel_x
+            self.start_animation = self.pixel_x
+            self.duree_pixel_animation = self.nbr_pxel_animation // Frames.WALKFRAMES
 
             if dx == -1:
                 direction = "left"

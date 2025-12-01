@@ -42,6 +42,8 @@ class Game:
 
         self.tile_selection_manager = None
 
+        self.SpriteSheet_move_horizontal = None
+        self.SpriteSheet_idle = None
 
     def _init_screens(self):
         '''Initialise les différents écrans du jeu'''
@@ -121,6 +123,8 @@ class Game:
             self.past_self_group.add(Past_self(start_location[0], start_location[1],delay["past_self_timer_spawn"],self.level))
         self.state = GameState.PLAYING
 
+        self.SpriteSheet_move_horizontal = SpriteSheet(self.asset_manager.get_image("walk"),Frames.WALKFRAMES)
+        self.SpriteSheet_idle = SpriteSheet(self.asset_manager.get_image("idle"),Frames.IDLEFRAMES)
 
 
 
@@ -232,7 +236,23 @@ class Game:
 
             
             # Dessin des entités
-            self.player.draw(self.screen,self.asset_manager)
+            if(self.player.moving == False):
+                # animation Idle
+                idle_frame_duration = 300
+                num_frame_idle = int(self.dt // idle_frame_duration) % 7
+                self.SpriteSheet_idle.draw(self.screen, self.player, num_frame_idle, self.asset_manager)
+            elif(self.player.moves[-1] in ["left","right"]):
+                # animation droite/gauche
+                num_frame_animation = abs(self.player.start_animation - self.player.pixel_x)//self.player.duree_pixel_animation
+                num_frame_animation %= self.SpriteSheet_move_horizontal.nbr_animation
+                if (self.player.moves[-1] == "left"):
+                    self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager, scale=1, facing_left=True)
+                else:
+                    self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager)
+            else:
+                self.SpriteSheet_idle.draw(self.screen, self.player, 1, self.asset_manager)
+
+
             for past_self in self.past_self_group:
                 if past_self.timer_spawn == 0:
                     past_self.draw(self.screen)

@@ -23,6 +23,10 @@ class _GameConstants:
         PORTALMAKER = "portalMaker"
         STUNMAKER = "stunMaker"
     
+    class Frames:
+        IDLEFRAMES = 7
+        WALKFRAMES = 12
+    
     
     class Paths:
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -40,3 +44,4 @@ ENTITIES_SPEED_Y = _GameConstants.ENTITIES_SPEED_Y  # ← EXPORTER
 GameState = _GameConstants.States
 Paths = _GameConstants.Paths
 ItemTypes = _GameConstants.ItemTypes
+Frames = _GameConstants.Frames
