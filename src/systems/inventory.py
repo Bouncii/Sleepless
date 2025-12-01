@@ -57,6 +57,9 @@ class Inventory():
             return True
         return False
     
+    def isTypeUsable(self,type):
+        return self.slots[self.getPosItemInv(type)]["usable"]
+    
     def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
