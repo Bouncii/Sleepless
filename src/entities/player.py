@@ -312,7 +312,10 @@ class Player(pygame.sprite.Sprite):
 
     def update_dt(self, dt):
         if not self.moving:
-            self.idle_time += dt * 1000  # dt en secondes → convertir en ms si nécessaire
+            self.idle_time += dt * 1000  # ms
+            idle_frame_duration = 150    # ms par frame
+            # Limiter idle_time pour éviter qu'elle devienne trop grande
+            self.idle_time %= idle_frame_duration * Frames.IDLEFRAMES
         else:
             self.idle_time = 0
                         
