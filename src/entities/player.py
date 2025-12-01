@@ -298,7 +298,6 @@ class Player(pygame.sprite.Sprite):
             inventaire : Inventaire
         sortie : None
         '''
-        print(inventory.slots)
         for i in range(len(self.current_tile.items)):
             if self.rect.colliderect(self.current_tile.items[i]) and not inventory.isTypeUsable(self.current_tile.items[i].type):
                 item = self.current_tile.items.pop(i)

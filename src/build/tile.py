@@ -12,6 +12,8 @@ class Tile:
         self.width = width
         self.height = height
 
+        self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
+
         self.tile_type = tile_type # type de la tile (exemple : "sol", "échelle", "bouton", "vide")
         self.tile_id = "0"  # id par défaut (sert pour le link de tile)
 

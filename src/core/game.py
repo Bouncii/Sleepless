@@ -40,6 +40,8 @@ class Game:
 
         self.inventory = None
 
+        self.tile_selection_manager = None
+
 
     def _init_screens(self):
         '''Initialise les différents écrans du jeu'''
@@ -104,6 +106,7 @@ class Game:
 
         # Initialisation de l'inventaire
         self.inventory = Inventory()
+        self.tile_selection_manager = TileSelection()
         
         # Mise à jour des UI
         self.menu.rebuild_ui()
@@ -137,6 +140,8 @@ class Game:
             self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
             self.inventory.update()
             self.player.update(self.dt, self.level,self.inventory)
+
+            self.tile_selection_manager.update(self.level)
 
             # animation objet
             for i in range(len(self.level)):
@@ -233,6 +238,7 @@ class Game:
                     past_self.draw(self.screen)
             
             self.inventory.display(self.screen,self.asset_manager,self.screen_width)
+            self.tile_selection_manager.display(self.screen)
                 
         elif self.state == GameState.WIN:
             self.background.draw(self.screen,self.asset_manager)
