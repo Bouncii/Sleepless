@@ -22,6 +22,7 @@ class Player(pygame.sprite.Sprite):
         self.nbr_pxel_animation = 0
         self.start_animation = self.pixel_x
         self.duree_pixel_animation = 0
+        self.idle_time = 0
 
         self.speed_x = 300  
         self.speed_y = 300  
@@ -308,6 +309,12 @@ class Player(pygame.sprite.Sprite):
             if self.rect.colliderect(self.current_tile.items[i]) and not inventory.isTypeUsable(self.current_tile.items[i].type):
                 item = self.current_tile.items.pop(i)
                 inventory.MakeTypeUsable(item.type)
+
+    def update_dt(self, dt):
+        if not self.moving:
+            self.idle_time += dt * 1000  # dt en secondes → convertir en ms si nécessaire
+        else:
+            self.idle_time = 0
                         
 
             

@@ -144,9 +144,9 @@ class Game:
             self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
             self.inventory.update()
             self.player.update(self.dt, self.level,self.inventory)
-
+            self.player.update_dt(self.dt)
             self.tile_selection_manager.update(self.level)
-
+            
             # animation objet
             for i in range(len(self.level)):
                 for j in range(len(self.level[0])):
@@ -169,7 +169,7 @@ class Game:
                 
         elif self.state == GameState.WIN:
             self.win_screen.update(self.dt)
-
+        
 
     def update_buttons_state(self):
         '''
@@ -233,14 +233,15 @@ class Game:
                     tile.draw(self.screen,self.asset_manager)
                     for item in tile.items:
                         item.display(self.screen,self.asset_manager)
-
-            
+                    
             # Dessin des entités
             if(self.player.moving == False):
                 # animation Idle
-                idle_frame_duration = 300
-                num_frame_idle = int(self.dt // idle_frame_duration) % 7
-                self.SpriteSheet_idle.draw(self.screen, self.player, num_frame_idle, self.asset_manager)
+                idle_frame_duration = 150
+                num_frame_idle = int(self.player.idle_time // idle_frame_duration) % self.SpriteSheet_idle.nbr_animation
+                facing_left = self.player.moves[-1] == "left" if self.player.moves else False
+                self.SpriteSheet_idle.draw(self.screen, self.player, num_frame_idle, self.asset_manager, scale=1, facing_left=facing_left)
+                #print(self.player.idle_time)
             elif(self.player.moves[-1] in ["left","right"]):
                 # animation droite/gauche
                 num_frame_animation = abs(self.player.start_animation - self.player.pixel_x)//self.player.duree_pixel_animation

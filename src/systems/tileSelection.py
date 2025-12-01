@@ -22,7 +22,7 @@ class TileSelection:
     def update(self,level:list):
         if self.active:
             self.updateSelectedTile(level)
-            print(self.selectedTile)
+            #print(self.selectedTile)
 
     def display(self,screen):
         if self.active and self.selectedTile:
