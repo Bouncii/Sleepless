@@ -1,6 +1,5 @@
 import pygame
-# Walk.png, dimension : 1536x128, 12 animations -> 128x128 par animation
-# Idle.png, dimension : 896x128, 7 animations -> 128x128 par animation
+from src.core.constants import*
 
 class SpriteSheet():
     def __init__(self, image, number_of_animation):
@@ -20,7 +19,15 @@ class SpriteSheet():
 
     def draw(self, screen, player, frame_nbr, asset_manager, scale=1, facing_left=False):
         image = self.get_image(frame_nbr, scale, asset_manager)
+        
         if facing_left:
             image = pygame.transform.flip(image, True, False)
-        image = pygame.transform.scale(image, (player.rect.width, player.rect.height))
-        screen.blit(image, player.rect.topleft)
+            
+        target_height = TILE_SIZE 
+        ratio = target_height / image.get_height()
+        image = pygame.transform.scale(image, (int(image.get_width() * ratio), int(target_height)))
+
+        image_rect = image.get_rect()
+        
+        image_rect.midbottom = player.rect.midbottom
+        screen.blit(image, image_rect)

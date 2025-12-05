@@ -158,8 +158,7 @@ class Player(pygame.sprite.Sprite):
 
         # Chute veticale
         if not self.moving_vertical:
-            self.gestion_gravite(dt,level)
-
+            self.gestion_gravite(dt,level) # <-- C'est ici que pixel_y est corrigé quand on touche le sol
 
         # Deplacement horizontal
         self.deplacement_horizontal(dt)
@@ -168,10 +167,12 @@ class Player(pygame.sprite.Sprite):
             self.deplacement_vertical(dt)
 
         
-        self.grid_x = int(self.pixel_x // TILE_SIZE) # nécessaire pour y à cause de la gravité, x et update par securité
+        self.grid_x = int(self.pixel_x // TILE_SIZE) 
         self.grid_y = int(self.pixel_y // TILE_SIZE)
 
         self.moving = self.moving_horizontal or self.moving_vertical or self.moving_gravite
+
+        self.rect = pygame.Rect(self.pixel_x, self.pixel_y, self.width, self.height)
 
         
 

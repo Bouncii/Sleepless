@@ -231,6 +231,7 @@ class Past_self(pygame.sprite.Sprite):
                         self.on_ground = True
 
         self.target_y = self.pixel_y
+        self.rect = pygame.Rect(self.pixel_x, self.pixel_y, self.width, self.height)
 
     def draw(self,screen):
         '''
