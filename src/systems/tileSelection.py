@@ -2,8 +2,10 @@ import pygame
 from src.core.constants import*
 class TileSelection:
     def __init__(self):
-        self.active = True
+        self.active = False
+        self.pointedTile = None
         self.selectedTile = None
+        self.activation_time = 0
 
     def getTileWithPixel(self,mousePos:tuple,level:list):
         for i in range(len(level)):
@@ -15,20 +17,35 @@ class TileSelection:
 
 
 
-    def updateSelectedTile(self,level:list):
+    def updatePointedTile(self,level:list):
         mousePos = pygame.mouse.get_pos()
-        self.selectedTile = self.getTileWithPixel(mousePos,level)
+        self.pointedTile = self.getTileWithPixel(mousePos,level)
 
     def update(self,level:list):
         if self.active:
-            self.updateSelectedTile(level)
-            #print(self.selectedTile)
+            self.updatePointedTile(level)
+            self.selectionListener()
+
+    def activate(self):
+        self.active = True
+        self.pointedTile = None
+        self.selectedTile = None
+        self.activation_time = pygame.time.get_ticks()
+
+
+    def selectionListener(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_RETURN] and self.pointedTile and pygame.time.get_ticks() - self.activation_time >= 200:
+            self.selectedTile = self.pointedTile
+            self.active = False
+            return True
+        return False
 
     def display(self,screen):
-        if self.active and self.selectedTile:
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.selectedTile.grid_x,self.selectedTile.grid_y*TILE_SIZE),(TILE_SIZE*self.selectedTile.grid_x+TILE_SIZE,self.selectedTile.grid_y*TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.selectedTile.grid_x+TILE_SIZE,self.selectedTile.grid_y*TILE_SIZE),(TILE_SIZE*self.selectedTile.grid_x+TILE_SIZE,self.selectedTile.grid_y*TILE_SIZE + TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.selectedTile.grid_x+TILE_SIZE,self.selectedTile.grid_y*TILE_SIZE + TILE_SIZE),(TILE_SIZE*self.selectedTile.grid_x,self.selectedTile.grid_y*TILE_SIZE + TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.selectedTile.grid_x,self.selectedTile.grid_y*TILE_SIZE + TILE_SIZE),(TILE_SIZE*self.selectedTile.grid_x,self.selectedTile.grid_y*TILE_SIZE),10)
+        if self.active and self.pointedTile:
+            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE),10)
+            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),10)
+            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),10)
+            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE),10)
     
 

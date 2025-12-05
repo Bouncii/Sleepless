@@ -57,20 +57,23 @@ class Past_self(pygame.sprite.Sprite):
 
 
         if self.timer_spawn == 0:
-
-            next_move = self.moves[self.tour]
-        
-            if next_move == "right":
-                self.try_move_horizontal(1,grid_width)
-                self.moving_horizontal = True
-            elif next_move == "left":
-                self.try_move_horizontal(-1,grid_width)
-            elif next_move == "up":
-                self.try_move_vertical(-1,grid_height)
-                self.moving_vertical = True
-            elif next_move == "down":
-                self.try_move_vertical(1,grid_height)
-                self.moving_vertical = True
+            if "stun" not in self.current_tile.effects:
+                next_move = self.moves[self.tour]
+            
+                if next_move == "right":
+                    self.try_move_horizontal(1,grid_width)
+                    self.moving_horizontal = True
+                elif next_move == "left":
+                    self.try_move_horizontal(-1,grid_width)
+                elif next_move == "up":
+                    self.try_move_vertical(-1,grid_height)
+                    self.moving_vertical = True
+                elif next_move == "down":
+                    self.try_move_vertical(1,grid_height)
+                    self.moving_vertical = True
+            else:
+                self.current_tile.effects.remove("stun")
+                
 
 
 

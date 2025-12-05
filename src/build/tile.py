@@ -28,6 +28,8 @@ class Tile:
 
         self.items = []
 
+        self.effects = []
+
 
     def find_color(self):
         '''
@@ -51,13 +53,21 @@ class Tile:
         sorties: none
         '''
         # Image de fond selon le type de tile
-        image = asset_manager.get_scaled_image('tile', self.width, self.height)
-        # screen.blit(image, (self.pixel_x, self.pixel_y))
-        image = asset_manager.getTransparentImage(self.width,self.height)
+        # image = asset_manager.get_scaled_image('tile', self.width, self.height)
+        # # screen.blit(image, (self.pixel_x, self.pixel_y))
+        # image = asset_manager.getTransparentImage(self.width,self.height)
+
+
     
         # Dessiner les structures par-dessus
         for _,structure in self.structures.items():
             structure.draw(screen, asset_manager)
+
+        if "stun" in self.effects:
+            # Dessine un petit cercle jaune ou une icône pour symboliser le piège
+            center_x = self.pixel_x + self.width // 2
+            center_y = self.pixel_y + self.height // 2
+            pygame.draw.circle(screen, (255, 255, 0), (center_x, center_y), 10, 2) # Jaune, rayon 10, épaisseur 2
 
 
     def structures_builder(self) -> list:

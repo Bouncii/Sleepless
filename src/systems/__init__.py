@@ -10,5 +10,6 @@ from .background import *
 from .inventory import *
 from .tileSelection import *
 from .SpriteSheet import *
+from .itemEffectManager import*
 
-__all__ = ['InteractionManagerButtonsDoors','AssetManager','Background',"Inventory","TileSelection","SpriteSheet"]
+__all__ = ['InteractionManagerButtonsDoors','AssetManager','Background',"Inventory","TileSelection","SpriteSheet","itemEffectManager"]

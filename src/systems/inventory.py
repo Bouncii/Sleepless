@@ -3,10 +3,12 @@
 import pygame
 from src.entities.objects import Item
 from src.core import ItemTypes
+from .tileSelection import*
+from .itemEffectManager import*
 
     
 class Inventory():
-    def __init__(self):
+    def __init__(self,level):
         self.slots = [{"type":ItemTypes.PORTALMAKER,"usable":False},
                       {"type":ItemTypes.STUNMAKER,"usable":False}]
         self.selected_slot = 0
@@ -14,6 +16,9 @@ class Inventory():
         self.width = self.SlotSize * len(self.slots)
         self.height = self.SlotSize
         self.LastSelectionTime = pygame.time.get_ticks()
+
+        self.tile_selection_manager = TileSelection()
+        self.effect_manager = ItemEffectManager()
 
     def SelectedIsUsable(self):
         return self.slots[self.selected_slot]["usable"]
@@ -60,19 +65,30 @@ class Inventory():
     def isTypeUsable(self,type):
         return self.slots[self.getPosItemInv(type)]["usable"]
     
-    def update(self):
+    def update(self,level):
+        self.tile_selection_manager.update(level)
+        self.useItemListener()
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT]:
             self.UpdateSelected(1)
         elif keys[pygame.K_LEFT]:
             self.UpdateSelected(-1)
         elif keys[pygame.K_RETURN]:
-            self.tryActionItem()
+            self.ActivateSelection()
 
-    def tryActionItem(self):
+    def ActivateSelection(self):
         if self.SelectedIsUsable():
-            self.MakeSelectedUnusable()
+            self.tile_selection_manager.activate()
 
+    def useItemListener(self):
+        if self.tile_selection_manager.selectedTile and self.SelectedIsUsable():
+            current_item_type = self.slots[self.selected_slot]["type"]
+            print(current_item_type)
+            success = self.effect_manager.apply_effect(current_item_type, self.tile_selection_manager.selectedTile)
+            if success:
+                self.MakeSelectedUnusable()
+                self.tile_selection_manager.selectedTile = None
     
     def display(self,screen,asset_manager,screen_width):
         image = asset_manager.getTransparentImage(self.SlotSize*len(self.slots), self.SlotSize)
@@ -86,4 +102,5 @@ class Inventory():
         pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,self.SlotSize),10)
         pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize+self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,0),10)
 
+        self.tile_selection_manager.display(screen)
         screen.blit(image, (screen_width - self.width, 0))
