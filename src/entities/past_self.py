@@ -121,7 +121,7 @@ class Past_self(pygame.sprite.Sprite):
 
             
 
-    def update(self, dt:float, level:list):
+    def update(self, dt:float, level:list, interaction_manager_portal=None):
         '''
         fonction qui actualise différents élements relatifs au past_self (à chaque frame)
         entrées: 
@@ -155,6 +155,9 @@ class Past_self(pygame.sprite.Sprite):
         self.grid_y = int(self.pixel_y // TILE_SIZE)
 
         self.moving = self.moving_horizontal or self.moving_vertical or self.moving_gravite
+
+        if interaction_manager_portal:
+            interaction_manager_portal.check_and_teleport_entity(self, level)
 
 
 

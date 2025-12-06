@@ -29,11 +29,12 @@ class Game:
         self.state = GameState.MENU
         
         self.interactionManagerDoorButton = None
+        self.interactionManagerPortal = None
 
         self.current_level_num = 2
         self.nb_levels = get_number_of_level()
 
-        self.player = None #initialisés dans load level
+        self.player = None
         self.past_self_group = pygame.sprite.Group()
 
         self.asset_manager = AssetManager()
@@ -98,6 +99,7 @@ class Game:
         
         # Construction du niveau
         self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
+        self.interactionManagerPortal = InteractionManagerPortal()
         self.level = level_builder(self.GRID_WIDTH, self.GRID_HEIGHT, self.level_str, self.interactionManagerDoorButton)
         add_item_to_tiles(settings["items"], self.level)
 
@@ -105,7 +107,7 @@ class Game:
         self.background = Background(self.screen_width,self.screen_height)
 
         # Initialisation de l'inventaire
-        self.inventory = Inventory(self.level)
+        self.inventory = Inventory(self.level,self.interactionManagerPortal)
         
         # Mise à jour des UI
         self.menu.rebuild_ui()
@@ -139,7 +141,7 @@ class Game:
             # Mise à jour du joueur
             self.background.update_camera(self.player.pixel_x)
             self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
-            self.inventory.update(self.level)
+            self.inventory.update(self.level,self.player)
             self.player.update(self.dt, self.level,self.inventory)
             self.player.update_dt(self.dt)
             
@@ -152,7 +154,7 @@ class Game:
                         item.animate(self.dt)
             
             # Mise à jour du past_self
-            self.past_self_group.update(self.dt, self.level)
+            self.past_self_group.update(self.dt, self.level,self.interactionManagerPortal)
 
             #Verif meme case que past self
             self.verif_player_on_same_tile_as_past_self()
