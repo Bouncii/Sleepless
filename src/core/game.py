@@ -265,21 +265,22 @@ class Game:
 
             for past_self in self.past_self_group:
                 if past_self.timer_spawn == 0:
+                    
+                    past_facing_left = past_self.current_direction == "left"
+
                     if(past_self.moving == False):
                         # animation Idle
                         past_idle_frame_duration = 150
                         past_num_frame_idle = int(past_self.idle_time // past_idle_frame_duration) % self.SpriteSheet_idle.nbr_animation
-                        past_facing_left = past_self.moves[past_self.tour] == "left" if past_self.moves else False
+                        
                         self.SpriteSheet_past_idle.draw(self.screen, past_self, past_num_frame_idle, self.asset_manager, scale=1, facing_left=past_facing_left)
-                        #print(self.past_self.idle_time)
-                    elif(past_self.moves[past_self.tour] in ["left","right"]):
+                    
+                    elif(past_self.current_direction in ["left","right"]):
                         # animation droite/gauche
                         past_num_frame_animation = abs(past_self.start_animation - past_self.pixel_x)//past_self.duree_pixel_animation
                         past_num_frame_animation %= self.SpriteSheet_past_move_horizontal.nbr_animation
-                        if (past_self.moves[past_self.tour] == "left"):
-                            self.SpriteSheet_past_move_horizontal.draw(self.screen, past_self, past_num_frame_animation, self.asset_manager, scale=1, facing_left=True)
-                        else:
-                            self.SpriteSheet_past_move_horizontal.draw(self.screen, past_self, past_num_frame_animation, self.asset_manager)
+                        
+                        self.SpriteSheet_past_move_horizontal.draw(self.screen, past_self, past_num_frame_animation, self.asset_manager, scale=1, facing_left=past_facing_left)
                     else:
                         self.SpriteSheet_past_idle.draw(self.screen, past_self, 1, self.asset_manager)
             
