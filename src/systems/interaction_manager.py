@@ -160,12 +160,13 @@ class InteractionManagerPortal:
         if pair_to_remove is not None and target_pos is not None:
             self._teleport_entity(entity, target_pos)
 
+            if hasattr(entity, "recalibrate_position"):
+                entity.recalibrate_position()
+
             self.active_pairs.remove(pair_to_remove)
             
             self._remove_visuals(level, pair_to_remove[0])
             self._remove_visuals(level, pair_to_remove[1])
-
-            print(f"Téléportation effectuée ! Duo détruit.")
 
     def _teleport_entity(self, entity, target_pos):
         dest_x, dest_y = target_pos

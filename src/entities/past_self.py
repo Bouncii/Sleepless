@@ -59,32 +59,29 @@ class Past_self(pygame.sprite.Sprite):
             grid_height : int
         sorties: none
         '''
-
-
         if self.timer_spawn == 0:
             if "stun" not in self.current_tile.effects:
                 if self.tour < len(self.moves):
-                    next_move = self.moves[self.tour]
+
+                    move_data = self.moves[self.tour]
+                    next_move = move_data[0]
+                    
                     self.current_direction = next_move
                 
                     if next_move == "right":
-                        self.try_move_horizontal(1,grid_width)
+                        self.try_move_horizontal(1, grid_width)
                         self.moving_horizontal = True
                     elif next_move == "left":
-                        self.try_move_horizontal(-1,grid_width)
+                        self.try_move_horizontal(-1, grid_width)
                         self.moving_horizontal = True
                     elif next_move == "up":
-                        self.try_move_vertical(-1,grid_height)
+                        self.try_move_vertical(-1, grid_height)
                         self.moving_vertical = True
                     elif next_move == "down":
-                        self.try_move_vertical(1,grid_height)
+                        self.try_move_vertical(1, grid_height)
                         self.moving_vertical = True
             else:
                 self.current_tile.effects.remove("stun")
-                
-
-
-
         else:
             self.timer_spawn -= 1
 
@@ -289,3 +286,22 @@ class Past_self(pygame.sprite.Sprite):
             self.idle_time %= idle_frame_duration * Frames.IDLEFRAMES
         else:
             self.idle_time = 0
+
+
+    def recalibrate_position(self):
+        '''
+        Scanne la liste des mouvements pour retrouver l'index correspondant à la position actuelle
+        '''
+        found = False
+        i = self.tour
+        
+        while i < len(self.moves) and not found:
+            move_data = self.moves[i]
+            move_start_x = move_data[1]
+            move_start_y = move_data[2]
+            
+            if move_start_x == self.grid_x and move_start_y == self.grid_y:
+                self.tour = i
+                found = True
+            else:
+                i += 1

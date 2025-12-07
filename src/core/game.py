@@ -248,14 +248,18 @@ class Game:
                 # animation Idle
                 idle_frame_duration = 150
                 num_frame_idle = int(self.player.idle_time // idle_frame_duration) % self.SpriteSheet_idle.nbr_animation
-                facing_left = self.player.moves[-1] == "left" if self.player.moves else False
+                
+                last_move_dir = self.player.moves[-1][0] if self.player.moves else "right"
+                facing_left = last_move_dir == "left"
+                
                 self.SpriteSheet_idle.draw(self.screen, self.player, num_frame_idle, self.asset_manager, scale=1, facing_left=facing_left)
-                #print(self.player.idle_time)
-            elif(self.player.moves[-1] in ["left","right"]):
+
+            elif self.player.moves and self.player.moves[-1][0] in ["left","right"]:
                 # animation droite/gauche
                 num_frame_animation = abs(self.player.start_animation - self.player.pixel_x)//self.player.duree_pixel_animation
                 num_frame_animation %= self.SpriteSheet_move_horizontal.nbr_animation
-                if (self.player.moves[-1] == "left"):
+                
+                if (self.player.moves[-1][0] == "left"):
                     self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager, scale=1, facing_left=True)
                 else:
                     self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager)

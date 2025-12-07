@@ -93,6 +93,9 @@ class Player(pygame.sprite.Sprite):
             past_self_tab : list of Past_self
         sorties: none
         '''
+        start_x = self.grid_x
+        start_y = self.grid_y
+
         new_x = self.grid_x + dx
         if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
             self.grid_x = new_x
@@ -105,7 +108,9 @@ class Player(pygame.sprite.Sprite):
                 direction = "left"
             elif dx == 1:
                 direction = "right"
-            self.update_moves(direction)
+
+            self.update_moves(direction, start_x, start_y)
+
             for past_self in past_self_tab:
                 past_self.moves = self.moves
                 past_self.detection_key(grid_width,grid_height)
@@ -122,6 +127,9 @@ class Player(pygame.sprite.Sprite):
             past_self_tab : list of Past_self
         sorties: none
         '''
+        start_x = self.grid_x
+        start_y = self.grid_y
+
         new_y = self.grid_y + dy
         if 0 <= new_y and new_y < grid_height:
             self.grid_y = new_y
@@ -131,7 +139,9 @@ class Player(pygame.sprite.Sprite):
                 direction = "up"
             elif dy == 1:
                 direction = "down"
-            self.update_moves(direction)
+
+            self.update_moves(direction, start_x, start_y)
+
             for past_self in past_self_tab:
                 past_self.moves = self.moves
                 past_self.detection_key(grid_width,grid_height)
@@ -262,12 +272,11 @@ class Player(pygame.sprite.Sprite):
         '''
         pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
 
-    def update_moves (self,direction):
+    def update_moves (self, direction, start_x, start_y):
         '''
         Fonction qui ajoute chaque nouvelles coordonnées que prends joueur à un tableau sous forme de tuple (x,y)
         '''
-        self.moves.append(direction)
-
+        self.moves.append((direction, start_x, start_y))
     def on_finish(self):
         '''
         Fonction qui verifie si le joueur est sur la case de l'arivée
