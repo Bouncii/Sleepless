@@ -18,6 +18,10 @@ class Past_self(pygame.sprite.Sprite):
 
         self.target_x = self.pixel_x
         self.target_y = self.pixel_y
+        self.nbr_pxel_animation = 0
+        self.start_animation = self.pixel_x
+        self.duree_pixel_animation = 0
+        self.idle_time = 0
 
         self.speed_x = 300  
         self.speed_y = 300  
@@ -98,6 +102,10 @@ class Past_self(pygame.sprite.Sprite):
         if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
             self.grid_x = new_x
             self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
+            self.nbr_pxel_animation = self.target_x - self.pixel_x
+            self.start_animation = self.pixel_x
+            self.duree_pixel_animation = self.nbr_pxel_animation // Frames.WALKFRAMES
+
             self.tour += 1
 
 
@@ -268,3 +276,12 @@ class Past_self(pygame.sprite.Sprite):
         elif dx == 1 and self.current_tile.tile_type == "door_right":
             res = self.current_tile.structures["door_right"].is_open
         return res
+
+    def update_dt(self, dt):
+        if not self.moving:
+            self.idle_time += dt * 1000  # ms
+            idle_frame_duration = 150    # ms par frame
+            # Limiter idle_time pour éviter qu'elle devienne trop grande
+            self.idle_time %= idle_frame_duration * Frames.IDLEFRAMES
+        else:
+            self.idle_time = 0

@@ -26,7 +26,9 @@ class AssetManager:
             'BackgroundLayer2': config.get_img_path("BackgroundLayer2"),
             'missing_texture': config.get_img_path("missing_texture"),
             'walk': config.get_img_path("Walk"),
-            'idle': config.get_img_path("Idle")
+            'idle': config.get_img_path("Idle"),
+            'past_walk': config.get_img_path("Past_walk"),
+            'past_idle': config.get_img_path("Past_idle")
         }
         
         for key, path in image_paths.items():
