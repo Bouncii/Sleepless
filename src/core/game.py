@@ -31,7 +31,7 @@ class Game:
         self.interactionManagerDoorButton = None
         self.interactionManagerPortal = None
 
-        self.current_level_num = 2
+        self.current_level_num = 0
         self.nb_levels = get_number_of_level()
 
         self.player = None
@@ -64,6 +64,8 @@ class Game:
                 self.running = False
             elif keys[pygame.K_r]: #reset le niveau avec R
                 self.state = GameState.RESET_GAME
+            elif keys[pygame.K_p]:
+                self.state = GameState.WIN
             
             if event.type == pygame_gui.UI_BUTTON_PRESSED and event.ui_element.state == self.state:
                 self.handle_button_events(event)
