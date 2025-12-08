@@ -1,6 +1,6 @@
 # src/systems/interaction_manager.py
 
-from src.core.constants import *
+from src.core.config import *
 
 class InteractionManagerButtonsDoors:
     def __init__(self):
@@ -173,8 +173,8 @@ class InteractionManagerPortal:
         entity.grid_x = dest_x
         entity.grid_y = dest_y
         
-        entity.pixel_x = dest_x * TILE_SIZE + (TILE_SIZE - entity.width) // 2
-        entity.pixel_y = dest_y * TILE_SIZE + int(TILE_SIZE*0.8) - entity.height
+        entity.pixel_x = dest_x * config.TILE_SIZE + (config.TILE_SIZE - entity.width) // 2
+        entity.pixel_y = dest_y * config.TILE_SIZE + int(config.TILE_SIZE*0.8) - entity.height
         entity.rect.topleft = (entity.pixel_x, entity.pixel_y)
         entity.target_x = entity.pixel_x
         entity.target_y = entity.pixel_y

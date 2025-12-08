@@ -1,4 +1,4 @@
-from src.core.constants import *
+from src.core.config import *
 from .tile import Tile
 
 def level_builder(grid_width: int, grid_height: int, level_str: str, interactionManagerDoorButton) -> list:
@@ -7,7 +7,7 @@ def level_builder(grid_width: int, grid_height: int, level_str: str, interaction
     entrées: 
         grid_height : int  
         grid_width : int  
-        tile_size : int  
+        config.TILE_SIZE : int  
         level_str : str  
         interactionManagerDoorButton : InteractionManagerButtonsDoors
     sorties: 
@@ -18,7 +18,7 @@ def level_builder(grid_width: int, grid_height: int, level_str: str, interaction
         tab_row = []
         for col in range(grid_width):
             type = level_str[row][col]
-            tile = Tile(col, row, TILE_SIZE, TILE_SIZE, type, TILE_SIZE)
+            tile = Tile(col, row, config.TILE_SIZE, config.TILE_SIZE, type, config.TILE_SIZE)
             link_door_button(tile,interactionManagerDoorButton)
             tab_row.append(tile)
         res.append(tab_row)

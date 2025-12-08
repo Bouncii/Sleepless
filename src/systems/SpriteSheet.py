@@ -1,5 +1,5 @@
 import pygame
-from src.core.constants import*
+from src.core.config import*
 
 class SpriteSheet():
     def __init__(self, image, number_of_animation):
@@ -23,7 +23,7 @@ class SpriteSheet():
         if facing_left:
             image = pygame.transform.flip(image, True, False)
             
-        target_height = TILE_SIZE 
+        target_height = config.TILE_SIZE 
         ratio = target_height / image.get_height()
         image = pygame.transform.scale(image, (int(image.get_width() * ratio), int(target_height)))
 

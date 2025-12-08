@@ -1,18 +1,19 @@
 import pygame
-from src.core.constants import *
+from src.core.constants import Frames
+from src.core.config import *
 
 class Past_self(pygame.sprite.Sprite):
     def __init__ (self, grid_x:int, grid_y:int, timer_spawn:int,level:list):
         pygame.sprite.Sprite.__init__(self)
 
-        self.height = 0.5*TILE_SIZE
-        self.width = 0.3*TILE_SIZE
+        self.height = 0.5*config.TILE_SIZE
+        self.width = 0.3*config.TILE_SIZE
 
         self.grid_x = grid_x
         self.grid_y = grid_y
 
-        self.pixel_x = self.grid_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
-        self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
+        self.pixel_x = self.grid_x * config.TILE_SIZE + (config.TILE_SIZE - self.width) // 2
+        self.pixel_y = self.grid_y * config.TILE_SIZE + int(config.TILE_SIZE*0.8) - self.height
 
         self.rect = pygame.Rect(self.pixel_x,self.pixel_y,self.width,self.height)
 
@@ -102,7 +103,7 @@ class Past_self(pygame.sprite.Sprite):
         new_x = self.grid_x + dx
         if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
             self.grid_x = new_x
-            self.target_x = new_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
+            self.target_x = new_x * config.TILE_SIZE + (config.TILE_SIZE - self.width) // 2
             self.nbr_pxel_animation = self.target_x - self.pixel_x
             self.start_animation = self.pixel_x
             self.duree_pixel_animation = self.nbr_pxel_animation // Frames.WALKFRAMES
@@ -125,7 +126,7 @@ class Past_self(pygame.sprite.Sprite):
         new_y = self.grid_y + dy
         if 0 <= new_y and new_y < grid_height:
             self.grid_y = new_y
-            self.target_y = new_y * TILE_SIZE + int(TILE_SIZE*0.8) - self.height
+            self.target_y = new_y * config.TILE_SIZE + int(config.TILE_SIZE*0.8) - self.height
             self.tour += 1
 
             
@@ -160,8 +161,8 @@ class Past_self(pygame.sprite.Sprite):
         
         
 
-        self.grid_x = int(self.pixel_x // TILE_SIZE) # nécessaire pour y à cause de la gravité, x et update par securité
-        self.grid_y = int(self.pixel_y // TILE_SIZE)
+        self.grid_x = int(self.pixel_x // config.TILE_SIZE) # nécessaire pour y à cause de la gravité, x et update par securité
+        self.grid_y = int(self.pixel_y // config.TILE_SIZE)
 
         self.moving = self.moving_horizontal or self.moving_vertical or self.moving_gravite
 

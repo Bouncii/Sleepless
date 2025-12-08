@@ -1,5 +1,5 @@
 import pygame
-from src.core.constants import*
+from src.core.config import*
 class TileSelection:
     def __init__(self):
         self.active = False
@@ -43,9 +43,9 @@ class TileSelection:
 
     def display(self,screen):
         if self.active and self.pointedTile:
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x+TILE_SIZE,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE + TILE_SIZE),(TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*TILE_SIZE),10)
+            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE),10)
+            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),10)
+            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),10)
+            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE),10)
     
 

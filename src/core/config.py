@@ -10,6 +10,7 @@ class Config:
         self.screen_size = (1920, 1080)
         self.debug_mode = False
         self.sound_volume = 1.0
+        self.TILE_SIZE = 100
     def get_level_path(self, level_num):
         """Retourne le chemin complet vers un fichier de niveau"""
         return os.path.join(Paths.LEVELS, f"level{level_num}.txt")

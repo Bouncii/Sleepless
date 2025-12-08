@@ -3,7 +3,6 @@
 Package core
 """
 from .constants import (
-    TILE_SIZE,
     FPS, 
     GRAVITY,
     ENTITIES_SPEED_X,
@@ -21,7 +20,6 @@ from .game import Game
 
 __all__ = [
     # Constantes
-    'TILE_SIZE',
     'FPS', 
     'GRAVITY',
     'ENTITIES_SPEED_X',

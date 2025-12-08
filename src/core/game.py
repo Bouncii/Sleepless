@@ -89,6 +89,15 @@ class Game:
             self.current_level_num = (self.current_level_num + 1) % self.nb_levels
             self.state = GameState.RESET_GAME
 
+    def getTileSize(self):
+        '''
+        Calcul automatiquement la taille des tiles selon la taille de l'écran
+        '''
+        tile_w = self.screen_width // self.GRID_WIDTH
+        tile_h = self.screen_height // self.GRID_HEIGHT
+        new_size = min(tile_w, tile_h)
+        return new_size
+
 
     def load_level(self, level_num: int):
         '''
@@ -102,6 +111,9 @@ class Game:
         self.GRID_WIDTH = len(self.level_str[0]) 
         self.GRID_HEIGHT = len(self.level_str)
         
+        # Changement de la taille des tiles
+        config.TILE_SIZE = self.getTileSize()
+
         # Construction du niveau
         self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
         self.interactionManagerPortal = InteractionManagerPortal()

@@ -1,19 +1,20 @@
 # Fichier: src/entities/objects
 import pygame
-from src.core.constants import *
+from src.core.config import *
+from src.core.constants import ItemTypes
 import math
 
 #Class qui va être hérité des différents types d'items
 class Item():
     def __init__(self, grid_x:int, grid_y:int,ItemType:ItemTypes):
-        self.height = 0.2*TILE_SIZE
-        self.width = 0.2*TILE_SIZE
+        self.height = 0.2*config.TILE_SIZE
+        self.width = 0.2*config.TILE_SIZE
 
         self.grid_x = grid_x
         self.grid_y = grid_y
 
-        self.pixel_x = self.grid_x * TILE_SIZE + (TILE_SIZE - self.width) // 2
-        self.pixel_y = self.grid_y * TILE_SIZE + int(TILE_SIZE*0.7) - self.height
+        self.pixel_x = self.grid_x * config.TILE_SIZE + (config.TILE_SIZE - self.width) // 2
+        self.pixel_y = self.grid_y * config.TILE_SIZE + int(config.TILE_SIZE*0.7) - self.height
         self.base_mid_vertival_point = self.pixel_y + (self.height // 2) 
         self.current_mid_vertival_point = self.pixel_y + (self.height // 2) 
 

@@ -5,10 +5,8 @@ class _GameConstants:
     """
     Constantes à utiliser qui ne changerons pas
     """
-    TILE_SIZE = 200
     FPS = 60
     
-
     GRAVITY = 600
     ENTITIES_SPEED_X = 300  
     ENTITIES_SPEED_Y = 300 
@@ -36,7 +34,6 @@ class _GameConstants:
         SETTINGS = os.path.join(BASE_DIR, "assets", "levels","levels_settings.json")
 
 
-TILE_SIZE = _GameConstants.TILE_SIZE
 FPS = _GameConstants.FPS
 GRAVITY = _GameConstants.GRAVITY
 ENTITIES_SPEED_X = _GameConstants.ENTITIES_SPEED_X  # ← EXPORTER
