@@ -290,10 +290,11 @@ class Past_self(pygame.sprite.Sprite):
 
     def recalibrate_position(self):
         '''
-        Scanne la liste des mouvements pour retrouver l'index correspondant à la position actuelle
+        Scanne tute la liste des mouvements
+        pour retrouver l'index correspondant à la position actuelle.
         '''
         found = False
-        i = self.tour
+        i = 0
         
         while i < len(self.moves) and not found:
             move_data = self.moves[i]
@@ -303,5 +304,6 @@ class Past_self(pygame.sprite.Sprite):
             if move_start_x == self.grid_x and move_start_y == self.grid_y:
                 self.tour = i
                 found = True
+                print(f"Recalibrage réussi : Position trouvée à l'index {i} (Ancien tour: {self.tour})")
             else:
                 i += 1
