@@ -7,9 +7,9 @@ class _GameConstants:
     """
     FPS = 60
     
-    GRAVITY = 600
-    ENTITIES_SPEED_X = 300  
-    ENTITIES_SPEED_Y = 300 
+    SPEED_FACTOR_X = 1.5
+    SPEED_FACTOR_Y = 1.5
+    GRAVITY_FACTOR = 5.0 
     
     class States:
         MENU = "menu"
@@ -35,9 +35,9 @@ class _GameConstants:
 
 
 FPS = _GameConstants.FPS
-GRAVITY = _GameConstants.GRAVITY
-ENTITIES_SPEED_X = _GameConstants.ENTITIES_SPEED_X  # ← EXPORTER
-ENTITIES_SPEED_Y = _GameConstants.ENTITIES_SPEED_Y  # ← EXPORTER
+SPEED_FACTOR_X = _GameConstants.SPEED_FACTOR_X
+SPEED_FACTOR_Y = _GameConstants.SPEED_FACTOR_Y
+GRAVITY_FACTOR = _GameConstants.GRAVITY_FACTOR
 GameState = _GameConstants.States
 Paths = _GameConstants.Paths
 ItemTypes = _GameConstants.ItemTypes

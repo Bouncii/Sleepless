@@ -4,9 +4,9 @@ Package core
 """
 from .constants import (
     FPS, 
-    GRAVITY,
-    ENTITIES_SPEED_X,
-    ENTITIES_SPEED_Y,
+    SPEED_FACTOR_X,
+    SPEED_FACTOR_Y,
+    GRAVITY_FACTOR,
     GameState,
     Paths,
     ItemTypes,
@@ -21,9 +21,9 @@ from .game import Game
 __all__ = [
     # Constantes
     'FPS', 
-    'GRAVITY',
-    'ENTITIES_SPEED_X',
-    'ENTITIES_SPEED_Y',
+    'SPEED_FACTOR_X',
+    'SPEED_FACTOR_Y',
+    'GRAVITY_FACTOR',
     'GameState',
     'Paths',
     'ItemTypes',

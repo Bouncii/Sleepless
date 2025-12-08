@@ -1,6 +1,6 @@
 import pygame
 from src.core.config import *
-from src.core.constants import Frames
+from src.core.constants import Frames,SPEED_FACTOR_X,SPEED_FACTOR_Y,GRAVITY_FACTOR
 from src.core.game_misc_functions import *
 
 class Player(pygame.sprite.Sprite):
@@ -25,11 +25,11 @@ class Player(pygame.sprite.Sprite):
         self.duree_pixel_animation = 0
         self.idle_time = 0
 
-        self.speed_x = 300  
-        self.speed_y = 300  
+        self.speed_x = SPEED_FACTOR_X * config.TILE_SIZE
+        self.speed_y = SPEED_FACTOR_Y * config.TILE_SIZE
+        self.gravity = GRAVITY_FACTOR * config.TILE_SIZE 
 
         self.speed_gravity_y = 0
-        self.gravity = 600
         self.on_ground = True
 
         self.moves = []
