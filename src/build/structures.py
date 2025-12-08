@@ -1,4 +1,4 @@
-from pygame import *
+import pygame
 class Ground:
     def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
         self.type = "ground"
@@ -9,14 +9,18 @@ class Ground:
         self.width = tile_width
         self.height = tile_height*0.2
 
-        self.rect = Rect(self.pixel_x, self.pixel_y,self.width,self.height)
+        self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
 
         self.color = (100,100,0)
 
     def draw(self, screen, asset_manager):
-        '''Dessine le sol avec une image'''
-        image = asset_manager.get_scaled_image('door', self.width, self.height)
-        screen.blit(image, (self.pixel_x, self.pixel_y))
+        image = asset_manager.get_scaled_image('ground', self.width, self.height) 
+        visual_offset = 6 
+        draw_position_y = self.pixel_y - visual_offset
+        
+        screen.blit(image, (self.pixel_x, draw_position_y))
+
+        # pygame.draw.rect(screen, (255, 0, 0), self.rect, 1)
 
 class Ladder:
     def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
@@ -28,7 +32,7 @@ class Ladder:
         self.width = tile_width
         self.height = tile_height*0.1
 
-        self.rects = [Rect(self.pixel_x, self.pixel_y+self.height*1.75*i,self.width,self.height)for i in range(1,4)]
+        self.rects = [pygame.Rect(self.pixel_x, self.pixel_y+self.height*1.75*i,self.width,self.height)for i in range(1,4)]
         self.color = (100,100,0)
 
     def draw(self, screen, asset_manager):
@@ -47,7 +51,7 @@ class End:
         self.width = tile_width
         self.height = tile_height
 
-        self.rect = Rect(self.pixel_x, self.pixel_y,self.width,self.height)
+        self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
         self.color = (100,100,0)
 
     def draw(self, screen, asset_manager):
@@ -71,10 +75,10 @@ class Door:
 
         if side == "left":
             self.type = "door_left"
-            self.rect = Rect(self.pixel_x, self.pixel_y,self.width,self.height)
+            self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
         else:
             self.type = "door_right"
-            self.rect = Rect(self.pixel_x+self.tile_width-self.width, self.pixel_y,self.width,self.height)
+            self.rect = pygame.Rect(self.pixel_x+self.tile_width-self.width, self.pixel_y,self.width,self.height)
         
         self.color = (150, 0, 0)
 
@@ -109,7 +113,7 @@ class Button:
         self.width = 1/3 * tile_width
         self.height = 1/6 * tile_height
 
-        self.rect = Rect(self.pixel_x, self.pixel_y,self.width,self.height)
+        self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
 
         self.color = (200, 200, 0)
 
