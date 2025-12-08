@@ -65,16 +65,20 @@ class Inventory():
         return self.slots[self.getPosItemInv(type)]["usable"]
     
     def update(self,level,player):
-        self.tile_selection_manager.update(level)
-        self.useItemListener(level)
+        if not player.moving:
+            self.tile_selection_manager.update(level)
+            self.useItemListener(level)
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RIGHT]:
-            self.UpdateSelected(1)
-        elif keys[pygame.K_LEFT]:
-            self.UpdateSelected(-1)
-        elif keys[pygame.K_RETURN]:
-            self.ActivateSelection(player,level)
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_RIGHT]:
+                self.UpdateSelected(1)
+            elif keys[pygame.K_LEFT]:
+                self.UpdateSelected(-1)
+            elif keys[pygame.K_RETURN]:
+                self.ActivateSelection(player,level)
+        else:
+            self.tile_selection_manager.selectedTile = None
+            self.tile_selection_manager.active = False
 
     def ActivateSelection(self, player, level):
         '''Gère l'activation (touche Entrée)'''
