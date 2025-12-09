@@ -110,7 +110,14 @@ class Inventory():
             ItemImage = asset_manager.get_scaled_image(self.slots[i]["type"], self.SlotSize, self.SlotSize)
             if not self.slots[i]["usable"]:
                 ItemImage = asset_manager.surface_to_grayscale(ItemImage)
-            image.blit(ItemImage, (self.SlotSize*i, 0))
+                image.blit(ItemImage, (self.SlotSize*i, 0))
+                imgCad = asset_manager.get_scaled_image("cadena", self.SlotSize, self.SlotSize)
+                image.blit(imgCad, (self.SlotSize*i, 0))
+
+            else:
+                image.blit(ItemImage, (self.SlotSize*i, 0))
+
+            
         pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,0),(self.selected_slot*self.SlotSize + self.SlotSize,0),10)
         pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,0),(self.selected_slot*self.SlotSize,self.SlotSize),10)
         pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,self.SlotSize),10)

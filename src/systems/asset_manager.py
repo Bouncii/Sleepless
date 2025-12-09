@@ -20,8 +20,9 @@ class AssetManager:
             'end': config.get_img_path("end"),
             'tile': config.get_img_path("tile"),
             'background': config.get_img_path("background"),
-            'portalMaker': config.get_img_path("portalMaker"),
+            'portalMaker': config.get_img_path("portalgun"),
             'portal': config.get_img_path("portal"),
+            'portalCrack': config.get_img_path("portalCrack"),
             'stunMaker': config.get_img_path("StunMaker"),
             'BackgroundLayer1': config.get_img_path("BackgroundLayer1"),
             'BackgroundLayer2': config.get_img_path("BackgroundLayer2"),
@@ -29,7 +30,8 @@ class AssetManager:
             'walk': config.get_img_path("Walk"),
             'idle': config.get_img_path("Idle"),
             'past_walk': config.get_img_path("Past_walk"),
-            'past_idle': config.get_img_path("Past_idle")
+            'past_idle': config.get_img_path("Past_idle"),
+            'cadena': config.get_img_path("cadena")
         }
         
         for key, path in image_paths.items():
