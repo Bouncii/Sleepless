@@ -32,7 +32,7 @@ To be continued ...
    >*Library will be automatically installed*<br>
    >⚠️ If not, make sure to install **pygame** and **pygame_gui** manually :
    >   ```bash
-   >  pip install pygame pygame_gui
+   >  pip install pygame-ce pygame_gui
    > ```
 
 
