@@ -16,6 +16,7 @@ class _GameConstants:
         PLAYING = "playing"
         WIN = "win"
         RESET_GAME = "reset_game"
+        PAUSE = "pause"
 
     class ItemTypes:
         PORTALMAKER = "portalMaker"

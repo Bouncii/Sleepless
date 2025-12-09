@@ -50,6 +50,7 @@ class Game:
     def _init_screens(self):
         '''Initialise les différents écrans du jeu'''
         self.menu = Menu()
+        self.pause = Pause()
         self.win_screen = Fin()
         self.current_screen = self.menu
         self.background = Background(self.screen_width,self.screen_height)
@@ -60,8 +61,10 @@ class Game:
         '''Gère tous les événements du jeu'''
         for event in pygame.event.get():
             keys = pygame.key.get_pressed()
-            if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
+            if event.type == pygame.QUIT or keys[pygame.K_f]:
                 self.running = False
+            elif keys[pygame.K_ESCAPE]:
+                self.state = GameState.PAUSE
             elif keys[pygame.K_r]: #reset le niveau avec R
                 self.state = GameState.RESET_GAME
             elif keys[pygame.K_p]:
@@ -73,6 +76,7 @@ class Game:
             # Traitement des événements par les managers UI
             self.menu.manager.process_events(event)
             self.win_screen.manager.process_events(event)
+            self.pause.manager.process_events(event)
 
 
     def handle_button_events(self, event):
@@ -83,6 +87,9 @@ class Game:
         elif event.ui_element == self.win_screen.replay_button:
             self.win_screen.message = random.choice(self.win_screen.level_messages)
             self.state = GameState.RESET_GAME
+
+        elif event.ui_element == self.pause.continue_button:
+            self.state = GameState.PLAYING
             
         elif event.ui_element == self.win_screen.next_button:
             self.win_screen.message = random.choice(self.win_screen.level_messages)
@@ -192,6 +199,9 @@ class Game:
                 
         elif self.state == GameState.WIN:
             self.win_screen.update(self.dt)
+
+        elif self.state == GameState.PAUSE:
+            self.pause.update(self.dt)
         
 
     def update_buttons_state(self):
@@ -244,6 +254,10 @@ class Game:
         if self.state == GameState.MENU:
             self.background.draw(self.screen,self.asset_manager)
             self.menu.draw(self.screen)
+        
+        if self.state == GameState.PAUSE:
+            self.background.draw(self.screen,self.asset_manager)
+            self.pause.draw(self.screen)
             
         elif self.state == GameState.PLAYING:
             # Dessin du niveau
