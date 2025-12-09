@@ -76,8 +76,8 @@ class Tile:
             pygame.draw.circle(screen, (0, 100, 255), (center_x, center_y), 5, 0)
 
         if "portal_active" in self.effects:
-            pygame.draw.circle(screen, (255, 140, 0), (center_x, center_y), 30, 4)
-            pygame.draw.circle(screen, (255, 200, 50), (center_x, center_y), 20, 1)
+            image = asset_manager.get_scaled_image('portal', self.width*1/3, self.height*2/3)
+            screen.blit(image, (self.pixel_x + self.width//2 - (self.width*1/3 //2), self.pixel_y + self.height - 0.2*self.height - 2/3*self.height))
 
 
     def structures_builder(self) -> list:
