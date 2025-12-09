@@ -124,29 +124,38 @@ class Pause:
 
         # Ajoute un titre
         self.title = pygame_gui.elements.UILabel(
-            relative_rect=pygame.Rect((0, self.window_height//3 - 100), (self.window_width, 100)),
+            relative_rect=pygame.Rect((35, self.window_height//3 - 100), (self.window_width, 100)),
             text='Menu Pause',
             manager=self.manager
         )
         self.elements.append(self.title)
 
-         # Ajoute un boutton pour rejouer
+        # Ajoute un boutton pour continuer à jouer
         self.continue_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((self.window_width//2.5 - 100, self.window_height//1.5 - 25), (200, 50)),
+            relative_rect=pygame.Rect((self.window_width//2 - 50, self.window_height//1.5), (200, 50)),
             text='Continue this level ?',
             manager=self.manager
         )
         self.continue_button.state = "pause"
         self.elements.append(self.continue_button)
 
-        # Ajoute un boutton pour changer de niveau
+        # Ajoute un boutton pour voir la liste de contrôles
         self.controls_button = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((self.window_width//1.5 - 100, self.window_height//1.5 - 25), (200, 50)),
+            relative_rect=pygame.Rect((self.window_width//2 - 50, self.window_height//2), (200, 50)),
             text='Show game controls',
             manager=self.manager
         )
         self.controls_button.state = "pause"
         self.elements.append(self.controls_button)
+
+        # Ajoute un boutton pour voir la liste de contrôles
+        self.leave_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((self.window_width//2 - 50, self.window_height//1.2), (200, 50)),
+            text='Quitter le jeu',
+            manager=self.manager
+        )
+        self.leave_button.state = "pause"
+        self.elements.append(self.leave_button)
 
     # Fonction pour rebuild l'UI qui rappelle build_ui
     def rebuild_ui(self,message=None):
@@ -160,5 +169,81 @@ class Pause:
         self.manager.update(delta)
 
     # Dessine les elements
+    def draw(self, screen):
+        self.manager.draw_ui(screen)
+
+class Controls:
+    def __init__(self):
+        self.window_width, self.window_height = pygame.display.get_surface().get_size()
+        self.manager = pygame_gui.UIManager((self.window_width, self.window_height), 'theme.json')
+        self.elements = []
+        self.build_ui()
+
+    def build_ui(self):
+        # Supprimer les anciens éléments
+        for e in self.elements:
+            e.kill()
+        self.elements = []
+
+        # Titre
+        self.title = pygame_gui.elements.UILabel(
+            relative_rect=pygame.Rect((0, 30), (self.window_width, 60)),
+            text='Game Controls',
+            manager=self.manager,
+        )
+        self.elements.append(self.title)
+
+        # Texte listant les contrôles
+        controls_text = (
+            "Direction Keys :\n"
+            "Climb up a ladder : Z\n"
+            "Move left :   Q\n"
+            "Climb down a ladder : S\n"
+            "Move right : D\n"
+
+            "\nItems :\n"
+            "Switch selected item : <- or ->\n"
+            "Use an item : Enter\n"
+            "You must press the use key twice for an unlimited-range item after selecting a grid cell.\n"
+
+            "\nMisc :\n"
+            "Pause : Escape\n"
+            "Restart : R\n"
+            "Clear level (debug) : P\n"
+            
+            "\n\nTo return to the pause menu, press Escape or the Back button.\n"
+        )
+
+        self.controls_label = pygame_gui.elements.UITextBox(
+            html_text=controls_text.replace("\n", "<br>"),
+            relative_rect=pygame.Rect(
+                (self.window_width//2 - 375, self.window_height//3),
+                (750, 500)
+            ),
+            manager=self.manager
+        )
+        self.elements.append(self.controls_label)
+
+        # Bouton retour
+        self.back_button = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect(
+                (self.window_width//2 - 100, self.window_height - 120),
+                (200, 50)
+            ),
+            text='Back',
+            manager=self.manager
+        )
+        self.back_button.state = "controls"
+        self.elements.append(self.back_button)
+
+    def rebuild_ui(self, message=None):
+        if message:
+            self.message = message
+        self.manager.set_window_resolution((self.window_width, self.window_height))
+        self.build_ui()
+
+    def update(self, delta):
+        self.manager.update(delta)
+
     def draw(self, screen):
         self.manager.draw_ui(screen)
