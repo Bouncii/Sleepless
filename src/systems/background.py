@@ -23,16 +23,30 @@ class Background():
 
             if layer == "BackgroundLayer1":
                 layer_image = AssetManager.get_scaled_image(layer, self.width, self.height)
-            else:
-                layer_image = AssetManager.get_image(layer)
+                self.background.blit(layer_image, (0, 0))
+                continue
 
+            # Gestion couches parallax
+            layer_image = AssetManager.get_image(layer)
+            layer_width = layer_image.get_width()
             layer_height = layer_image.get_height()
-
-            parallax_x = -self.camera_x * factor
-
+            
             new_y = self.height - layer_height
+            displacement = self.camera_x * factor
+            
+            start_x = - int(displacement % layer_width)
+            
+            if start_x > 0:
+                 start_x -= layer_width
 
-            self.background.blit(layer_image, (parallax_x, new_y))
+            current_tile_x = start_x
+            
+            overlap = 10
+
+            while current_tile_x < self.width:
+                self.background.blit(layer_image, (int(current_tile_x), new_y))
+                
+                current_tile_x += (layer_width - overlap)
 
 
     def draw(self,screen,AssetManager):
