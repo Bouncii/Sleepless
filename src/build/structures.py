@@ -45,11 +45,12 @@ class End:
     def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
         self.type = "ground"
 
-        self.pixel_x = pixel_x
-        self.pixel_y = pixel_y
+        self.width = tile_width * 4/6
+        self.height = tile_height * 3/6
 
-        self.width = tile_width
-        self.height = tile_height
+        self.pixel_x = pixel_x + (1/6 * tile_width) 
+        self.pixel_y = pixel_y  + tile_height - tile_height*0.2 - self.height
+
 
         self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
         self.color = (100,100,0)
@@ -88,8 +89,9 @@ class Door:
 
     def draw(self, screen, asset_manager):
         '''Dessine la porte avec l'image appropriée'''
-        image = asset_manager.get_scaled_image('door_left', self.width, self.height)
-        screen.blit(image, self.rect.topleft)
+        pygame.draw.rect(screen, self.color,self.rect)
+        # image = asset_manager.get_scaled_image('door_left', self.width, self.height)
+        # screen.blit(image, self.rect.topleft)
 
 
 
