@@ -151,7 +151,7 @@ class Pause:
         # Ajoute un boutton pour voir la liste de contrôles
         self.leave_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((self.window_width//2 - 50, self.window_height//1.2), (200, 50)),
-            text='Quitter le jeu',
+            text='Leave the game',
             manager=self.manager
         )
         self.leave_button.state = "pause"
