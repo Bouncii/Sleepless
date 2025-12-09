@@ -64,7 +64,7 @@ class Game:
             keys = pygame.key.get_pressed()
             if event.type == pygame.QUIT:
                 self.running = False
-            elif keys[pygame.K_ESCAPE]:
+            elif keys[pygame.K_ESCAPE] and self.state != GameState.MENU and self.state != GameState.RESET_GAME:
                 self.state = GameState.PAUSE
                 pygame.mouse.set_visible(True)
             elif keys[pygame.K_r]: #reset le niveau avec R
