@@ -15,7 +15,7 @@
             {"past_self_timer_spawn": 2}
         ],
         "items":[
-            {"stun": [1,1]}
+            {"stun": [0,1]}
         ]
     },
     
