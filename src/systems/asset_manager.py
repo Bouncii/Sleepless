@@ -31,7 +31,8 @@ class AssetManager:
             'idle': config.get_img_path("Idle"),
             'past_walk': config.get_img_path("Past_walk"),
             'past_idle': config.get_img_path("Past_idle"),
-            'cadena': config.get_img_path("cadena")
+            'cadena': config.get_img_path("cadena"),
+            'chain': config.get_img_path("chain")
         }
         
         for key, path in image_paths.items():

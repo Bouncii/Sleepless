@@ -67,9 +67,11 @@ class Tile:
         center_y = self.pixel_y + self.height // 2
 
         if "stun" in self.effects:
-            center_x = self.pixel_x + self.width // 2
-            center_y = self.pixel_y + self.height // 2
-            pygame.draw.circle(screen, (255, 255, 0), (center_x, center_y), 10, 2)
+            # center_x = self.pixel_x + self.width // 2
+            # center_y = self.pixel_y + self.height // 2
+            # pygame.draw.circle(screen, (255, 255, 0), (center_x, center_y), 10, 2)
+            image = asset_manager.get_scaled_image('chain', self.width*0.8, self.height*0.8)
+            screen.blit(image, (self.pixel_x+0.1*self.width, self.pixel_y))
 
         if "portal_pending" in self.effects:
             image = asset_manager.get_scaled_image('portalCrack', self.width*1/3, self.height*2/3)
