@@ -24,8 +24,8 @@ class _GameConstants:
         STUNMAKER = "stunMaker"
     
     class Frames:
-        IDLEFRAMES = 7
-        WALKFRAMES = 12
+        IDLEFRAMES = 27
+        WALKFRAMES = 9
     
     
     class Paths:

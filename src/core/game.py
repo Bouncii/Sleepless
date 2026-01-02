@@ -159,11 +159,11 @@ class Game:
             self.past_self_group.add(Past_self(start_location[0], start_location[1],delay["past_self_timer_spawn"],self.level))
         self.state = GameState.PLAYING
 
-        self.SpriteSheet_move_horizontal = SpriteSheet(self.asset_manager.get_image("walk"),Frames.WALKFRAMES)
-        self.SpriteSheet_idle = SpriteSheet(self.asset_manager.get_image("idle"),Frames.IDLEFRAMES)
+        self.SpriteSheet_move_horizontal = SpriteSheet(self.asset_manager.get_image("Walking_Kid"),Frames.WALKFRAMES)
+        self.SpriteSheet_idle = SpriteSheet(self.asset_manager.get_image("Idle_Kid"),Frames.IDLEFRAMES)
 
-        self.SpriteSheet_past_move_horizontal = SpriteSheet(self.asset_manager.get_image("past_walk"),Frames.WALKFRAMES)
-        self.SpriteSheet_past_idle = SpriteSheet(self.asset_manager.get_image("past_idle"),Frames.IDLEFRAMES)
+        self.SpriteSheet_past_move_horizontal = SpriteSheet(self.asset_manager.get_image("Walking_ghost"),Frames.WALKFRAMES)
+        self.SpriteSheet_past_idle = SpriteSheet(self.asset_manager.get_image("Idle_Ghost"),Frames.IDLEFRAMES)
 
 
 
@@ -294,7 +294,7 @@ class Game:
             # Dessin des entités
             if(self.player.moving == False):
                 # animation Idle
-                idle_frame_duration = 150
+                idle_frame_duration = 75
                 num_frame_idle = int(self.player.idle_time // idle_frame_duration) % self.SpriteSheet_idle.nbr_animation
                 
                 last_move_dir = self.player.moves[-1][0] if self.player.moves else "right"
@@ -322,7 +322,7 @@ class Game:
 
                     if(past_self.moving == False):
                         # animation Idle
-                        past_idle_frame_duration = 150
+                        past_idle_frame_duration = 75
                         past_num_frame_idle = int(past_self.idle_time // past_idle_frame_duration) % self.SpriteSheet_idle.nbr_animation
                         
                         self.SpriteSheet_past_idle.draw(self.screen, past_self, past_num_frame_idle, self.asset_manager, scale=1, facing_left=past_facing_left)

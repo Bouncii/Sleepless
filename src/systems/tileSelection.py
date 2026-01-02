@@ -34,8 +34,8 @@ class TileSelection:
 
 
     def selectionListener(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RETURN] and self.pointedTile and pygame.time.get_ticks() - self.activation_time >= 200:
+        mouse_buttons = pygame.mouse.get_pressed()
+        if mouse_buttons[0] and self.pointedTile and pygame.time.get_ticks() - self.activation_time >= 200:
             self.selectedTile = self.pointedTile
             self.active = False
             return True

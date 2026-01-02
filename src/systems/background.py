@@ -1,16 +1,16 @@
 # Fichier: src/systems/background.py
-
 import pygame
 
 class Background():
     def __init__(self,witdh,heigth):
+        # ... (le début du __init__ reste identique)
         self.width,self.height = witdh,heigth
         self.background = pygame.Surface((self.width,self.height)).convert_alpha()
         self.layers = {
             "BackgroundLayer1": 0.0,
             "BackgroundLayer2": 0.3,
+            "BackgroundLayer3": 0.5
         }
-
         self.camera_x = 0
 
     def update_camera(self, player_x):
@@ -21,32 +21,38 @@ class Background():
         
         for layer, factor in self.layers.items():
 
+
             if layer == "BackgroundLayer1":
                 layer_image = AssetManager.get_scaled_image(layer, self.width, self.height)
                 self.background.blit(layer_image, (0, 0))
-                continue
 
-            # Gestion couches parallax
-            layer_image = AssetManager.get_image(layer)
-            layer_width = layer_image.get_width()
-            layer_height = layer_image.get_height()
-            
-            new_y = self.height - layer_height
-            displacement = self.camera_x * factor
-            
-            start_x = - int(displacement % layer_width)
-            
-            if start_x > 0:
-                 start_x -= layer_width
+            else: 
 
-            current_tile_x = start_x
-            
-            overlap = 10
+                original_image = AssetManager.get_image(layer)
+                orig_w = original_image.get_width()
+                orig_h = original_image.get_height()
 
-            while current_tile_x < self.width:
-                self.background.blit(layer_image, (int(current_tile_x), new_y))
+                scale_factor = self.height / orig_h
                 
-                current_tile_x += (layer_width - overlap)
+                new_layer_width = int(orig_w * scale_factor)
+                new_layer_height = self.height
+
+                layer_image = pygame.transform.scale(original_image, (new_layer_width, new_layer_height))
+                
+                new_y = 0 
+                
+                displacement = self.camera_x * factor
+                
+                start_x = - int(displacement % new_layer_width)
+                
+                if start_x > 0:
+                     start_x -= new_layer_width
+
+                current_tile_x = start_x
+                
+                while current_tile_x < self.width:
+                    self.background.blit(layer_image, (int(current_tile_x), new_y))
+                    current_tile_x += new_layer_width
 
 
     def draw(self,screen,AssetManager):

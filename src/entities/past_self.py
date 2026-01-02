@@ -249,15 +249,6 @@ class Past_self(pygame.sprite.Sprite):
         self.target_y = self.pixel_y
         self.rect = pygame.Rect(self.pixel_x, self.pixel_y, self.width, self.height)
 
-    def draw(self,screen):
-        '''
-        Fonction qui dessine le past self en fonction de ses attributs
-        entrées: 
-            screen: pygames
-        sorties: none
-        '''
-        pygame.draw.rect(screen, "orange", (self.pixel_x, self.pixel_y, self.width, self.height ))
-
 
     def target_is_door_and_open(self,dx):
         '''

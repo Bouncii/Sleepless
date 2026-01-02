@@ -15,7 +15,7 @@ class Ground:
 
     def draw(self, screen, asset_manager):
         image = asset_manager.get_scaled_image('ground', self.width, self.height) 
-        visual_offset = 6 
+        visual_offset = 0
         draw_position_y = self.pixel_y - visual_offset
         
         screen.blit(image, (self.pixel_x, draw_position_y))
@@ -29,26 +29,25 @@ class Ladder:
         self.pixel_x = pixel_x
         self.pixel_y = pixel_y
 
-        self.width = tile_width
-        self.height = tile_height*0.1
+        self.width = tile_width*0.8
+        self.height = tile_height*0.8
 
-        self.rects = [pygame.Rect(self.pixel_x, self.pixel_y+self.height*1.75*i,self.width,self.height)for i in range(1,4)]
+        self.rect = self.rect = pygame.Rect(self.pixel_x+tile_height*0.1, self.pixel_y,self.width,self.height)
         self.color = (100,100,0)
 
     def draw(self, screen, asset_manager):
         '''Dessine le sol avec une image'''
         image = asset_manager.get_scaled_image('ladder', self.width, self.height)
-        for rect in self.rects:
-            screen.blit(image, rect.topleft)
+        screen.blit(image, self.rect.topleft)
 
 class End:
     def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
         self.type = "ground"
 
-        self.width = tile_width * 4/6
-        self.height = tile_height * 3/6
+        self.width = tile_width * 5/6
+        self.height = tile_height * 4/6
 
-        self.pixel_x = pixel_x + (1/6 * tile_width) 
+        self.pixel_x = pixel_x + (1/12 * tile_width) 
         self.pixel_y = pixel_y  + tile_height - tile_height*0.2 - self.height
 
 
@@ -110,10 +109,10 @@ class Button:
         self.button_id = button_id
 
         self.pixel_x = pixel_x + (1/3 * tile_width) 
-        self.pixel_y = pixel_y + (5/6 * tile_height) - tile_height*0.2
+        self.pixel_y = pixel_y + 1/3*tile_height
 
         self.width = 1/3 * tile_width
-        self.height = 1/6 * tile_height
+        self.height = 1/3 * tile_height
 
         self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
 

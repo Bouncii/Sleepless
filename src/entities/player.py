@@ -264,14 +264,6 @@ class Player(pygame.sprite.Sprite):
 
         self.target_y = self.pixel_y
 
-    def draw(self,screen,asset_manager):
-        '''
-        Fonction qui dessine le joueur en fonction de ses attributs
-        entrée: 
-            screen : pygames
-        sorties: none
-        '''
-        pygame.draw.rect(screen, "red", (self.pixel_x, self.pixel_y, self.width, self.height ))
 
     def update_moves (self, direction, start_x, start_y):
         '''
