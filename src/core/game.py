@@ -165,6 +165,9 @@ class Game:
         self.SpriteSheet_past_move_horizontal = SpriteSheet(self.asset_manager.get_image("Walking_ghost"),Frames.WALKFRAMES)
         self.SpriteSheet_past_idle = SpriteSheet(self.asset_manager.get_image("Idle_Ghost"),Frames.IDLEFRAMES)
 
+        self.SpriteSheet_climb = SpriteSheet(self.asset_manager.get_image("Ladder Kid"), Frames.CLIMBFRAMES)
+        self.SpriteSheet_past_climb = SpriteSheet(self.asset_manager.get_image("Ladder Ghost"), Frames.CLIMBFRAMES)
+
 
 
 
@@ -302,6 +305,13 @@ class Game:
                 
                 self.SpriteSheet_idle.draw(self.screen, self.player, num_frame_idle, self.asset_manager, scale=1, facing_left=facing_left)
 
+            elif self.player.moving_vertical:
+                distance_parcourue = abs(self.player.start_animation_y - self.player.pixel_y)
+                num_frame = int(distance_parcourue // self.player.duree_pixel_animation_y)
+                num_frame %= self.SpriteSheet_climb.nbr_animation
+                
+                self.SpriteSheet_climb.draw(self.screen, self.player, num_frame, self.asset_manager)
+
             elif self.player.moves and self.player.moves[-1][0] in ["left","right"]:
                 # animation droite/gauche
                 num_frame_animation = abs(self.player.start_animation - self.player.pixel_x)//self.player.duree_pixel_animation
@@ -326,6 +336,13 @@ class Game:
                         past_num_frame_idle = int(past_self.idle_time // past_idle_frame_duration) % self.SpriteSheet_idle.nbr_animation
                         
                         self.SpriteSheet_past_idle.draw(self.screen, past_self, past_num_frame_idle, self.asset_manager, scale=1, facing_left=past_facing_left)
+
+                    elif past_self.moving_vertical:
+                        distance_parcourue = abs(past_self.start_animation_y - past_self.pixel_y)
+                        num_frame = int(distance_parcourue // past_self.duree_pixel_animation_y)
+                        num_frame %= self.SpriteSheet_past_climb.nbr_animation
+                        
+                        self.SpriteSheet_past_climb.draw(self.screen, past_self, num_frame, self.asset_manager)
                     
                     elif(past_self.current_direction in ["left","right"]):
                         # animation droite/gauche

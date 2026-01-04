@@ -48,7 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.tile_right = level[self.grid_y][self.grid_x+1] if self.grid_x+1 < len(level[0]) else None
 
         self.last_move_time = 0
-        self.move_delay = 750
+        self.move_delay = 1000
         
 
 
@@ -101,8 +101,9 @@ class Player(pygame.sprite.Sprite):
         if 0 <= new_x and new_x < grid_width and self.target_is_door_and_open(dx):
             self.grid_x = new_x
             self.target_x = new_x * config.TILE_SIZE + (config.TILE_SIZE - self.width) // 2
-            self.nbr_pxel_animation = self.target_x - self.pixel_x
+
             self.start_animation = self.pixel_x
+            self.nbr_pxel_animation = self.target_x - self.pixel_x
             self.duree_pixel_animation = self.nbr_pxel_animation // Frames.WALKFRAMES
 
             if dx == -1:
@@ -135,6 +136,10 @@ class Player(pygame.sprite.Sprite):
         if 0 <= new_y and new_y < grid_height:
             self.grid_y = new_y
             self.target_y = new_y * config.TILE_SIZE + int(config.TILE_SIZE*0.8) - self.height
+            
+            self.start_animation_y = start_y
+            self.nbr_pixel_animation_y = self.target_y - self.start_animation_y
+            self.duree_pixel_animation_y = abs(self.nbr_pixel_animation_y) // Frames.CLIMBFRAMES
 
             if dy == -1:
                 direction = "up"

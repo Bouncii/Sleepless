@@ -26,6 +26,7 @@ class _GameConstants:
     class Frames:
         IDLEFRAMES = 27
         WALKFRAMES = 9
+        CLIMBFRAMES = 6
     
     
     class Paths:

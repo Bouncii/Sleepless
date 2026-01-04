@@ -127,6 +127,11 @@ class Past_self(pygame.sprite.Sprite):
         if 0 <= new_y and new_y < grid_height:
             self.grid_y = new_y
             self.target_y = new_y * config.TILE_SIZE + int(config.TILE_SIZE*0.8) - self.height
+
+            self.start_animation_y = self.pixel_y
+            self.nbr_pixel_animation_y = self.target_y - self.start_animation_y
+            self.duree_pixel_animation_y = abs(self.nbr_pixel_animation_y) // Frames.CLIMBFRAMES
+
             self.tour += 1
 
             

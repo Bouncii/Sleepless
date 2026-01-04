@@ -32,6 +32,8 @@ class AssetManager:
             'Idle_Kid': config.get_img_path("Standing Kid"),
             'Walking_ghost': config.get_img_path("Walking ghost"),
             'Idle_Ghost': config.get_img_path("Standing Ghost"),
+            'Ladder Kid': config.get_img_path("Ladder Kid"),
+            'Ladder Ghost': config.get_img_path("Ladder Ghost"),
             'cadena': config.get_img_path("cadena"),
             'chain': config.get_img_path("chain")
         }
