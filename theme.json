@@ -3,47 +3,101 @@
     {
         "colours":
         {
-            "normal_bg": "#1F1D1D",
-            "hovered_bg": "#706B6B",
-            "disabled_bg": "rgb(200, 150, 60)",
-            "selected_bg": "rgba(20, 50, 89, 225)",
-            "dark_bg": "#1F1D1D",
-            "normal_text": "white",
-            "hovered_text": "#FFFFFF",
-            "selected_text": "purple",
-            "disabled_text": "RGB(40, 70, 90)",
-            "link_text": "HSV(50deg, 30%, 40%)",
-            "link_hover": "cmy(50%, 30%, 0.7)",
-            "link_selected": "teal",
-            "text_shadow": "skyblue",
-            "normal_border": "white"
+            "normal_bg": "#0f1e26",
+            "hovered_bg": "#16303d",
+            "disabled_bg": "rgba(10, 10, 10, 150)",
+            "selected_bg": "#2a9d8f",
+            "dark_bg": "#050f12",
+            
+            "normal_text": "#e0f7fa",
+            "hovered_text": "#ffffff",
+            "selected_text": "#ffffff",
+            "disabled_text": "#546e7a",
+            
+            "normal_border": "#264653",
+            "hovered_border": "#2a9d8f",
+            
+            "text_shadow": "rgba(0, 0, 0, 100)"
         },
-         "misc":
+        "misc":
         {
-             "shape": "rectangle",
-             "border_width": {"left": 1, "right": 1, "top": 1, "bottom": 1},
-             "shadow_width": 2,
-             "shape_corner_radius": 2,
-             "border_overlap": 1,
-             "enable_title_bar": "1",
-             "text_horiz_alignment": "left",
-             "text_vert_alignment": "center",
-             "text_horiz_alignment_padding": 4,
-             "text_vert_alignment_padding": 4,
-             "text_shadow_size": 1,
-             "text_shadow_offset": [1, 1],
-             "tool_tip_delay": 1.0,
-             "title_bar_height": 28
+             "shape": "rounded_rectangle",
+             "shape_corner_radius": "20",
+             "border_width": "2",
+             "shadow_width": "0",
+             "text_shadow_size": "0",
+             "text_shadow_offset": "0, 0"
+        },
+        "font": {
+            "name": "custom_font",
+            "regular_path": "assets/fonts/dream.ttf",
+            "bold_path": "assets/fonts/dream.ttf",
+            "italic_path": "assets/fonts/dream.ttf",
+            "size": "20"
         }
     },
-    "#menu_titre": {
-    "colours": {
-        "dark_bg": "#000000",
-        "normal_text": "#FF0000",
-        "disabled_text": "#888888",
-        "text_shadow": "#222222"
+
+    "label": {
+        "misc": {
+            "border_width": "0",
+            "normal_bg": "rgba(0,0,0,0)" 
+        }
     },
-    "text_horiz_alignment": "center",
-    "text_vert_alignment": "center"
+
+    "#main_title": {
+        "colours": {
+            "normal_text": "#4db6ac",
+            "text_shadow": "rgba(0, 50, 50, 200)"
+        },
+        "misc": {
+            "text_shadow_size": "2",
+            "text_shadow_offset": "2, 2"
+        },
+        "font": {
+            "name": "custom_font", 
+            "size": "70",
+            "bold": "0"
+        }
+    },
+
+    "button": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "30",
+            "border_width": "2",
+            "text_shadow_size": "0",
+            "text_shadow_offset": "0, 0",
+            "transition_duration": "0.2"
+        },
+        "colours": {
+            "normal_bg": "#1b3b47",
+            "hovered_bg": "#2a9d8f",
+            "active_bg": "#264653",
+            
+            "normal_border": "#4db6ac",
+            "hovered_border": "#80cbc4",
+            
+            "normal_text": "#b2dfdb",
+            "hovered_text": "#ffffff",
+            "text_shadow": "rgba(0,0,0,0)"
+        },
+        "font": {
+            "name": "custom_font",
+            "size": "25",
+            "regular_path": "assets/fonts/dream.ttf",
+            "bold_path": "assets/fonts/dream.ttf",
+            "italic_path": "assets/fonts/dream.ttf"
+        }
+    },
+    
+    "text_box": {
+        "misc": {
+            "shape_corner_radius": "15",
+            "border_width": "2"
+        },
+        "colours": {
+            "normal_bg": "rgba(15, 30, 38, 220)",
+            "normal_border": "#2a9d8f"
+        }
     }
 }

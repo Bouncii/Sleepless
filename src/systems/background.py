@@ -8,8 +8,8 @@ class Background():
         self.background = pygame.Surface((self.width,self.height)).convert_alpha()
         self.layers = {
             "BackgroundLayer1": 0.0,
-            "BackgroundLayer2": 0.3,
-            "BackgroundLayer3": 0.5
+            "BackgroundLayer2": 0.03,
+            "BackgroundLayer3": 0.05
         }
         self.camera_x = 0
 
