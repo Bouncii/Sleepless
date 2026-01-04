@@ -1,4 +1,5 @@
 import pygame
+from src.systems import SpriteSheet
 class Ground:
     def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
         self.type = "ground"
@@ -61,46 +62,61 @@ class End:
 
 
 class Door:
-    def __init__(self,pixel_x,pixel_y,tile_width,tile_height,door_id,side):   
+    def __init__(self, pixel_x, pixel_y, tile_width, tile_height, door_id, side):   
         self.door_id = door_id
 
-        self.pixel_x = pixel_x
-        self.pixel_y = pixel_y
+        self.pixel_x = pixel_x-1/5*tile_width
+        self.pixel_y = pixel_y+5
     
-        self.width = 20
-        self.height = tile_height*0.8
+        self.width = tile_width*0.6
+        self.height = tile_height * 0.8
 
         self.tile_width = tile_width
         self.tile_height = tile_height
 
         if side == "left":
             self.type = "door_left"
-            self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
+            self.rect = pygame.Rect(self.pixel_x, self.pixel_y, self.width, self.height)
         else:
             self.type = "door_right"
-            self.rect = pygame.Rect(self.pixel_x+self.tile_width-self.width, self.pixel_y,self.width,self.height)
+            self.rect = pygame.Rect(self.pixel_x + self.tile_width - self.width, self.pixel_y, self.width, self.height)
         
-        self.color = (150, 0, 0)
-
         self.is_open = False
-
         self.side = side
 
+        self.sprite_sheet = None
+        self.total_frames = 17
+        self.current_frame = 0
+        
+        self.last_update_time = 0
+        self.frame_delay = 50
+
     def draw(self, screen, asset_manager):
-        '''Dessine la porte avec l'image appropriée'''
-        pygame.draw.rect(screen, self.color,self.rect)
-        # image = asset_manager.get_scaled_image('door_left', self.width, self.height)
-        # screen.blit(image, self.rect.topleft)
+        if self.sprite_sheet is None:
+            self.sprite_sheet = SpriteSheet(asset_manager.get_image('door'), self.total_frames)
 
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_update_time > self.frame_delay:
+            self.last_update_time = current_time
+            
+            if self.is_open:
+                if self.current_frame < self.total_frames - 1:
+                    self.current_frame += 1
+            else:
+                if self.current_frame > 0:
+                    self.current_frame -= 1
 
+        if not self.is_open or self.current_frame != self.total_frames - 1:
+            image = self.sprite_sheet.get_image(self.current_frame, asset_manager)
+            scaled_image = pygame.transform.scale(image, (int(self.width), int(self.height)))
+            
+            screen.blit(scaled_image, (self.rect.x, self.rect.y))
 
     def open(self):
         self.is_open = True
-        self.color = (0, 200, 0)
 
     def close(self):
         self.is_open = False
-        self.color = (150, 0, 0)
 
 
 class Button:

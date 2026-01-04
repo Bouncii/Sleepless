@@ -14,7 +14,6 @@ class ItemEffectManager:
         if item_type == ItemTypes.STUNMAKER:
             if "stun" not in tile.effects:
                 tile.effects.append("stun")
-                print(f"Piège STUN posé en {tile.grid_x}, {tile.grid_y}")
                 return True
         
         elif item_type == ItemTypes.PORTALMAKER:

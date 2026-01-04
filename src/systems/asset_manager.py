@@ -16,6 +16,7 @@ class AssetManager:
             'ground': config.get_img_path("ground"),
             'ladder': config.get_img_path("ladder"),
             'button': config.get_img_path("Button"),
+            'door': config.get_img_path("Door"),
             'start': config.get_img_path("start"),
             'end': config.get_img_path("end"),
             'tile': config.get_img_path("tile"),

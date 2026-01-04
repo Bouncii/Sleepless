@@ -110,7 +110,6 @@ class InteractionManagerPortal:
             if "portal_pending" not in tile.effects:
                 tile.effects.append("portal_pending")
             
-            print(f"Portail A (attente) posé en {grid_x}, {grid_y}")
             item_consumed = False
         
         else:
@@ -131,7 +130,6 @@ class InteractionManagerPortal:
 
                 self.pending_portal = None
                 
-                print(f"Portail B posé en {grid_x}, {grid_y}. Liaison créée !")
                 item_consumed = True
             
         return item_consumed
