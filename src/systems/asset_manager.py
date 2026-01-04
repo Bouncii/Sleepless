@@ -6,6 +6,7 @@ from src.core import config
 class AssetManager:
     def __init__(self):
         self.images = {}
+        self.scaled_cache = {}
         self.load_images()
 
     def load_images(self):
@@ -53,9 +54,17 @@ class AssetManager:
     
 
     def get_scaled_image(self, key, target_width, target_height):
-        '''Récupère une image redimensionnée à la taille spécifiée'''
-        original_image = self.get_image(key)
-        return pygame.transform.scale(original_image, (int(target_width), int(target_height)))
+        '''Récupère une image redimensionnée (avec mise en cache)'''
+        w = int(target_width)
+        h = int(target_height)
+        
+        cache_key = (key, w, h)
+
+        if cache_key not in self.scaled_cache:
+            original_image = self.get_image(key)
+            self.scaled_cache[cache_key] = pygame.transform.scale(original_image, (w, h))
+        
+        return self.scaled_cache[cache_key]
     
     def getTransparentImage(self,target_width, target_height):
         image = pygame.Surface((target_width,target_height), pygame.SRCALPHA)
