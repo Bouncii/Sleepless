@@ -34,6 +34,8 @@ class Game:
         self.current_level_num = 0
         self.nb_levels = get_number_of_level()
 
+        self.render_offset = None
+
         self.player = None
         self.past_self_group = pygame.sprite.Group()
 
@@ -134,6 +136,9 @@ class Game:
         # Changement de la taille des tiles
         config.TILE_SIZE = self.getTileSize()
 
+        # Calcul de l'offset de centrage du niveau
+        self.render_offset = renderOffsetCalcul(self.GRID_WIDTH,self.GRID_HEIGHT,self.screen_width,self.screen_height)
+
         # Construction du niveau
         self.interactionManagerDoorButton = InteractionManagerButtonsDoors()
         self.interactionManagerPortal = InteractionManagerPortal()
@@ -185,7 +190,7 @@ class Game:
             # Mise à jour du joueur
             self.background.update_camera(self.player.pixel_x)
             self.player.detection_key(self.GRID_WIDTH, self.GRID_HEIGHT, self.past_self_group)
-            self.inventory.update(self.level,self.player)
+            self.inventory.update(self.level,self.player, self.render_offset)
             self.player.update(self.dt, self.level,self.inventory)
             self.player.update_dt(self.dt)
 
@@ -290,9 +295,9 @@ class Game:
             for row in range(self.GRID_HEIGHT):
                 for col in range(self.GRID_WIDTH):
                     tile = self.level[row][col]
-                    tile.draw(self.screen,self.asset_manager)
+                    tile.draw(self.screen,self.asset_manager,self.render_offset)
                     for item in tile.items:
-                        item.display(self.screen,self.asset_manager)
+                        item.display(self.screen,self.asset_manager,self.render_offset)
                     
             # Dessin des entités
             if(self.player.moving == False):
@@ -303,14 +308,14 @@ class Game:
                 last_move_dir = self.player.moves[-1][0] if self.player.moves else "right"
                 facing_left = last_move_dir == "left"
                 
-                self.SpriteSheet_idle.draw(self.screen, self.player, num_frame_idle, self.asset_manager, scale=1, facing_left=facing_left)
+                self.SpriteSheet_idle.draw(self.screen, self.player, num_frame_idle, self.asset_manager, scale=1, facing_left=facing_left, offset = self.render_offset)
 
             elif self.player.moving_vertical:
                 distance_parcourue = abs(self.player.start_animation_y - self.player.pixel_y)
                 num_frame = int(distance_parcourue // self.player.duree_pixel_animation_y)
                 num_frame %= self.SpriteSheet_climb.nbr_animation
                 
-                self.SpriteSheet_climb.draw(self.screen, self.player, num_frame, self.asset_manager)
+                self.SpriteSheet_climb.draw(self.screen, self.player, num_frame, self.asset_manager, offset = self.render_offset)
 
             elif self.player.moves and self.player.moves[-1][0] in ["left","right"]:
                 # animation droite/gauche
@@ -318,11 +323,11 @@ class Game:
                 num_frame_animation %= self.SpriteSheet_move_horizontal.nbr_animation
                 
                 if (self.player.moves[-1][0] == "left"):
-                    self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager, scale=1, facing_left=True)
+                    self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager, scale=1, facing_left=True, offset = self.render_offset)
                 else:
-                    self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager)
+                    self.SpriteSheet_move_horizontal.draw(self.screen, self.player, num_frame_animation, self.asset_manager, offset = self.render_offset)
             else:
-                self.SpriteSheet_idle.draw(self.screen, self.player, 1, self.asset_manager)
+                self.SpriteSheet_idle.draw(self.screen, self.player, 1, self.asset_manager, offset = self.render_offset)
 
 
             for past_self in self.past_self_group:
@@ -335,25 +340,25 @@ class Game:
                         past_idle_frame_duration = 75
                         past_num_frame_idle = int(past_self.idle_time // past_idle_frame_duration) % self.SpriteSheet_idle.nbr_animation
                         
-                        self.SpriteSheet_past_idle.draw(self.screen, past_self, past_num_frame_idle, self.asset_manager, scale=1, facing_left=past_facing_left)
+                        self.SpriteSheet_past_idle.draw(self.screen, past_self, past_num_frame_idle, self.asset_manager, scale=1, facing_left=past_facing_left, offset = self.render_offset)
 
                     elif past_self.moving_vertical:
                         distance_parcourue = abs(past_self.start_animation_y - past_self.pixel_y)
                         num_frame = int(distance_parcourue // past_self.duree_pixel_animation_y)
                         num_frame %= self.SpriteSheet_past_climb.nbr_animation
                         
-                        self.SpriteSheet_past_climb.draw(self.screen, past_self, num_frame, self.asset_manager)
+                        self.SpriteSheet_past_climb.draw(self.screen, past_self, num_frame, self.asset_manager, offset = self.render_offset)
                     
                     elif(past_self.current_direction in ["left","right"]):
                         # animation droite/gauche
                         past_num_frame_animation = abs(past_self.start_animation - past_self.pixel_x)//past_self.duree_pixel_animation
                         past_num_frame_animation %= self.SpriteSheet_past_move_horizontal.nbr_animation
                         
-                        self.SpriteSheet_past_move_horizontal.draw(self.screen, past_self, past_num_frame_animation, self.asset_manager, scale=1, facing_left=past_facing_left)
+                        self.SpriteSheet_past_move_horizontal.draw(self.screen, past_self, past_num_frame_animation, self.asset_manager, scale=1, facing_left=past_facing_left, offset = self.render_offset)
                     else:
-                        self.SpriteSheet_past_idle.draw(self.screen, past_self, 1, self.asset_manager)
+                        self.SpriteSheet_past_idle.draw(self.screen, past_self, 1, self.asset_manager, offset = self.render_offset)
             
-            self.inventory.display(self.screen,self.asset_manager,self.screen_width)
+            self.inventory.display(self.screen,self.asset_manager,self.screen_width, self.render_offset)
                 
         elif self.state == GameState.WIN:
             self.background.draw(self.screen,self.asset_manager)

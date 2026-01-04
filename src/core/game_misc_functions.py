@@ -1,5 +1,7 @@
 # src/core/game_misc_functions.py
 
+from src.core import config
+
 def are_all_past_self_idle(past_self_tab):
     '''
     Vérifie si les past self ont terminés leurs déplacement
@@ -32,3 +34,14 @@ def get_start_location(level:list):
                 res = (tile.grid_x,tile.grid_y)
     return res
 
+def renderOffsetCalcul(GRID_WIDTH,GRID_HEIGHT,screen_width,screen_height):
+    '''
+    Retourne le décallage nécéssaire afin que le niveau soit centré
+    '''
+    level_pixel_width = GRID_WIDTH * config.TILE_SIZE
+    level_pixel_height = GRID_HEIGHT * config.TILE_SIZE
+
+    offset_x = (screen_width - level_pixel_width) // 2
+    offset_y = (screen_height - level_pixel_height) // 2
+    
+    return (offset_x, offset_y)

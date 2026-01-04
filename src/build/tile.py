@@ -46,40 +46,26 @@ class Tile:
             return (100,0,100)
         
 
-    def draw(self,screen,asset_manager):
+    def draw(self,screen,asset_manager,offset=(0, 0)):
         '''
         Fonction qui dessine la tile puis les structures qu'elle conttient
         entrées: screen
         sorties: none
         '''
-        # Image de fond selon le type de tile
-        # image = asset_manager.get_scaled_image('tile', self.width, self.height)
-        # # screen.blit(image, (self.pixel_x, self.pixel_y))
-        # image = asset_manager.getTransparentImage(self.width,self.height)
-
-
-    
-        # Dessiner les structures par-dessus
         for _,structure in self.structures.items():
-            structure.draw(screen, asset_manager)
-
-        center_x = self.pixel_x + self.width // 2
-        center_y = self.pixel_y + self.height // 2
+            structure.draw(screen, asset_manager,offset)
 
         if "stun" in self.effects:
-            # center_x = self.pixel_x + self.width // 2
-            # center_y = self.pixel_y + self.height // 2
-            # pygame.draw.circle(screen, (255, 255, 0), (center_x, center_y), 10, 2)
             image = asset_manager.get_scaled_image('chain', self.width*0.8, self.height*0.8)
-            screen.blit(image, (self.pixel_x+0.1*self.width, self.pixel_y))
+            screen.blit(image, (self.pixel_x+0.1*self.width + offset[0], self.pixel_y+offset[1]))
 
         if "portal_pending" in self.effects:
             image = asset_manager.get_scaled_image('portalCrack', self.width*1/3, self.height*2/3)
-            screen.blit(image, (self.pixel_x + self.width//2 - (self.width*1/3 //2), self.pixel_y + self.height - 0.2*self.height - 2/3*self.height))
+            screen.blit(image, (self.pixel_x + self.width//2 - (self.width*1/3 //2) + offset[0], self.pixel_y + self.height - 0.2*self.height - 2/3*self.height + offset[1]))
 
         if "portal_active" in self.effects:
             image = asset_manager.get_scaled_image('portal', self.width*1/3, self.height*2/3)
-            screen.blit(image, (self.pixel_x + self.width//2 - (self.width*1/3 //2), self.pixel_y + self.height - 0.2*self.height - 2/3*self.height))
+            screen.blit(image, (self.pixel_x + self.width//2 - (self.width*1/3 //2) + offset[0], self.pixel_y + self.height - 0.2*self.height - 2/3*self.height)+ offset[1])
 
 
     def structures_builder(self) -> list:

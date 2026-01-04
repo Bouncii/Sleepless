@@ -14,32 +14,31 @@ class Ground:
 
         self.color = (100,100,0)
 
-    def draw(self, screen, asset_manager):
+    def draw(self, screen, asset_manager, offset):
         image = asset_manager.get_scaled_image('ground', self.width, self.height) 
         visual_offset = 0
         draw_position_y = self.pixel_y - visual_offset
         
-        screen.blit(image, (self.pixel_x, draw_position_y))
+        screen.blit(image, (self.pixel_x + offset[0], draw_position_y + offset[1]))
 
-        # pygame.draw.rect(screen, (255, 0, 0), self.rect, 1)
 
 class Ladder:
     def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
         self.type = "ladder"
 
-        self.pixel_x = pixel_x
-        self.pixel_y = pixel_y
-
         self.width = tile_width*0.8
         self.height = tile_height*0.8
+
+        self.pixel_x = pixel_x + tile_width//2 - self.width//2
+        self.pixel_y = pixel_y
 
         self.rect = self.rect = pygame.Rect(self.pixel_x+tile_height*0.1, self.pixel_y,self.width,self.height)
         self.color = (100,100,0)
 
-    def draw(self, screen, asset_manager):
+    def draw(self, screen, asset_manager, offset):
         '''Dessine le sol avec une image'''
         image = asset_manager.get_scaled_image('ladder', self.width, self.height)
-        screen.blit(image, self.rect.topleft)
+        screen.blit(image, (self.pixel_x + offset[0],self.pixel_y + offset[1]))
 
 class End:
     def __init__(self,pixel_x,pixel_y,tile_width,tile_height):
@@ -55,10 +54,10 @@ class End:
         self.rect = pygame.Rect(self.pixel_x, self.pixel_y,self.width,self.height)
         self.color = (100,100,0)
 
-    def draw(self, screen, asset_manager):
+    def draw(self, screen, asset_manager, offset):
         '''Dessine le sol avec une image'''
         image = asset_manager.get_scaled_image('end', self.width, self.height)
-        screen.blit(image, self.rect.topleft)
+        screen.blit(image, (self.pixel_x + offset[0],self.pixel_y + offset[1]))
 
 
 class Door:
@@ -89,9 +88,9 @@ class Door:
         self.current_frame = 0
         
         self.last_update_time = 0
-        self.frame_delay = 50
+        self.frame_delay = 30
 
-    def draw(self, screen, asset_manager):
+    def draw(self, screen, asset_manager, offset):
         if self.sprite_sheet is None:
             self.sprite_sheet = SpriteSheet(asset_manager.get_image('door'), self.total_frames)
 
@@ -110,7 +109,7 @@ class Door:
             image = self.sprite_sheet.get_image(self.current_frame, asset_manager)
             scaled_image = pygame.transform.scale(image, (int(self.width), int(self.height)))
             
-            screen.blit(scaled_image, (self.rect.x, self.rect.y))
+            screen.blit(scaled_image, (self.rect.x + offset[0], self.rect.y + offset[1]))
 
     def open(self):
         self.is_open = True
@@ -136,10 +135,10 @@ class Button:
 
         self.is_pressed = False
 
-    def draw(self, screen, asset_manager):
+    def draw(self, screen, asset_manager, offset):
         '''Dessine le bouton avec l'image appropriée'''
         image = asset_manager.get_scaled_image('button', self.width, self.height)
-        screen.blit(image, (self.pixel_x, self.pixel_y))
+        screen.blit(image, (self.pixel_x + offset[0], self.pixel_y + offset[1]))
 
     def press(self):
         self.is_pressed = True

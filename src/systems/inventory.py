@@ -64,9 +64,9 @@ class Inventory():
     def isTypeUsable(self,type):
         return self.slots[self.getPosItemInv(type)]["usable"]
     
-    def update(self,level,player):
+    def update(self,level,player,offset=(0, 0)):
         if not player.moving:
-            self.tile_selection_manager.update(level)
+            self.tile_selection_manager.update(level,offset)
             self.useItemListener(level)
 
             keys = pygame.key.get_pressed()
@@ -104,7 +104,7 @@ class Inventory():
                 self.MakeSelectedUnusable()
                 self.tile_selection_manager.selectedTile = None
     
-    def display(self,screen,asset_manager,screen_width):
+    def display(self,screen,asset_manager,screen_width, offset=(0,0)):
         image = asset_manager.getTransparentImage(self.SlotSize*len(self.slots), self.SlotSize)
         for i in range(len(self.slots)):
             ItemImage = asset_manager.get_scaled_image(self.slots[i]["type"], self.SlotSize, self.SlotSize)
@@ -123,5 +123,5 @@ class Inventory():
         pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,self.SlotSize),10)
         pygame.draw.line(image,(255,0,0),(self.selected_slot*self.SlotSize+self.SlotSize,self.SlotSize),(self.selected_slot*self.SlotSize + self.SlotSize,0),10)
 
-        self.tile_selection_manager.display(screen)
-        screen.blit(image, (screen_width - self.width, 0))
+        self.tile_selection_manager.display(screen,offset)
+        screen.blit(image, (screen_width - self.width - 25, 25))

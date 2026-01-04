@@ -190,10 +190,6 @@ class Player(pygame.sprite.Sprite):
 
         self.rect = pygame.Rect(self.pixel_x, self.pixel_y, self.width, self.height)
 
-        
-
-
-
 
     def deplacement_horizontal(self,dt:float):
         '''

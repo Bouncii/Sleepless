@@ -17,13 +17,15 @@ class TileSelection:
 
 
 
-    def updatePointedTile(self,level:list):
+    def updatePointedTile(self,level:list, offset=(0, 0)):
         mousePos = pygame.mouse.get_pos()
-        self.pointedTile = self.getTileWithPixel(mousePos,level)
+        level_mouse_x = mousePos[0] - offset[0]
+        level_mouse_y = mousePos[1] - offset[1]
+        self.pointedTile = self.getTileWithPixel((level_mouse_x, level_mouse_y), level)
 
-    def update(self,level:list):
+    def update(self,level:list, offset=(0, 0)):
         if self.active:
-            self.updatePointedTile(level)
+            self.updatePointedTile(level, offset)
             self.selectionListener()
 
     def activate(self):
@@ -41,11 +43,20 @@ class TileSelection:
             return True
         return False
 
-    def display(self,screen):
+    def display(self, screen, offset=(0, 0)):
+        '''
+        Affiche le cadre de sélection autour de la tuile survolée.
+        '''
         if self.active and self.pointedTile:
-            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x+config.TILE_SIZE,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),10)
-            pygame.draw.line(screen,(0,200,100),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE + config.TILE_SIZE),(config.TILE_SIZE*self.pointedTile.grid_x,self.pointedTile.grid_y*config.TILE_SIZE),10)
+            x = self.pointedTile.grid_x * config.TILE_SIZE + offset[0]
+            y = self.pointedTile.grid_y * config.TILE_SIZE + offset[1]
+            size = config.TILE_SIZE
+            color = (0, 200, 100)
+            thickness = 10
+
+            pygame.draw.line(screen, color, (x, y), (x + size, y), thickness)
+            pygame.draw.line(screen, color, (x + size, y), (x + size, y + size), thickness)
+            pygame.draw.line(screen, color, (x + size, y + size), (x, y + size), thickness)
+            pygame.draw.line(screen, color, (x, y + size), (x, y), thickness)
     
 
