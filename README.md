@@ -10,7 +10,7 @@ Our project focuese on **grid-based movement, puzzle-solving mechanics and smoot
 This is a 2D puzzle platformer where the player moves across a grid of tiles, interacts with objects and must reach the level's exit. The game combines platforming mechanics with puzzle-solving elements, requiring players to think strategically about movement and object interactions.
 
 ## 👻 Lore ?
-To be continued ...
+In the middle of a peaceful sleep, you are suddenly thrust into your deepest nightmare. To get back to your cozy bed, you must navigate your way avoiding shadows that mirror your movements and learning how to use them to your advantage to escape.
 
 ## ⚙️ Features
 - Grid-based movement and tile interactions
