@@ -40,4 +40,7 @@ In the middle of a peaceful sleep, you are suddenly thrust into your deepest nig
 - [Bounci](https://github.com/Bouncii)
 - [Nils](https://github.com/NilsBrfd)
 
+## 🖌️ Graphics 
+- nicolas fradet
+
 *Developped with python and Pygame as part of a **university course project***
